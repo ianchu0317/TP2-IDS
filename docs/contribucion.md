@@ -4,6 +4,19 @@ Este documento trata acerca de cómo contribuir en el proyecto y de algunas conv
 
 ## Tabla de contenidos
 
+<!-- TOC -->
+
+- [Contribuciones](#contribuciones)
+    - [Tabla de contenidos](#tabla-de-contenidos)
+    - [Estructura de proyecto](#estructura-de-proyecto)
+        - [docs/](#docs)
+        - [backend/](#backend)
+        - [frontend/](#frontend)
+    - [Flujo de trabajo, Ramas y Commits](#flujo-de-trabajo-ramas-y-commits)
+    - [PRs e Issues](#prs-e-issues)
+    - [Documentación](#documentaci%C3%B3n)
+
+<!-- /TOC -->
 
 <br>
 
@@ -85,9 +98,7 @@ Depende del framework y el que sepa codear frontend sabrá cómo organizar.
 
 <br>
 
---- 
 
-<br>
 
 ## Flujo de trabajo, Ramas y Commits
 
@@ -112,9 +123,6 @@ Entonces, una vez que se termine mi trabajo en una rama hay que pushearlo al rep
 
 <br>
 
---- 
-
-<br>
 
 ## PRs e Issues
 
@@ -126,9 +134,7 @@ Los issues pueden ser manejados por Github Projects para tenerlos visualmente. S
 
 <br>
 
----
 
-<br>
 
 ## Documentación
 

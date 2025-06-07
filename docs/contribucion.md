@@ -112,14 +112,11 @@ Las principales ramas serían:
 TP2-NOMBRE-TP/
 ├── main
 ├── dev
-│   ├── frontend
-│   ├── backend
+│   ├── feature/crear-algo
+│   ├── feature/editar-algo
 ```
-Sobre esta estructura, vamos a trabajar siempre sobre la rama `dev`. De cada rama podría tener más subramas dependiendo de lo que esté compuesto y la cantidad de funcionalidades a tener. Por ejemplo la rama `dev/backend` podría tener dos subramas `dev/backend/database-config` o `dev/backend/endpoint-login` o la cantidad de cosas (features) que pueden surgir. 
+Sobre esta estructura, vamos a trabajar siempre sobre la rama `dev`. De la rama `dev` saldrán  más subramas trabajando en las distintas funcionalidades (una funcionalidad a la vez 🙏, modo escalable). Cada integrante trabajará sobre la rama en su propio tarea: backend, frontend. Una vez terminada la funcionalidad (integrando todo y que todo funcione), se abre un pull request en la página para revisión antes de mergear. **ojo** acordarse de la [documentación](#documentación).  
 
-(_otra opción es usar solo `dev` y la vida es más fácil_)
-
-Entonces, una vez que se termine mi trabajo en una rama hay que pushearlo al repositorio y abrir un _Pull Request_ de **mergear a su rama padre** indicando la funcionalidad y lo que se hizo. Por ejemplo si terminé de configurar `dev/backend/database-config` abrir un PR a `dev/backend/` para revisión y no mergear nada 🙏
 
 <br>
 

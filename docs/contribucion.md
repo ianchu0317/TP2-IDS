@@ -132,7 +132,35 @@ Los issues pueden ser manejados por Github Projects para tenerlos visualmente. S
 
 ## Documentación
 
+Parece poco importante pero es muy importante la documentación.
+
+La documentación se realiza **JUSTO DESPUÉS DE LA IMPLEMENTACION DE CÓDIGO** para que nadie ajeno tenga que ir descifrando cómo utilizar una función y qué es lo que devuleve.
+
+Toda documentación va dentro de `docs/`. Además tener en cuenta de no cambiar nada de lo que ya está, de lo contrario se puede explotar todo y habría conflicto.
+
+Por ejemplo, una documentación de un endpoint iría en `docs/api.md` y podría ser así
 
 
+**Ejemplo `POST /productos/{id}`**
+- **Descripción**: Crear un producto
+- Ejemplo de body en request:
+```js
+{
+    "nombre": "escopeta 3000",
+    "precio": 300,
+    "stock": 20
+}
+```
 
+- Ejemplo de return
+```js
+{
+    "id": 3
+    "nombre": "escopeta 3000",
+    "precio": 300,
+    "stock": 20
+}
+```
+
+No es necesario anotar cómo se implementa en el código, sino cómo utilizar la función y qué es lo que hace.
 

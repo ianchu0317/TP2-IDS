@@ -110,10 +110,25 @@ Sobre esta estructura, vamos a trabajar siempre sobre la rama `dev`. De cada ram
 
 Entonces, una vez que se termine mi trabajo en una rama hay que pushearlo al repositorio y abrir un _Pull Request_ de **mergear a su rama padre** indicando la funcionalidad y lo que se hizo. Por ejemplo si terminé de configurar `dev/backend/database-config` abrir un PR a `dev/backend/` para revisión y no mergear nada 🙏
 
+<br>
+
+--- 
+
+<br>
 
 ## PRs e Issues
 
+El formato de PR ya se mencionó anterior y cómo utilizarlo. 
 
+Para cada feature va a haber un Issue abierto probablemente diciendo acerca de qué se quiere organizar y capaz un poco de cómo implementar lógicamente la funcionalidad. Esto permite que se lleve en el historial el trabajo que se va realizando.
+
+Los issues pueden ser manejados por Github Projects para tenerlos visualmente. Se cierran luego de mergear la funcionalidad y de documentar.
+
+<br>
+
+---
+
+<br>
 
 ## Documentación
 

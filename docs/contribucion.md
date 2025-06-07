@@ -83,15 +83,37 @@ TP2-NOMBRE-TP/
 
 Depende del framework y el que sepa codear frontend sabrá cómo organizar.
 
+<br>
+
 --- 
 
-## Ramas y commits
+<br>
+
+## Flujo de trabajo, Ramas y Commits
+
+Básicamente, mantener siempre la rama main con cosas funcionales. 
+
+**Favor de no mergear nada sin revisión**.
+
+Las principales ramas serían:
+
+```
+TP2-NOMBRE-TP/
+├── main
+├── dev
+│   ├── frontend
+│   ├── backend
+```
+Sobre esta estructura, vamos a trabajar siempre sobre la rama `dev`. De cada rama podría tener más subramas dependiendo de lo que esté compuesto y la cantidad de funcionalidades a tener. Por ejemplo la rama `dev/backend` podría tener dos subramas `dev/backend/database-config` o `dev/backend/endpoint-login` o la cantidad de cosas (features) que pueden surgir. 
+
+(_otra opción es usar solo `dev` y la vida es más fácil_)
+
+Entonces, una vez que se termine mi trabajo en una rama hay que pushearlo al repositorio y abrir un _Pull Request_ de **mergear a su rama padre** indicando la funcionalidad y lo que se hizo. Por ejemplo si terminé de configurar `dev/backend/database-config` abrir un PR a `dev/backend/` para revisión y no mergear nada 🙏
 
 
 ## PRs e Issues
 
 
-## Flujo de trabajo
 
 ## Documentación
 

@@ -17,6 +17,8 @@ services:
       context: ./api
     depends_on:
       - db
+    volumes:
+      - ./api:/app
     ports:
       - "8000:8000"    
 

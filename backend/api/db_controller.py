@@ -8,9 +8,9 @@ async def create_user(user_data: User):
     hashed_password = hash_password(user_data.password) # Hash antes de almacenar
     
     aconn = await psycopg.AsyncConnection.connect(
-        "dbname=tp2 user=fobias password=fobias")
+        "host=db dbname=tp2 user=fobias password=fobias")
     
-    with await aconn:
+    async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
                 "INSERT INTO users (username, email, phone, hashed_password, register_date) " 

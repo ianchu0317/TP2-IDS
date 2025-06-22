@@ -8,6 +8,22 @@ Contiene instrucciones y referencias para levantar y conectar la DB PostgreSQL q
 - `backend/docker-compose.yml`: define el servicio `db`.
 
 ## 3. Levantar la base
+
+```
 cd backend
 docker-compose up -d
+```
+
+## 4. Conexión base de datos
+
+**Credenciales**
+```
+usuario: fobias
+contraseña: fobias
+```
+
+**Conexión**
+```
+psql --host localhost -U fobias -d tp2
+```
 

@@ -1,1 +1,3 @@
 fastapi[standard]
+psycopg[binary]
+passlib[bcrypt]

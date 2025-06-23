@@ -20,3 +20,8 @@ class UserInDB(BaseModel):
     phone: int | None
     hashed_password: str
     date: datetime.date
+
+
+class Token(BaseModel):
+    token: str
+    token_type: str

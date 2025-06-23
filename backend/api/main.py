@@ -23,7 +23,8 @@ async def login_user(user_data: UserLogin):
     
     if not auth.verify_password(user_data.password, user_db.hashed_password):
         raise HTTPException(
-            status_code=400,
+            status_code=401,
             detail="Datos inválidos"
         )
-    return "Login success"
+
+    return auth.create_token(user_db)

@@ -7,6 +7,7 @@ from auth_controller import hash_password
 
 
 # Funciones principales
+# Funciones de usuarios
 async def create_user(user_data: User):
     hashed_password = hash_password(user_data.password) # Hash antes de almacenar
     
@@ -28,7 +29,6 @@ async def create_user(user_data: User):
 
 async def get_user(user_data: UserLogin):
 
-    
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
     

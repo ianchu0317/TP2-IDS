@@ -19,11 +19,4 @@ async def register_user(user_data: User):
 
 @app.post("/login", status_code=200)
 async def login_user(user_data: UserLogin):
-    return await db.is_user_in_db(user_data)
-
-{
-    "username": "testing",
-    "email": "test@testing.com",
-    "phone": 123456,
-    "password": "password"
-}
+    return await db.get_user(user_data)

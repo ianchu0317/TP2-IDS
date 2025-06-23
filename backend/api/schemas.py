@@ -7,3 +7,7 @@ class User(BaseModel):
     phone: int
     password: str
 
+
+class UserLogin(BaseModel):
+    email: str
+    password: str

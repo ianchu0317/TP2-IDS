@@ -19,4 +19,11 @@ async def register_user(user_data: User):
 
 @app.post("/login", status_code=200)
 async def login_user(user_data: UserLogin):
-    return await db.get_user(user_data)
+    user_db = await db.get_user(user_data)
+    
+    if not auth.verify_password(user_data.password, user_db.hashed_password):
+        raise HTTPException(
+            status_code=400,
+            detail="Datos inválidos"
+        )
+    return "Login success"

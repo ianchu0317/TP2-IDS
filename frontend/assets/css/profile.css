@@ -1,0 +1,159 @@
+@font-face {
+  font-family: 'Roboto Medium';
+  src: url('../fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Regular';
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins Medium';
+  src: url('../fonts/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins Light';
+  src: url('../fonts/Poppins-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #161618;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #161618;
+}
+
+.decorative-box {
+  position: absolute;
+  left: 75px;
+  top: 124px;
+  width: 1130px;
+  height: 301px;
+  background-color: #1A1D1F;
+  display: flex; /* si querés centrar cosas adentro */
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  border-radius: 12px;
+}
+
+.cover-img {
+  position: absolute;
+  left: 75px;
+  top: 120px;
+  width: 1130px;
+  height: 180px;
+  object-fit: cover; /* opcional: recorta si no es exacta */
+  z-index: 2;
+  border-radius: 12px;/* ajustá según si debe ir arriba o abajo de otros elementos */
+}
+
+.avatar {
+  position: absolute;
+  left: 99px;
+  top: 237px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%; /* Opcional: para que sea redondo */
+  object-fit: cover;
+  z-index: 3; /* Asegura que esté por encima del fondo */
+}
+
+.username {
+  position: absolute;
+  left: 291px;
+  top: 331px;
+  font-family: 'Poppins Medium', sans-serif;
+  font-size: 20px;
+  color: #FFFFFF; /* Ajustalo según fondo */
+  z-index: 4;
+}
+
+.email {
+  position: absolute;
+  left: 291px;
+  top: 369px;
+  font-family: 'Poppins Light', sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  z-index: 4;
+}
+
+
+.header {
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  background-color: #161618;
+}
+
+.logo {
+  position: absolute;
+  left: 60px;
+  top: 32px;
+  width: 62px;
+  height: 38px;
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 24px;
+  color: #FF4500;
+  letter-spacing: 0.5px;
+  line-height: 38px;
+}
+
+.nav-buttons {
+  position: relative;
+  height: 100%;
+}
+
+.nav-button {
+  position: absolute;
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 14px;
+  color: #FF4500;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  top: 17.5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  text-transform: uppercase;
+}
+
+.nav-button:hover {
+  opacity: 0.8;
+}
+
+.nav-button:nth-child(1) {
+  left: 843px;
+  top: 32px;
+}
+
+.nav-button:nth-child(2) {
+  left: 977px;
+  top: 32px;
+}
+
+.nav-button:nth-child(3) {
+  left: 1103px;
+  top: 32px;
+}

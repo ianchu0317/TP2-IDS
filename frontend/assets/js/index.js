@@ -28,13 +28,12 @@ function setRandomTitle() {
     }
 }
 
-// Datos de ejemplo para posts
 const posts = [
     {
         id: 1,
         text: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
         author: "the_big_mothergoose",
-        timestamp: Date.now() - (6 * 60 * 60 * 1000), // 6 horas atrás
+        timestamp: Date.now() - (6 * 60 * 60 * 1000),
         likes: 214,
         comments: 13
     },
@@ -42,7 +41,7 @@ const posts = [
         id: 2,
         text: "Ayuda creo que me da miedo la gente fea",
         author: "bwe_ahki",
-        timestamp: Date.now() - (45 * 60 * 1000), // 45 minutos atrás
+        timestamp: Date.now() - (45 * 60 * 1000),
         likes: 100,
         comments: 10
     },
@@ -50,7 +49,7 @@ const posts = [
         id: 3,
         text: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
         author: "JoergS",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000), // 7 horas atrás
+        timestamp: Date.now() - (7 * 60 * 60 * 1000),
         likes: 70,
         comments: 2
     },
@@ -58,7 +57,7 @@ const posts = [
         id: 4,
         text: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
         author: "satosaison",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000), // 7 horas atrás
+        timestamp: Date.now() - (7 * 60 * 60 * 1000),
         likes: 214,
         comments: 13
     },
@@ -66,7 +65,7 @@ const posts = [
         id: 5,
         text: "Alguien más con Gefirofobia?",
         author: "IHaeTypos",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000), // 8 horas atrás
+        timestamp: Date.now() - (8 * 60 * 60 * 1000),
         likes: 214,
         comments: 13
     },
@@ -74,7 +73,7 @@ const posts = [
         id: 6,
         text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia",
         author: "ashwin_3beauty",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000), // 8 horas atrás
+        timestamp: Date.now() - (8 * 60 * 60 * 1000),
         likes: 214,
         comments: 13,
         isPromoted: true
@@ -83,13 +82,28 @@ const posts = [
         id: 7,
         text: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
         author: "randomUser",
-        timestamp: Date.now() - (9 * 60 * 60 * 1000), // 9 horas atrás
+        timestamp: Date.now() - (9 * 60 * 60 * 1000),
         likes: 89,
         comments: 25
+    },
+    {
+        id:8,
+        text: "Test 12 34 5 6 ",
+        author: "randomUser",
+        timestamp: Date.now(),
+        likes: 100,
+        comments: 23
+    },
+    {
+        id:9,
+        text: "Test 12 34 5 6 ",
+        author: "randomUser",
+        timestamp: Date.now(),
+        likes: 100,
+        comments: 23
     }
 ];
 
-// Función para formatear el tiempo transcurrido
 function formatTimeAgo(timestamp) {
     const now = Date.now();
     const diff = now - timestamp;
@@ -107,7 +121,6 @@ function formatTimeAgo(timestamp) {
     }
 }
 
-// Función para formatear números (1000 -> 1K)
 function formatNumber(num) {
     if (num >= 1000) {
         return (num / 1000).toFixed(0) + 'K';
@@ -115,7 +128,6 @@ function formatNumber(num) {
     return num.toString();
 }
 
-// Función para crear una tarjeta de post
 function createPostCard(post) {
     const postCard = document.createElement('div');
     postCard.className = 'post-card';
@@ -153,7 +165,6 @@ function createPostCard(post) {
     return postCard;
 }
 
-// Función para renderizar todos los posts
 function renderPosts() {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) {
@@ -161,10 +172,8 @@ function renderPosts() {
         return;
     }
     
-    // Limpiar contenido existente
     postsGrid.innerHTML = '';
     
-    // Crear y agregar cada post
     posts.forEach(post => {
         const postCard = createPostCard(post);
         postsGrid.appendChild(postCard);
@@ -173,10 +182,10 @@ function renderPosts() {
     console.log(`Se renderizaron ${posts.length} posts`);
 }
 
-// Función para agregar un nuevo post
+
 function addNewPost(postData) {
     const newPost = {
-        id: Date.now(), // ID único basado en timestamp
+        id: Date.now(),
         text: postData.text,
         author: postData.author || 'anonymous',
         timestamp: Date.now(),
@@ -184,20 +193,16 @@ function addNewPost(postData) {
         comments: 0
     };
     
-    // Agregar al inicio del array
     posts.unshift(newPost);
     
-    // Re-renderizar
     renderPosts();
     
-    // Scroll al top para mostrar el nuevo post
     const postsGrid = document.getElementById('postsGrid');
     if (postsGrid) {
         postsGrid.scrollTop = 0;
     }
 }
 
-// Event listeners para interacciones
 function setupEventListeners() {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) return;
@@ -214,23 +219,44 @@ function setupEventListeners() {
         if (commentsBtn) {
             const postId = parseInt(commentsBtn.dataset.postId);
             console.log(`Abrir comentarios para post ${postId}`);
-            // Aquí después puedes agregar la lógica para abrir comentarios
         }
     });
 }
 
-// Función para manejar likes
 function toggleLike(postId) {
-    const post = posts.find(p => p.id === postId);
-    if (post) {
-        post.likes += 1; // Por ahora solo suma, después puedes agregar toggle
+    const likesBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
+    const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
+    const likeIcon = document.querySelector(`[data-post-id="${postId}"] .like-icon`);
+    
+    if (!post || !likesBtn || !likesCount || !likeIcon) return;
+    
+    const isCurrentlyLiked = userLikes.has(postId);
+    
+    if (isCurrentlyLiked) {
+        userLikes.delete(postId);
+        post.likes -= 1;
+        likesBtn.classList.remove('liked');
+        likeIcon.setAttribute('fill', 'none');
+        likesBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            likesBtn.style.transform = 'scale(1)';
+        }, 150);
         
-        // Actualizar solo el contador de likes
-        const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
-        if (likesCount) {
-            likesCount.textContent = formatNumber(post.likes);
-        }
+    } else {
+        userLikes.add(postId);
+        post.likes += 1;
+        likesBtn.classList.add('liked');
+        likeIcon.setAttribute('fill', 'currentColor');
+        
+        likesBtn.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            likesBtn.style.transform = 'scale(1)';
+        }, 150);
     }
+    
+    likesCount.textContent = formatNumber(post.likes);
+    
+    console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
 }
 
 // Función de utilidad para testing

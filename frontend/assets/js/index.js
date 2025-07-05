@@ -13,6 +13,7 @@ const inspirationalPhrases = [
     "Spoiler: nadie te entiende. Pero nosotros sí",
     "Fobia al silencio incómodo. ¿Cómo venís con eso?",
 ];
+
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
     return inspirationalPhrases[randomIndex];
@@ -20,10 +21,238 @@ function getRandomPhrase() {
 
 function setRandomTitle() {
     const titleElement = document.getElementById('inspirationalTitle');
-    const randomPhrase = getRandomPhrase();
-    titleElement.textContent = randomPhrase;
+    if (titleElement) {
+        const randomPhrase = getRandomPhrase();
+        titleElement.textContent = randomPhrase;
+        console.log("Título actualizado con:", randomPhrase);
+    }
 }
+
+// Datos de ejemplo para posts
+const posts = [
+    {
+        id: 1,
+        text: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
+        author: "the_big_mothergoose",
+        timestamp: Date.now() - (6 * 60 * 60 * 1000), // 6 horas atrás
+        likes: 214,
+        comments: 13
+    },
+    {
+        id: 2,
+        text: "Ayuda creo que me da miedo la gente fea",
+        author: "bwe_ahki",
+        timestamp: Date.now() - (45 * 60 * 1000), // 45 minutos atrás
+        likes: 100,
+        comments: 10
+    },
+    {
+        id: 3,
+        text: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
+        author: "JoergS",
+        timestamp: Date.now() - (7 * 60 * 60 * 1000), // 7 horas atrás
+        likes: 70,
+        comments: 2
+    },
+    {
+        id: 4,
+        text: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
+        author: "satosaison",
+        timestamp: Date.now() - (7 * 60 * 60 * 1000), // 7 horas atrás
+        likes: 214,
+        comments: 13
+    },
+    {
+        id: 5,
+        text: "Alguien más con Gefirofobia?",
+        author: "IHaeTypos",
+        timestamp: Date.now() - (8 * 60 * 60 * 1000), // 8 horas atrás
+        likes: 214,
+        comments: 13
+    },
+    {
+        id: 6,
+        text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia",
+        author: "ashwin_3beauty",
+        timestamp: Date.now() - (8 * 60 * 60 * 1000), // 8 horas atrás
+        likes: 214,
+        comments: 13,
+        isPromoted: true
+    },
+    {
+        id: 7,
+        text: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
+        author: "randomUser",
+        timestamp: Date.now() - (9 * 60 * 60 * 1000), // 9 horas atrás
+        likes: 89,
+        comments: 25
+    }
+];
+
+// Función para formatear el tiempo transcurrido
+function formatTimeAgo(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (minutes < 60) {
+        return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+        return `${hours} hours ago`;
+    } else {
+        return `${days} days ago`;
+    }
+}
+
+// Función para formatear números (1000 -> 1K)
+function formatNumber(num) {
+    if (num >= 1000) {
+        return (num / 1000).toFixed(0) + 'K';
+    }
+    return num.toString();
+}
+
+// Función para crear una tarjeta de post
+function createPostCard(post) {
+    const postCard = document.createElement('div');
+    postCard.className = 'post-card';
+    postCard.dataset.postId = post.id;
+    
+    const promotedTag = post.isPromoted ? '<span class="promoted-tag">promoted by</span>' : '';
+    
+    postCard.innerHTML = `
+        <div class="post-content">
+            <p class="post-text">${post.text}</p>
+            ${promotedTag}
+        </div>
+        <div class="post-meta">
+            <div class="post-info">
+                <span class="post-time">${formatTimeAgo(post.timestamp)}</span>
+                <span class="post-author">by ${post.author}</span>
+            </div>
+            <div class="post-stats">
+                <div class="stat-item likes-btn" data-post-id="${post.id}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 10v12l4-4 4 4V10M7 10l5-6 5 6M7 10H4a2 2 0 00-2 2v3a2 2 0 002 2h3"/>
+                    </svg>
+                    <span class="likes-count">${formatNumber(post.likes)}</span>
+                </div>
+                <div class="stat-item comments-btn" data-post-id="${post.id}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                    </svg>
+                    <span class="comments-count">${post.comments}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return postCard;
+}
+
+// Función para renderizar todos los posts
+function renderPosts() {
+    const postsGrid = document.getElementById('postsGrid');
+    if (!postsGrid) {
+        console.error('No se encontró el elemento con id "postsGrid"');
+        return;
+    }
+    
+    // Limpiar contenido existente
+    postsGrid.innerHTML = '';
+    
+    // Crear y agregar cada post
+    posts.forEach(post => {
+        const postCard = createPostCard(post);
+        postsGrid.appendChild(postCard);
+    });
+    
+    console.log(`Se renderizaron ${posts.length} posts`);
+}
+
+// Función para agregar un nuevo post
+function addNewPost(postData) {
+    const newPost = {
+        id: Date.now(), // ID único basado en timestamp
+        text: postData.text,
+        author: postData.author || 'anonymous',
+        timestamp: Date.now(),
+        likes: 0,
+        comments: 0
+    };
+    
+    // Agregar al inicio del array
+    posts.unshift(newPost);
+    
+    // Re-renderizar
+    renderPosts();
+    
+    // Scroll al top para mostrar el nuevo post
+    const postsGrid = document.getElementById('postsGrid');
+    if (postsGrid) {
+        postsGrid.scrollTop = 0;
+    }
+}
+
+// Event listeners para interacciones
+function setupEventListeners() {
+    const postsGrid = document.getElementById('postsGrid');
+    if (!postsGrid) return;
+    
+    postsGrid.addEventListener('click', (e) => {
+        const likesBtn = e.target.closest('.likes-btn');
+        const commentsBtn = e.target.closest('.comments-btn');
+        
+        if (likesBtn) {
+            const postId = parseInt(likesBtn.dataset.postId);
+            toggleLike(postId);
+        }
+        
+        if (commentsBtn) {
+            const postId = parseInt(commentsBtn.dataset.postId);
+            console.log(`Abrir comentarios para post ${postId}`);
+            // Aquí después puedes agregar la lógica para abrir comentarios
+        }
+    });
+}
+
+// Función para manejar likes
+function toggleLike(postId) {
+    const post = posts.find(p => p.id === postId);
+    if (post) {
+        post.likes += 1; // Por ahora solo suma, después puedes agregar toggle
+        
+        // Actualizar solo el contador de likes
+        const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
+        if (likesCount) {
+            likesCount.textContent = formatNumber(post.likes);
+        }
+    }
+}
+
+// Función de utilidad para testing
+function testAddPost() {
+    addNewPost({
+        text: "Post de prueba desde la consola",
+        author: "console_user"
+    });
+}
+
+// INICIALIZACIÓN - Este es el código que faltaba
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, inicializando...');
+    
+    // Configurar título aleatorio
     setRandomTitle();
+    
+    // Renderizar posts iniciales
+    renderPosts();
+    
+    // Configurar event listeners
+    setupEventListeners();
+    
+    console.log('Inicialización completada');
 });
-console.log("Título actualizado con:", randomPhrase);

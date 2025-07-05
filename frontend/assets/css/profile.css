@@ -64,9 +64,9 @@ body {
   top: 120px;
   width: 1130px;
   height: 180px;
-  object-fit: cover; /* opcional: recorta si no es exacta */
+  object-fit: cover;
   z-index: 2;
-  border-radius: 12px;/* ajustá según si debe ir arriba o abajo de otros elementos */
+  border-radius: 12px;
 }
 
 .avatar {
@@ -75,9 +75,9 @@ body {
   top: 237px;
   width: 160px;
   height: 160px;
-  border-radius: 50%; /* Opcional: para que sea redondo */
+  border-radius: 50%;
   object-fit: cover;
-  z-index: 3; /* Asegura que esté por encima del fondo */
+  z-index: 3;
 }
 
 .username {
@@ -86,7 +86,7 @@ body {
   top: 331px;
   font-family: 'Poppins Medium', sans-serif;
   font-size: 20px;
-  color: #FFFFFF; /* Ajustalo según fondo */
+  color: #FFFFFF;
   z-index: 4;
 }
 

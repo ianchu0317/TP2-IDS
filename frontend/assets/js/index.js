@@ -259,25 +259,13 @@ function toggleLike(postId) {
     console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
 }
 
-// Función de utilidad para testing
-function testAddPost() {
-    addNewPost({
-        text: "Post de prueba desde la consola",
-        author: "console_user"
-    });
-}
-
-// INICIALIZACIÓN - Este es el código que faltaba
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, inicializando...');
     
-    // Configurar título aleatorio
     setRandomTitle();
     
-    // Renderizar posts iniciales
     renderPosts();
     
-    // Configurar event listeners
     setupEventListeners();
     
     console.log('Inicialización completada');

@@ -1,8 +1,8 @@
 const currentUser = {
     username: "juan_perez",
     email: "juan.perez@email.com",
-    avatarUrl: "https://pbs.twimg.com/media/ERv_whhXYAAw0rH.jpg",
-    coverUrl: "https://aem-all.accor.com/content/dam/all/hubs/americas/latam/generic-images/all-magazine/machu-picchu-todo-lo-que-necesitas-saber-antes-de-viajar-2024-1.jpg"
+    avatarUrl: "../assets/images/avatar.jpg",
+    coverUrl: "../assets/images/header.png"
 };
 
 function loadProfile() {
@@ -31,7 +31,6 @@ function loadProfile() {
     console.log(`Total de likes: ${totalLikes}`);
 }
 
-// Al final del archivo, agregar esto:
 document.addEventListener('DOMContentLoaded', function() {
     loadProfile();
 });

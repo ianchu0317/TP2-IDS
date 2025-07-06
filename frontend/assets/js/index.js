@@ -15,6 +15,11 @@ const inspirationalPhrases = [
 ];
 
 const userLikes = new Set();
+const renderedPosts = new Set();
+
+const POSTS_PER_PAGE = 20;
+let currentPage = 0;
+let isLoading = false;
 
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
@@ -168,32 +173,59 @@ function createPostCard(post) {
     return postCard;
 }
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
+function getShuffledPosts(postsArray) {
+    const shuffled = [...postsArray];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 }
 
-function renderPosts() {
+function getPostsForPage(page = 0) {
+    const startIndex = page * POSTS_PER_PAGE;
+    const endIndex = startIndex + POSTS_PER_PAGE;
+    if (page === 0) {
+        const shuffledPosts = getShuffledPosts(posts);
+        return shuffledPosts.slice(startIndex, endIndex);
+    }
+    const pagePosts = posts.slice(startIndex, endIndex);
+    return getShuffledPosts(pagePosts);
+}
+
+function renderPosts(loadMore = false) {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) {
         console.error('No se encontró el elemento con id "postsGrid"');
         return;
     }
+    if (!loadMore) {
+        postsGrid.innerHTML = '';
+        renderedPosts.clear();
+        currentPage = 0;
+    }
     
-    shuffleArray(posts);
-    postsGrid.innerHTML = '';
+    const pagePosts = getPostsForPage(currentPage);
+    const fragment = document.createDocumentFragment();
+    let newPostsCount = 0;
     
-    posts.forEach(post => {
-        const postCard = createPostCard(post);
-        postsGrid.appendChild(postCard);
+    pagePosts.forEach(post => {
+        if (!renderedPosts.has(post.id)) {
+            const postCard = createPostCard(post);
+            fragment.appendChild(postCard);
+            renderedPosts.add(post.id);
+            newPostsCount++;
+        }
     });
+    if (newPostsCount > 0) {
+        postsGrid.appendChild(fragment);
+        updateTimeAgoInCards();
+        console.log(`Se renderizaron ${newPostsCount} posts nuevos (página ${currentPage})`);
+    }
     
-    updateTimeAgoInCards();
-    console.log(`Se renderizaron ${posts.length} posts`);
+    currentPage++;
+    return newPostsCount;
 }
-
 
 function addNewPost(postData) {
     const newPost = {
@@ -213,6 +245,31 @@ function addNewPost(postData) {
     if (postsGrid) {
         postsGrid.scrollTop = 0;
     }
+}
+
+function loadMorePosts() {
+    if (isLoading) return;
+    
+    isLoading = true;
+    const newPostsCount = renderPosts(true);
+    setTimeout(() => {
+        isLoading = false;
+        if (newPostsCount === 0) {
+            console.log('No hay más posts para cargar');
+        }
+    }, 100);
+}
+
+function setupInfiniteScroll() {
+    const postsGrid = document.getElementById('postsGrid');
+    if (!postsGrid) return;
+    
+    postsGrid.addEventListener('scroll', () => {
+        const { scrollTop, scrollHeight, clientHeight } = postsGrid;
+        if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+            loadMorePosts();
+        }
+    });
 }
 
 function setupEventListeners() {
@@ -274,14 +331,13 @@ function toggleLike(postId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, inicializando...');
-    
+    console.log('DOM loaded, inicializando aplicación optimizada...');
     setRandomTitle();
-    
     renderPosts();
-    
     setupEventListeners();
+    setupInfiniteScroll();
     setInterval(updateTimeAgoInCards, 60 * 1000);
-    
-    console.log('Inicialización completada');
+    console.log('Inicialización completada con optimizaciones');
+    console.log(`Posts por página: ${POSTS_PER_PAGE}`);
+    console.log(`Posts renderizados inicialmente: ${renderedPosts.size}`);
 });

@@ -17,5 +17,22 @@
                 <a href="#" class="nav-button">PROFILE</a>
             </nav>
         </header>
+        <main class="comments-section">
+            <div class="comments-header">
+                <div class="comments-count" id="comments-count"></div>
+                <div class="filter-container">
+                    <select class="filter-select" id="filter-select">
+                        <option value="5"> Showing top 5</option>
+                        <option value="10"> Showing top 10</option>
+                        <option value="20">Showing top 20</option>
+                        <option value="all">Show all</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="comments-list" id="comments-list">
+            </div>
+        </main>
+        <script src="../assets/js/comments.js"></script>
 </body>
 </html>

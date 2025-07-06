@@ -114,9 +114,8 @@ body {
 }
 
 .posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  column-count: 3;
+  column-gap: 20px;
   padding: 10px;
   width: 100%;
   max-width: 1200px;
@@ -124,13 +123,13 @@ body {
 
 
 .post-card {
+  break-inside: avoid;
   background-color: #333338;
-  padding: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: block;
 }
 
 .post-card:hover {
@@ -151,6 +150,8 @@ body {
   color: #FFFFFF;
   opacity: 0.87;
   margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .post-meta {

@@ -14,6 +14,8 @@ const inspirationalPhrases = [
     "Fobia al silencio incómodo. ¿Cómo venís con eso?",
 ];
 
+const userLikes = new Set();
+
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
     return inspirationalPhrases[randomIndex];
@@ -71,12 +73,11 @@ const posts = [
     },
     {
         id: 6,
-        text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia",
+        text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia.",
         author: "ashwin_3beauty",
         timestamp: Date.now() - (8 * 60 * 60 * 1000),
         likes: 214,
         comments: 13,
-        isPromoted: true
     },
     {
         id: 7,
@@ -85,22 +86,6 @@ const posts = [
         timestamp: Date.now() - (9 * 60 * 60 * 1000),
         likes: 89,
         comments: 25
-    },
-    {
-        id:8,
-        text: "Test 12 34 5 6 ",
-        author: "randomUser",
-        timestamp: Date.now(),
-        likes: 100,
-        comments: 23
-    },
-    {
-        id:9,
-        text: "Test 12 34 5 6 ",
-        author: "randomUser",
-        timestamp: Date.now(),
-        likes: 100,
-        comments: 23
     }
 ];
 
@@ -108,16 +93,19 @@ function formatTimeAgo(timestamp) {
     const now = Date.now();
     const diff = now - timestamp;
     
+    const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(diff / (1000 * 60));
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     
-    if (minutes < 60) {
-        return `${minutes} minutes ago`;
-    } else if (hours < 24) {
-        return `${hours} hours ago`;
+    if (diff < 60 * 1000) { // Menos de 1 minuto
+        return seconds <= 1 ? 'ahora' : `${seconds} segundos`;
+    } else if (diff < 60 * 60 * 1000) { // Menos de 1 hora
+        return minutes === 1 ? '1 minuto' : `${minutes} minutos`;
+    } else if (diff < 24 * 60 * 60 * 1000) { // Menos de 1 día
+        return hours === 1 ? '1 hora' : `${hours} horas`;
     } else {
-        return `${days} days ago`;
+        return days === 1 ? '1 día' : `${days} días`;
     }
 }
 
@@ -128,10 +116,25 @@ function formatNumber(num) {
     return num.toString();
 }
 
+function updateTimeAgoInCards() {
+    const postCards = document.querySelectorAll('.post-card');
+
+    postCards.forEach(card => {
+        const timestamp = Number(card.dataset.timestamp);
+        const timeElement = card.querySelector('.post-time');
+        if (timestamp && timeElement) {
+            const newTime = formatTimeAgo(timestamp);
+            console.log(`Actualizando card ${card.dataset.postId}: ${newTime}`);
+            timeElement.textContent = newTime;
+        }
+    });
+}
+
 function createPostCard(post) {
     const postCard = document.createElement('div');
     postCard.className = 'post-card';
     postCard.dataset.postId = post.id;
+    postCard.dataset.timestamp = post.timestamp;
     
     const promotedTag = post.isPromoted ? '<span class="promoted-tag">promoted by</span>' : '';
     
@@ -148,13 +151,13 @@ function createPostCard(post) {
             <div class="post-stats">
                 <div class="stat-item likes-btn" data-post-id="${post.id}">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M7 10v12l4-4 4 4V10M7 10l5-6 5 6M7 10H4a2 2 0 00-2 2v3a2 2 0 002 2h3"/>
+                        <path d="M7 14l5-5 5 5"/>
                     </svg>
                     <span class="likes-count">${formatNumber(post.likes)}</span>
                 </div>
                 <div class="stat-item comments-btn" data-post-id="${post.id}">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                     </svg>
                     <span class="comments-count">${post.comments}</span>
                 </div>
@@ -165,6 +168,13 @@ function createPostCard(post) {
     return postCard;
 }
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 function renderPosts() {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) {
@@ -172,6 +182,7 @@ function renderPosts() {
         return;
     }
     
+    shuffleArray(posts);
     postsGrid.innerHTML = '';
     
     posts.forEach(post => {
@@ -179,6 +190,7 @@ function renderPosts() {
         postsGrid.appendChild(postCard);
     });
     
+    updateTimeAgoInCards();
     console.log(`Se renderizaron ${posts.length} posts`);
 }
 
@@ -224,11 +236,13 @@ function setupEventListeners() {
 }
 
 function toggleLike(postId) {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
     const likesBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
     const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
-    const likeIcon = document.querySelector(`[data-post-id="${postId}"] .like-icon`);
+    const likeIcon = likesBtn?.querySelector('svg');
     
-    if (!post || !likesBtn || !likesCount || !likeIcon) return;
+    if (!likesBtn || !likesCount || !likeIcon) return;
     
     const isCurrentlyLiked = userLikes.has(postId);
     
@@ -237,6 +251,7 @@ function toggleLike(postId) {
         post.likes -= 1;
         likesBtn.classList.remove('liked');
         likeIcon.setAttribute('fill', 'none');
+        
         likesBtn.style.transform = 'scale(0.9)';
         setTimeout(() => {
             likesBtn.style.transform = 'scale(1)';
@@ -247,7 +262,6 @@ function toggleLike(postId) {
         post.likes += 1;
         likesBtn.classList.add('liked');
         likeIcon.setAttribute('fill', 'currentColor');
-        
         likesBtn.style.transform = 'scale(1.1)';
         setTimeout(() => {
             likesBtn.style.transform = 'scale(1)';
@@ -267,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPosts();
     
     setupEventListeners();
+    setInterval(updateTimeAgoInCards, 60 * 1000);
     
     console.log('Inicialización completada');
 });

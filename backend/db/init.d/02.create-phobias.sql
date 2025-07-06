@@ -1,4 +1,3 @@
--- 02-create-phobias.sql
 CREATE TABLE IF NOT EXISTS phobias (
   id           SERIAL PRIMARY KEY,
   phobia_name  VARCHAR(100) NOT NULL,

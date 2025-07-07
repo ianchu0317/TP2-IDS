@@ -5,18 +5,13 @@ from schemas import Comment, CommentInDB
 from auth_controller import hash_password
 
 
-# Funciones auxiliares
-
-
-
-# Funciones principales
-# Funciones de usuarios
+# **** Funciones de usuarios ****
+# Crear usuario en db
 async def create_user(user_data: User):
     hashed_password = hash_password(user_data.password) # Hash antes de almacenar
     
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -26,25 +21,22 @@ async def create_user(user_data: User):
                  user_data.email,
                  user_data.phone,
                  hashed_password))
-                
     aconn.close()
 
 
+# Obtener datos de usuario por login
 async def get_user(user_data: UserLogin):
-
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
                 "SELECT * FROM users " 
                 f"WHERE email='{user_data.email}'")
-            
-            # devolver todos los datos que coinciden con busqueda
+            # devolver datos del usuario encontrado
             user_db_data = await acur.fetchone() 
     aconn.close()
-
+    
     return UserInDB(
         id=user_db_data[0],
         username=user_db_data[1],
@@ -54,11 +46,35 @@ async def get_user(user_data: UserLogin):
         date=user_db_data[5]
     )
 
-# Funciones de fobias
+
+# Obtener información registrada del usuario
+async def get_user_info(user_id: int) -> UserInDB | None:
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT * FROM users " 
+                f"WHERE id={user_id}")
+            user_db_data = await acur.fetchone() 
+    aconn.close()
+    
+    return UserInDB(
+        id=user_db_data[0],
+        username=user_db_data[1],
+        email=user_db_data[2],
+        phone=user_db_data[3],
+        hashed_password=user_db_data[4],
+        date=user_db_data[5]
+    )
+
+
+
+#  **** Funciones de fobias ****
+# Crear fobia en DB
 async def create_phobia(phobia_data: Phobia, user_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -68,9 +84,7 @@ async def create_phobia(phobia_data: Phobia, user_id: int):
                  phobia_data.description,
                  user_id,
                  0))
-                
     aconn.close()
-    
     # id y date se generan en db automaticamente
     return PhobiaInDB(
         id=None,  
@@ -82,6 +96,7 @@ async def create_phobia(phobia_data: Phobia, user_id: int):
     )  
     
 
+# Obtener todas las fobias de DB
 async def get_phobias():
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
@@ -90,10 +105,9 @@ async def get_phobias():
         async with aconn.cursor() as acur:
             await acur.execute(
                 "SELECT * FROM phobias")
-            
             # devolver todos los datos que coinciden con busqueda
             phobias_db_data = await acur.fetchall() 
-            
+            # Limpieza de datos
             for phobia in phobias_db_data:
                 phobias.append(PhobiaInDB(
                     id=phobia[0],
@@ -106,22 +120,21 @@ async def get_phobias():
     aconn.close()
     return phobias
 
+
 # Get phobia por su id en db
 async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
                 "SELECT * FROM phobias " 
                 f"WHERE id={phobia_id}")
-            
             phobia_db_data = await acur.fetchone() 
     aconn.close()
 
     if not phobia_db_data:
-        return None
+        return None    
     
     return PhobiaInDB(
         id=phobia_db_data[0],
@@ -132,10 +145,11 @@ async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
         date=phobia_db_data[5]
     )
 
+
+# Actualizar fobia (título, descripción)
 async def update_phobia(phobia_id: int, phobia_data: Phobia):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -143,24 +157,25 @@ async def update_phobia(phobia_id: int, phobia_data: Phobia):
                 f"WHERE id={phobia_id}",
                 (phobia_data.phobia_name,
                  phobia_data.description))
-
     aconn.close()
     
 
+# Eliminar una fobia
 async def delete_phobia(phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
                 "DELETE FROM phobias " 
-                f"WHERE id={phobia_id}",)
-
+                "WHERE id=%s",
+                (str(phobia_id),))
     aconn.close()
 
 
-# CRUD Comentarios
+
+#  **** CRUD Comentarios**** 
+# Crear comentario en una fobia
 async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
@@ -183,6 +198,8 @@ async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
         date=None
     )
 
+
+# Obtener lista de comentarios de una fobia
 async def get_comments(phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
@@ -192,9 +209,7 @@ async def get_comments(phobia_id: int):
             await acur.execute(
                 "SELECT * FROM comments " 
                 f"WHERE phobia_id={phobia_id}")
-            
             comments_db_data = await acur.fetchall() 
-            
             for comment in comments_db_data:
                 comments.append(CommentInDB(
                     id=comment[0],
@@ -207,28 +222,9 @@ async def get_comments(phobia_id: int):
     aconn.close()
     return comments
 
-async def get_user_info(user_id: int) -> UserInDB | None:
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
-    
-    async with aconn:
-        async with aconn.cursor() as acur:
-            await acur.execute(
-                "SELECT * FROM users " 
-                f"WHERE id={user_id}")
-            
-            user_db_data = await acur.fetchone() 
-    aconn.close()
-    
-    return UserInDB(
-        id=user_db_data[0],
-        username=user_db_data[1],
-        email=user_db_data[2],
-        phone=user_db_data[3],
-        hashed_password=user_db_data[4],
-        date=user_db_data[5]
-    )
 
+
+# **** Rankings ****
 # Dar actualizar like de fobia
 async def like_phobia(phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(
@@ -237,9 +233,9 @@ async def like_phobia(phobia_id: int):
         async with aconn.cursor() as acur:
             await acur.execute(
                 "UPDATE phobias SET likes=likes+1 WHERE id=%s",
-                (str(phobia_id),))
-    
+                (str(phobia_id),))    
     aconn.close()
+
 
 # Obtener lista de fobias ordenadas descendente por laiks
 async def get_rankings():
@@ -250,7 +246,6 @@ async def get_rankings():
         async with aconn.cursor() as acur:
             await acur.execute(
                 "SELECT * FROM phobias ORDER BY likes DESC")
-            
             phobias_db_data = await acur.fetchall() 
             
             for phobia in phobias_db_data:

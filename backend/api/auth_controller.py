@@ -1,7 +1,7 @@
 import jwt
 from fastapi import HTTPException
 from passlib.context import CryptContext
-from schemas import UserLogin, UserInDB
+from schemas import UserInDB
 from datetime import datetime, timezone, timedelta
 
 # contexto de hasheo para contraseñas
@@ -13,19 +13,22 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 10
 
 
+# Manejo de contraseñas
+# Hashear contraseña
 def hash_password(password: str) -> str:
-    """Hashear contraseña usando SHA-256"""
     try: 
         hashed_password = pwd_context.hash(password)
     except AttributeError:
         pass
     return hashed_password
 
-
+# Verificar contraseña
 def verify_password(password, hashed_password):
     return pwd_context.verify(password, hashed_password)
 
 
+#  Manejo de tokens JWT
+# Crear token para el usuario
 def create_token(user: UserInDB):
     """Create a token for the user"""
     data = {
@@ -38,6 +41,7 @@ def create_token(user: UserInDB):
     return jwt_token
 
 
+# Obtener ID de usuario desde el token
 def get_id_from_token(token: str) -> int:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

@@ -8,12 +8,14 @@ from schemas import Comment, CommentInDB
 import db_controller as db
 import auth_controller as auth
 
+
 app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
-# Autenticación de usuarios
+# **** Autenticación de usuarios ****
+# Registrar usuario
 @app.post("/register", status_code=201)
 async def register_user(user_data: User):
     try:
@@ -23,7 +25,7 @@ async def register_user(user_data: User):
             status_code=400,
             detail="Datos inválidos")
 
-
+# Login usuario
 @app.post("/login", status_code=200)
 async def login_user(user_data: UserLogin):
     user_db = await db.get_user(user_data)
@@ -46,7 +48,23 @@ async def login_user(user_data: UserLogin):
         }
 
 
-# CRUD Fobias
+# Obtener información de un usuario
+@app.get("/profile", status_code=200, response_model=UserInfo)
+async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+    user_in_db = await db.get_user_info(user_id)
+
+    return UserInfo(
+        username=user_in_db.username,
+        email=user_in_db.email,
+        phone=user_in_db.phone,
+        date=user_in_db.date
+    )
+
+
+
+# **** CRUD Fobias ****
+# Crear fobia
 @app.post("/phobias", status_code=201)
 async def create_phobia(phobia_data: Phobia, 
                       token: Annotated[str, Depends(oauth2_scheme)]):
@@ -61,11 +79,13 @@ async def create_phobia(phobia_data: Phobia,
     return db_phobia
 
 
+# Obtener todas las fobias en una lista
 @app.get("/phobias", status_code=200, response_model=list[PhobiaInDB])
 async def get_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
     return await db.get_phobias()
 
-# Get fobia por su id en db
+
+# Obtener fobia por ID específica de la lista
 @app.get("/phobias/{phobia_id}", status_code=200, response_model=PhobiaInDB)
 async def get_phobia(phobia_id: int,
                     token: Annotated[str, Depends(oauth2_scheme)]):
@@ -77,6 +97,8 @@ async def get_phobia(phobia_id: int,
         )
     return phobia
 
+
+# Actualizar fobia (título, descripción)
 @app.put("/phobias/{phobia_id}", status_code=201)
 async def update_phobia(phobia_id: int,
                         phobia_data: Phobia,
@@ -99,6 +121,8 @@ async def update_phobia(phobia_id: int,
             detail="Error actualizando fobia"
         )
 
+
+# Eliminar fobia
 @app.delete("/phobias/{phobia_id}", status_code=204)
 async def delete_phobia(phobia_id: int, 
                         token: Annotated[str, Depends(oauth2_scheme)]):
@@ -120,7 +144,9 @@ async def delete_phobia(phobia_id: int,
         )
 
 
-# CRUD comentarios
+
+# *** CRUD comentarios ***
+# Crear comentario en una fobia
 @app.post("/phobias/{phobia_id}/comments", status_code=200)
 async def create_comment(phobia_id: int,
                          comment_data: Comment,
@@ -137,6 +163,7 @@ async def create_comment(phobia_id: int,
     return comment_db
 
 
+# Obtener comentarios de una fobia
 @app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentInDB])
 async def get_comments(phobia_id: int,
                        token: Annotated[str, Depends(oauth2_scheme)]):
@@ -149,24 +176,14 @@ async def get_comments(phobia_id: int,
     return comments
 
 
-@app.get("/profile", status_code=200, response_model=UserInfo)
-async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
-    user_id = auth.get_id_from_token(token)
-    user_in_db = await db.get_user_info(user_id)
 
-    return UserInfo(
-        username=user_in_db.username,
-        email=user_in_db.email,
-        phone=user_in_db.phone,
-        date=user_in_db.date
-    )
-
+# **** Rankings ****
 # Dar like a fobia
 @app.put("/phobias/{phobia_id}/like", status_code=200)
 async def like_phobia(phobia_id: int, token: Annotated[str, Depends(oauth2_scheme)]):
     await db.like_phobia(phobia_id)
 
-# Ranking de fobias
+# Lista de fobias ordenadas por cantidad de likes
 @app.get("/rankings", status_code=200, response_model=list[PhobiaInDB])
 async def get_rankings(token: Annotated[str, Depends(oauth2_scheme)]):
     phobias = await db.get_rankings()

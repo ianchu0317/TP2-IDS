@@ -97,3 +97,23 @@ async def update_phobia(phobia_id: int,
             status_code=400,
             detail="Error actualizando fobia"
         )
+
+@app.delete("/phobias/{phobia_id}", status_code=204)
+async def delete_phobia(phobia_id: int, 
+                        token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+    phobia_in_db = await db.get_phobia(phobia_id)
+    user_in_db = phobia_in_db.creator_id
+    # verificar que el usuario que borra la fobia es el creador
+    if user_id != user_in_db:
+        raise HTTPException(
+            status_code=403,
+            detail="No sos el usuario creador lol"
+        )
+    try:     
+        await db.update_phobia(phobia_id)
+    except: 
+        HTTPException(
+            status_code=400,
+            detail="Error actualizando fobia"
+        )

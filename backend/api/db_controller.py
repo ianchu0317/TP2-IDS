@@ -144,3 +144,15 @@ async def update_phobia(phobia_id: int, phobia_data: Phobia):
 
     aconn.close()
     
+
+async def delete_phobia(phobia_id: int):
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "DELETE FROM phobias " 
+                f"WHERE id={phobia_id}",)
+
+    aconn.close()

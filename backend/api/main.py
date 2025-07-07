@@ -152,7 +152,7 @@ async def get_comments(phobia_id: int,
 @app.get("/profile", status_code=200, response_model=UserInfo)
 async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
-    user_in_db = await db.get_user_by_id(user_id)
+    user_in_db = await db.get_user_info(user_id)
 
     return UserInfo(
         username=user_in_db.username,

@@ -75,3 +75,16 @@ async def get_phobia(phobia_id: int,
             detail="Fobia no encontrada"
         )
     return phobia
+
+@app.put("/phobias/{phobia_id}", status_code=200, response_model=PhobiaInDB)
+async def update_phobia(phobia_id: int,
+                        phobia_data: Phobia,
+                        token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+    user_id_db = await db.get_phobia(phobia_id).creator_id
+    # verificar que el usuario que actualiza la fobia es el creador
+    if user_id != user_id_db:
+        raise HTTPException(
+            status_code=403,
+            detail="No sos el usuario creador lol"
+        )

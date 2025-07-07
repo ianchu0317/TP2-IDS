@@ -105,7 +105,7 @@ async def get_phobias():
     return phobias
 
 # Get phobia por su id en db
-async def get_phobia(phobia_id: int):
+async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
     
@@ -129,3 +129,18 @@ async def get_phobia(phobia_id: int):
         likes=phobia_db_data[4],
         date=phobia_db_data[5]
     )
+
+async def update_phobia(phobia_id: int, phobia_data: Phobia):
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "UPDATE phobias SET phobia_name=%s, description=%s " 
+                f"WHERE id={phobia_id}",
+                (phobia_data.phobia_name,
+                 phobia_data.description))
+
+    aconn.close()
+    

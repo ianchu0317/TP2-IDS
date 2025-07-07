@@ -82,9 +82,17 @@ async def update_phobia(phobia_id: int,
                         token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
     user_id_db = await db.get_phobia(phobia_id).creator_id
+    
     # verificar que el usuario que actualiza la fobia es el creador
     if user_id != user_id_db:
         raise HTTPException(
             status_code=403,
             detail="No sos el usuario creador lol"
+        )
+    try:     
+        await db.update_phobia(phobia_id, phobia_data)
+    except: 
+        HTTPException(
+            status_code=400,
+            detail="Error actualizando fobia"
         )

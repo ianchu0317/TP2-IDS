@@ -233,12 +233,11 @@ async def get_user_info(user_id: int) -> UserInDB | None:
 async def like_phobia(phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
-    
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "UPDATE phobias SET likes=likes+1 " 
-                f"WHERE id={phobia_id}")
+                "UPDATE phobias SET likes=likes+1 WHERE id=%s",
+                (str(phobia_id),))
     
     aconn.close()
 

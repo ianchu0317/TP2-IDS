@@ -40,3 +40,15 @@ class PhobiaInDB(BaseModel):
     creator_id: int
     likes: int
     date: datetime.date | None
+    
+# Comentarios
+class Comment(BaseModel):
+    comment: str
+
+class CommentInDB(BaseModel):
+    id: int | None
+    comment: str
+    creator_id: int
+    phobia_id: int
+    likes: int
+    date: datetime.date | None

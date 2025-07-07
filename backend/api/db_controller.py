@@ -182,3 +182,27 @@ async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
         likes=0,
         date=None
     )
+
+async def get_comments(phobia_id: int):
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    comments = []
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT * FROM comments " 
+                f"WHERE phobia_id={phobia_id}")
+            
+            comments_db_data = await acur.fetchall() 
+            
+            for comment in comments_db_data:
+                comments.append(CommentInDB(
+                    id=comment[0],
+                    comment=comment[1],
+                    creator_id=comment[2],
+                    phobia_id=comment[3],
+                    likes=comment[4],
+                    date=comment[5]
+                ))
+    aconn.close()
+    return comments

@@ -135,4 +135,17 @@ async def create_comment(phobia_id: int,
             detail="Error creando comentario"
         ) 
     return comment_db
+
+
+@app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentInDB])
+async def get_comments(phobia_id: int,
+                       token: Annotated[str, Depends(oauth2_scheme)]):
+    comments = await db.get_comments(phobia_id)
+    if not comments:
+        raise HTTPException(
+            status_code=404,
+            detail="No hay comentarios para esta fobia"
+        )
+    return comments
+
                          

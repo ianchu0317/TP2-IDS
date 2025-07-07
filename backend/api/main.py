@@ -1,9 +1,14 @@
 from fastapi import FastAPI, HTTPException
-from schemas import User, UserLogin, Token
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends
+from typing import Annotated
+from schemas import User, UserLogin, Token, Phobia
 import db_controller as db
 import auth_controller as auth
 
 app = FastAPI()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 # Autenticación de usuarios
@@ -37,3 +42,13 @@ async def login_user(user_data: UserLogin):
             token_type="bearer"
             )
         }
+
+
+# CRUD Fobias
+@app.post("/phobias", status_code=201)
+async def create_post(phobia: Phobia, 
+                      token: Annotated[str, Depends(oauth2_scheme)]):
+    # verificar token
+    user_id = auth.get_id_from_token(token)
+    
+    return f"Vos sos {user_id}"

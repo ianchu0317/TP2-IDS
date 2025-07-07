@@ -35,3 +35,14 @@ def create_token(user: UserInDB):
     } 
     jwt_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return jwt_token
+
+
+def get_id_from_token(token: str) -> int:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = int(payload.get("sub"))
+        return user_id
+    except jwt.ExpiredSignatureError:
+        raise ValueError("Token has expired")
+    except jwt.InvalidTokenError:
+        raise ValueError("Invalid token")

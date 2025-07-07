@@ -25,3 +25,18 @@ class UserInDB(BaseModel):
 class Token(BaseModel):
     token: str
     token_type: str
+    
+    
+# POSTS
+class Phobia(BaseModel):
+    phobia_name: str
+    description: str | None    
+
+
+class PhobiaInDB(BaseModel):
+    id: int
+    phobia_name: str
+    description: str | None
+    creator_id: int
+    likes: int | None
+    date: datetime.date

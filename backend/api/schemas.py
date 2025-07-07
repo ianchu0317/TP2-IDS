@@ -22,6 +22,13 @@ class UserInDB(BaseModel):
     date: datetime.date
 
 
+class UserInfo(BaseModel):
+    username: str
+    email: str
+    phone: int
+    date: datetime.date 
+
+
 class Token(BaseModel):
     token: str
     token_type: str

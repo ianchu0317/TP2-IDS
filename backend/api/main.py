@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from typing import Annotated
-from schemas import User, UserLogin, Token
+from schemas import User, UserLogin, UserInfo, Token
 from schemas import Phobia, PhobiaInDB
 from schemas import Comment, CommentInDB
 import db_controller as db
@@ -148,4 +148,15 @@ async def get_comments(phobia_id: int,
         )
     return comments
 
-                         
+
+@app.get("/profile", status_code=200, response_model=UserInfo)
+async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+    user_in_db = await db.get_user_by_id(user_id)
+
+    return UserInfo(
+        username=user_in_db.username,
+        email=user_in_db.email,
+        phone=user_in_db.phone,
+        date=user_in_db.date
+    )

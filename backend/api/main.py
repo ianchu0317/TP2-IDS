@@ -46,9 +46,16 @@ async def login_user(user_data: UserLogin):
 
 # CRUD Fobias
 @app.post("/phobias", status_code=201)
-async def create_post(phobia: Phobia, 
+async def create_phobia(phobia_data: Phobia, 
                       token: Annotated[str, Depends(oauth2_scheme)]):
     # verificar token
     user_id = auth.get_id_from_token(token)
-    
-    return f"Vos sos {user_id}"
+    db_phobia = await db.create_phobia(phobia_data, user_id)
+    """
+    try:
+    except:
+        raise HTTPException(
+            status_code=400,
+            detail="Error creando fobia")
+    """
+    return db_phobia

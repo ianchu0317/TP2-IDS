@@ -1,5 +1,6 @@
 import psycopg
 from schemas import User, UserLogin, UserInDB
+from schemas import Phobia, PhobiaInDB
 from auth_controller import hash_password
 
 # Funciones auxiliares
@@ -50,3 +51,30 @@ async def get_user(user_data: UserLogin):
         hashed_password=user_db_data[4],
         date=user_db_data[5]
     )
+
+# Funciones de fobias
+async def create_phobia(phobia_data: User, user_id: int):
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "INSERT INTO phobias (phobia_name, description, creator_id, likes, date) " 
+                "VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)",
+                (phobia_data.phobia_name,
+                 phobia_data.description,
+                 user_id,
+                 0))
+                
+    aconn.close()
+    
+    # id y date se generan en db automaticamente
+    return PhobiaInDB(
+        id=None,  
+        phobia_name=phobia_data.phobia_name,
+        description=phobia_data.description,
+        creator_id=user_id,
+        likes=0,
+        date=None
+    )  

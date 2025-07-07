@@ -34,9 +34,9 @@ class Phobia(BaseModel):
 
 
 class PhobiaInDB(BaseModel):
-    id: int
-    phobia_name: str
+    id: int | None
+    phobia_name: str 
     description: str | None
     creator_id: int
     likes: int | None
-    date: datetime.date
+    date: datetime.date | None

@@ -53,7 +53,7 @@ async def get_user(user_data: UserLogin):
     )
 
 # Funciones de fobias
-async def create_phobia(phobia_data: User, user_id: int):
+async def create_phobia(phobia_data: Phobia, user_id: int):
     aconn = await psycopg.AsyncConnection.connect(
         "host=db dbname=tp2 user=fobias password=fobias")
     
@@ -78,3 +78,28 @@ async def create_phobia(phobia_data: User, user_id: int):
         likes=0,
         date=None
     )  
+    
+
+async def get_phobias():
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    phobias = []
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT * FROM phobias")
+            
+            # devolver todos los datos que coinciden con busqueda
+            phobias_db_data = await acur.fetchall() 
+            
+            for phobia in phobias_db_data:
+                phobias.append(PhobiaInDB(
+                    id=phobia[0],
+                    phobia_name=phobia[1],
+                    description=phobia[2],
+                    creator_id=phobia[3],
+                    likes=phobia[4],
+                    date=phobia[5]
+                ))
+    aconn.close()
+    return phobias

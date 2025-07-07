@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from typing import Annotated
-from schemas import User, UserLogin, Token, Phobia
+from schemas import User, UserLogin, Token
+from schemas import Phobia, PhobiaInDB
 import db_controller as db
 import auth_controller as auth
 
@@ -50,12 +51,16 @@ async def create_phobia(phobia_data: Phobia,
                       token: Annotated[str, Depends(oauth2_scheme)]):
     # verificar token
     user_id = auth.get_id_from_token(token)
-    db_phobia = await db.create_phobia(phobia_data, user_id)
-    """
     try:
+        db_phobia = await db.create_phobia(phobia_data, user_id)
     except:
         raise HTTPException(
             status_code=400,
             detail="Error creando fobia")
-    """
     return db_phobia
+
+
+@app.get("/phobias", status_code=200, response_model=list[PhobiaInDB])
+async def get_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
+    return await db.get_phobias()
+

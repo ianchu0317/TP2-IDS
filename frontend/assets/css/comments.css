@@ -32,17 +32,17 @@ body {
 }
 
 .header {
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
   height: 60px;
   position: relative;
   z-index: 10;
-  margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .logo {
-  position: absolute;
-  left: 60px;
-  top: 32px;
   width: 62px;
   height: 38px;
   font-size: 24px;
@@ -52,12 +52,11 @@ body {
 }
 
 .nav-buttons {
-  position: relative;
-  height: 100%;
+  display: flex;
+  gap: 48px;
 }
 
 .nav-button {
-  position: absolute;
   font-family: 'Roboto Medium', Arial, sans-serif;
   font-size: 14px;
   color: #FF4500;
@@ -70,21 +69,6 @@ body {
 
 .nav-button:hover {
   opacity: 0.8;
-}
-
-.nav-button:nth-child(1) {
-  left: 843px;
-  top: 32px;
-}
-
-.nav-button:nth-child(2) {
-  left: 977px;
-  top: 32px;
-}
-
-.nav-button:nth-child(3) {
-  left: 1103px;
-  top: 32px;
 }
 
 .comments-section {

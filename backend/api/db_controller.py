@@ -3,6 +3,15 @@ from schemas import User, UserLogin, UserInDB
 from schemas import Phobia, PhobiaInDB
 from schemas import Comment, CommentInDB
 from auth_controller import hash_password
+from os import getenv
+
+
+# Informacion de la conexion a la base de datos
+# obtener desde variables de entorno
+db_conn_info = f"""host={getenv('DB_HOST')}
+                dbname={getenv('DB_NAME')} 
+                user={getenv('DB_USER')} 
+                password={getenv('DB_PASSWORD')}"""
 
 
 # **** Funciones de usuarios ****
@@ -10,8 +19,7 @@ from auth_controller import hash_password
 async def create_user(user_data: User):
     hashed_password = hash_password(user_data.password) # Hash antes de almacenar
     
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -26,8 +34,7 @@ async def create_user(user_data: User):
 
 # Obtener datos de usuario por login
 async def get_user(user_data: UserLogin):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -49,8 +56,7 @@ async def get_user(user_data: UserLogin):
 
 # Obtener información registrada del usuario
 async def get_user_info(user_id: int) -> UserInDB | None:
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -73,8 +79,7 @@ async def get_user_info(user_id: int) -> UserInDB | None:
 #  **** Funciones de fobias ****
 # Crear fobia en DB
 async def create_phobia(phobia_data: Phobia, user_id: int):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -98,8 +103,7 @@ async def create_phobia(phobia_data: Phobia, user_id: int):
 
 # Obtener todas las fobias de DB
 async def get_phobias():
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     phobias = []
     async with aconn:
         async with aconn.cursor() as acur:
@@ -123,8 +127,7 @@ async def get_phobias():
 
 # Get phobia por su id en db
 async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -148,8 +151,7 @@ async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
 
 # Actualizar fobia (título, descripción)
 async def update_phobia(phobia_id: int, phobia_data: Phobia):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -162,8 +164,7 @@ async def update_phobia(phobia_id: int, phobia_data: Phobia):
 
 # Eliminar una fobia
 async def delete_phobia(phobia_id: int):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -177,8 +178,7 @@ async def delete_phobia(phobia_id: int):
 #  **** CRUD Comentarios**** 
 # Crear comentario en una fobia
 async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -201,8 +201,7 @@ async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
 
 # Obtener lista de comentarios de una fobia
 async def get_comments(phobia_id: int):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     comments = []
     async with aconn:
         async with aconn.cursor() as acur:
@@ -227,8 +226,7 @@ async def get_comments(phobia_id: int):
 # **** Rankings ****
 # Dar actualizar like de fobia
 async def like_phobia(phobia_id: int):
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
@@ -239,8 +237,7 @@ async def like_phobia(phobia_id: int):
 
 # Obtener lista de fobias ordenadas descendente por laiks
 async def get_rankings():
-    aconn = await psycopg.AsyncConnection.connect(
-        "host=db dbname=tp2 user=fobias password=fobias")
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     phobias_ranked = []
     async with aconn:
         async with aconn.cursor() as acur:

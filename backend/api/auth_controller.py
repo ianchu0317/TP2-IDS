@@ -3,14 +3,15 @@ from fastapi import HTTPException
 from passlib.context import CryptContext
 from schemas import UserInDB
 from datetime import datetime, timezone, timedelta
+from os import getenv
 
 # contexto de hasheo para contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 # variables para generación de jwt
-# openssl rand -hex 32
-SECRET_KEY = "354198b9efb425526d5822bd4e4d5ab36fa92dcf2e40521d18402e4edcd60ae1"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 10
+SECRET_KEY = getenv('SECRET_KEY')
+ALGORITHM = getenv('ALGORITHM', 'HS256') 
+ACCESS_TOKEN_EXPIRE_MINUTES = int(getenv('ACCESS_TOKEN_EXPIRE_MINUTES', 30))
 
 
 # Manejo de contraseñas

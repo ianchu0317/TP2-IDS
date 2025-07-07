@@ -165,3 +165,9 @@ async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
 @app.put("/phobias/{phobia_id}/like", status_code=200)
 async def like_phobia(phobia_id: int, token: Annotated[str, Depends(oauth2_scheme)]):
     db.like_phobia(phobia_id)
+
+# Ranking de fobias
+@app.get("/rankings", status_code=200, response_model=list[PhobiaInDB])
+async def get_rankings(token: Annotated[str, Depends(oauth2_scheme)]):
+    phobias = await db.get_rankings()
+    return phobias

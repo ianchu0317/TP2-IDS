@@ -241,3 +241,27 @@ async def like_phobia(phobia_id: int):
                 f"WHERE id={phobia_id}")
     
     aconn.close()
+
+# Obtener lista de fobias ordenadas descendente por laiks
+async def get_rankings():
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    phobias_ranked = []
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT * FROM phobias ORDER BY likes DESC")
+            
+            phobias_db_data = await acur.fetchall() 
+            
+            for phobia in phobias_db_data:
+                phobias_ranked.append(PhobiaInDB(
+                    id=phobia[0],
+                    phobia_name=phobia[1],
+                    description=phobia[2],
+                    creator_id=phobia[3],
+                    likes=phobia[4],
+                    date=phobia[5]
+                ))
+    aconn.close()
+    return phobias_ranked

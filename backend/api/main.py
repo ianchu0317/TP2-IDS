@@ -4,6 +4,7 @@ from fastapi import Depends
 from typing import Annotated
 from schemas import User, UserLogin, Token
 from schemas import Phobia, PhobiaInDB
+from schemas import Comment, CommentInDB
 import db_controller as db
 import auth_controller as auth
 
@@ -117,3 +118,21 @@ async def delete_phobia(phobia_id: int,
             status_code=400,
             detail="Error actualizando fobia"
         )
+
+
+# CRUD comentarios
+@app.post("/phobias/{phobia_id}/comments", status_code=200)
+async def create_comment(phobia_id: int,
+                         comment_data: Comment,
+                         token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+
+    try:
+        comment_db = await db.create_comment(comment_data, user_id, phobia_id)
+    except:
+        raise HTTPException(
+            status_code=400,
+            detail="Error creando comentario"
+        ) 
+    return comment_db
+                         

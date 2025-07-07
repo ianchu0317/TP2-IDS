@@ -39,7 +39,6 @@ async def login_user(user_data: UserLogin):
             status_code=401,
             detail="Datos inválidos"
         )
-
     return { 
         "access_token": Token(
             token=auth.create_token(user_db),
@@ -81,14 +80,13 @@ async def create_phobia(phobia_data: Phobia,
 
 # Obtener todas las fobias en una lista
 @app.get("/phobias", status_code=200, response_model=list[PhobiaInDB])
-async def get_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_phobias():
     return await db.get_phobias()
 
 
 # Obtener fobia por ID específica de la lista
 @app.get("/phobias/{phobia_id}", status_code=200, response_model=PhobiaInDB)
-async def get_phobia(phobia_id: int,
-                    token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_phobia(phobia_id: int):
     phobia = await db.get_phobia(phobia_id)
     if not phobia:
         raise HTTPException(
@@ -165,8 +163,7 @@ async def create_comment(phobia_id: int,
 
 # Obtener comentarios de una fobia
 @app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentInDB])
-async def get_comments(phobia_id: int,
-                       token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_comments(phobia_id: int):
     comments = await db.get_comments(phobia_id)
     if not comments:
         raise HTTPException(

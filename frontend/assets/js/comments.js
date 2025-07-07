@@ -5,8 +5,6 @@ const commentsData = [
         author: "CringePolicía",
         timeAgo: "3 hours ago",
         timestamp: Date.now() - (3 * 60 * 60 * 1000),
-        votes: 10,
-        userVoted: true,
         links: []
     },
     {
@@ -15,8 +13,6 @@ const commentsData = [
         author: "ToontoPolarBear",
         timeAgo: "3 hours ago",
         timestamp: Date.now() - (3 * 60 * 60 * 1000),
-        votes: 5,
-        userVoted: true,
         links: []
     },
     {
@@ -25,8 +21,6 @@ const commentsData = [
         author: "DarwinTeMira",
         timeAgo: "2 hours ago",
         timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        votes: 1,
-        userVoted: true,
         links: []
     },
     {
@@ -35,8 +29,6 @@ const commentsData = [
         author: "NarizDePayaso",
         timeAgo: "2 hours ago",
         timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        votes: 1,
-        userVoted: true,
         links: []
     },
     {
@@ -45,8 +37,6 @@ const commentsData = [
         author: "PsicoLicenciadoEnYouTube",
         timeAgo: "2 hours ago",
         timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        votes: 20,
-        userVoted: true,
         links: []
     },
     {
@@ -55,8 +45,6 @@ const commentsData = [
         author: "ShrekFanPage",
         timeAgo: "2 hours ago",
         timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        votes: 45,
-        userVoted: true,
         links: ["https://ar.pinterest.com/pin/290693350965105609/"]
     },
     {
@@ -65,8 +53,6 @@ const commentsData = [
         author: "CriterioEstéticoViciado",
         timeAgo: "2 hours ago",
         timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        votes: 45,
-        userVoted: true,
         links: []
     }
 ];
@@ -148,15 +134,6 @@ function createCommentElement(comment) {
         ).join('');
     }
     commentDiv.innerHTML = `
-        <div class="vote-section">
-            <button class="vote-arrow ${comment.userVoted ? 'upvoted' : ''}" 
-                    onclick="handleVote(${comment.id}, true)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M7 14l5-5 5 5"></path>
-                </svg>
-            </button>
-            <div class="vote-count">${formatVotes(comment.votes)}</div>
-        </div>
         <div class="comment-content">
             <div class="comment-text">${commentTextHtml}</div>
             ${linksHtml}
@@ -176,9 +153,7 @@ function renderComments() {
     const filterValue = filterSelect ? filterSelect.value : "all";
 
     commentsList.innerHTML = '';
-    let sortedComments = sortComments(commentsData, 'newest');
-
-    // Mostrar todos o solo los top N según filtro
+    let sortedComments = [...commentsData].sort((a, b) => b.timestamp - a.timestamp);
     if (filterValue !== "all") {
         sortedComments = sortedComments.slice(0, parseInt(filterValue, 10));
     }

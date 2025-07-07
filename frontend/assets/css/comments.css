@@ -45,7 +45,6 @@ body {
   top: 32px;
   width: 62px;
   height: 38px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
   font-size: 24px;
   color: #FF4500;
   letter-spacing: 0.5px;
@@ -105,7 +104,6 @@ body {
   color: #FFFFFF;
   font-size: 16px;
   opacity: 0.87;
-  font-family: 'Roboto Regular', Arial, sans-serif;
 }
 
 .filter-container {
@@ -118,7 +116,6 @@ body {
   color: #FFFFFF;
   opacity: 0.87;
   font-size: 15px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
 }
 
 .filter-select {
@@ -128,7 +125,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
   opacity: 0.87;
 }
 
@@ -168,47 +164,9 @@ body {
   border-radius: 8px;
 }
 
-.vote-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 50px;
-  margin-right: 15px;
-}
-
-.vote-arrow {
-  background: none;
-  border: none;
-  color: #fff;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vote-arrow svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-}
-
-.vote-arrow svg path {
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-}
-
-.vote-count {
-  font-size: 14px;
-  margin: 5px 0;
-  min-width: 30px;
-  text-align: center;
-  font-family: 'Roboto Regular', Arial, sans-serif;
-}
-
 .comment-content {
   flex: 1;
+  width: 100%;
 }
 
 .comment-text {
@@ -217,16 +175,15 @@ body {
   line-height: 1.5;
   margin-bottom: 5px;
   opacity: 0.87;
-  font-family: 'Roboto Regular', Arial, sans-serif;
 }
 
 .comment-link {
   color: #00BCD4;
-  text-decoration: none;
-  word-break: break-all;
+  font-size: 14px;
+  word-break: break-word;
   display: block;
-  margin-top: 4px;
-  margin-bottom: 0;
+  margin-top: 4px 0 0;
+  text-decoration: none;
 }
 
 .comment-link:hover {
@@ -239,7 +196,6 @@ body {
   gap: 10px;
   font-size: 12px;
   color: #FFFFFF;
-  font-family: 'Roboto Regular', Arial, sans-serif;
   margin-top: 8px;
 }
 
@@ -247,7 +203,6 @@ body {
   color: #FF4500;
   opacity: 0.5;
   text-decoration: none;
-  font-family: 'Roboto Regular', Arial, sans-serif;
 }
 
 .comment-author:hover {
@@ -257,35 +212,67 @@ body {
 .comment-time {
   color: #FFFFFF;
   opacity: 0.5;
-  font-family: 'Roboto Regular', Arial, sans-serif;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
+@media (max-width: 1024px) {
+  .comments-section {
+    max-width: 100%;
     padding: 0 15px;
   }
   
+  .header {
+    padding: 0 15px;
+  }
+  
+  .nav-buttons {
+    gap: 15px;
+  }
+  
+  .nav-button {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: auto;
+    min-height: 60px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
   .logo {
-    left: 20px;
+    font-size: 20px;
   }
   
-  .nav-button:nth-child(1) {
-    left: 200px;
+  .nav-buttons {
+    justify-content: center;
+    gap: 12px;
   }
   
-  .nav-button:nth-child(2) {
-    left: 320px;
+  .nav-button {
+    font-size: 12px;
+    padding: 5px 10px;
   }
   
-  .nav-button:nth-child(3) {
-    left: 440px;
+  .comments-section {
+    padding: 0 10px;
   }
   
   .comments-header {
     flex-direction: column;
-    gap: 15px;
     align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .filter-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .filter-select {
+    min-width: 120px;
   }
   
   .comment {
@@ -297,7 +284,116 @@ body {
     margin-right: 10px;
   }
   
+  .vote-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .vote-count {
+    font-size: 12px;
+  }
+  
   .comment-text {
     font-size: 13px;
+  }
+  
+  .comment-meta {
+    font-size: 11px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .nav-buttons {
+    gap: 8px;
+  }
+  
+  .nav-button {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  
+  .comments-section {
+    padding: 0 5px;
+  }
+  
+  .comment {
+    padding: 10px;
+  }
+  
+  .vote-section {
+    min-width: 35px;
+    margin-right: 8px;
+  }
+  
+  .vote-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .vote-count {
+    font-size: 11px;
+  }
+  
+  .comment-text {
+    font-size: 12px;
+  }
+  
+  .comment-meta {
+    font-size: 10px;
+    gap: 6px;
+  }
+  
+  .filter-select {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .filter-label {
+    font-size: 13px;
+  }
+  
+  .comments-count {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: 8px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  .nav-button {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  
+  .comment {
+    padding: 8px;
+  }
+  
+  .vote-section {
+    min-width: 30px;
+    margin-right: 6px;
+  }
+  
+  .comment-text {
+    font-size: 11px;
+  }
+  
+  .comment-meta {
+    font-size: 9px;
   }
 }

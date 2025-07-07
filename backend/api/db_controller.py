@@ -228,3 +228,16 @@ async def get_user_info(user_id: int) -> UserInDB | None:
         hashed_password=user_db_data[4],
         date=user_db_data[5]
     )
+
+# Dar actualizar like de fobia
+async def like_phobia(phobia_id: int):
+    aconn = await psycopg.AsyncConnection.connect(
+        "host=db dbname=tp2 user=fobias password=fobias")
+    
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "UPDATE phobias SET likes=likes+1 " 
+                f"WHERE id={phobia_id}")
+    
+    aconn.close()

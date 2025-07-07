@@ -160,3 +160,8 @@ async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
         phone=user_in_db.phone,
         date=user_in_db.date
     )
+
+# Dar like a fobia
+@app.put("/phobias/{phobia_id}/like", status_code=200)
+async def like_phobia(phobia_id: int, token: Annotated[str, Depends(oauth2_scheme)]):
+    db.like_phobia(phobia_id)

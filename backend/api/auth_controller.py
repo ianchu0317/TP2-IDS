@@ -1,4 +1,5 @@
 import jwt
+from fastapi import HTTPException
 from passlib.context import CryptContext
 from schemas import UserLogin, UserInDB
 from datetime import datetime, timezone, timedelta
@@ -43,6 +44,12 @@ def get_id_from_token(token: str) -> int:
         user_id = int(payload.get("sub"))
         return user_id
     except jwt.ExpiredSignatureError:
-        raise ValueError("Token has expired")
+        raise HTTPException(
+            status_code=401,
+            detail="Token invalido, logear de nuevo (expirado)"    
+        )
     except jwt.InvalidTokenError:
-        raise ValueError("Invalid token")
+        raise HTTPException(
+            status_code=401,
+            detail="Token invalido"
+        )

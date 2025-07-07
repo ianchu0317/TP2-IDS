@@ -64,3 +64,14 @@ async def create_phobia(phobia_data: Phobia,
 async def get_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
     return await db.get_phobias()
 
+# Get fobia por su id en db
+@app.get("/phobias/{phobia_id}", status_code=200, response_model=PhobiaInDB)
+async def get_phobia(phobia_id: int,
+                    token: Annotated[str, Depends(oauth2_scheme)]):
+    phobia = await db.get_phobia(phobia_id)
+    if not phobia:
+        raise HTTPException(
+            status_code=404,
+            detail="Fobia no encontrada"
+        )
+    return phobia

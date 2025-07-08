@@ -196,7 +196,29 @@ body {
   fill: currentColor;
 }
 
-/* Responsive */
+.likes-btn {
+  transition: all 0.3s ease;
+}
+
+.likes-btn.liked {
+  color: #FF4500 !important;
+  opacity: 1 !important;
+}
+
+.likes-btn.liked .icon {
+  fill: #FF4500;
+  stroke: #FF4500;
+}
+
+.likes-btn.liked:hover {
+  color: #FF4500 !important;
+  opacity: 0.8 !important;
+}
+
+.likes-btn .icon {
+  transition: all 0.3s ease;
+}
+
 @media (max-width: 1200px) {
   .nav-button:nth-child(1) {
     left: 70%;

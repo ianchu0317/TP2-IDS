@@ -139,7 +139,7 @@ async def get_phobia(phobia_id: int) -> PhobiaOUT | None:
                 "(SELECT COUNT(*) FROM comments c WHERE c.phobia_id=p.id) AS comments, " 
                 "p.date FROM phobias p " 
                 "JOIN users u ON p.creator_id=u.id " 
-                "WHERE id=%s",
+                "WHERE p.id=%s",
                 (str(phobia_id),))
             phobia_db_data = await acur.fetchone() 
     aconn.close()

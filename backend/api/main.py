@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from typing import Annotated
 from schemas import User, UserLogin, UserInfo, Token
-from schemas import Phobia, PhobiaInDB
+from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
 import db_controller as db
 import auth_controller as auth
@@ -79,13 +79,13 @@ async def create_phobia(phobia_data: Phobia,
 
 
 # Obtener todas las fobias en una lista
-@app.get("/phobias", status_code=200, response_model=list[PhobiaInDB])
+@app.get("/phobias", status_code=200, response_model=list[PhobiaOUT])
 async def get_phobias():
     return await db.get_phobias()
 
 
 # Obtener fobia por ID específica de la lista
-@app.get("/phobias/{phobia_id}", status_code=200, response_model=PhobiaInDB)
+@app.get("/phobias/{phobia_id}", status_code=200, response_model=PhobiaOUT)
 async def get_phobia(phobia_id: int):
     phobia = await db.get_phobia(phobia_id)
     if not phobia:
@@ -145,7 +145,7 @@ async def delete_phobia(phobia_id: int,
 
 # *** CRUD comentarios ***
 # Crear comentario en una fobia
-@app.post("/phobias/{phobia_id}/comments", status_code=200)
+@app.post("/phobias/{phobia_id}/comments", status_code=200, response_model=CommentInDB)
 async def create_comment(phobia_id: int,
                          comment_data: Comment,
                          token: Annotated[str, Depends(oauth2_scheme)]):
@@ -181,7 +181,7 @@ async def like_phobia(phobia_id: int, token: Annotated[str, Depends(oauth2_schem
     await db.like_phobia(phobia_id)
 
 # Lista de fobias ordenadas por cantidad de likes
-@app.get("/rankings", status_code=200, response_model=list[PhobiaInDB])
+@app.get("/rankings", status_code=200, response_model=list[PhobiaOUT])
 async def get_rankings(token: Annotated[str, Depends(oauth2_scheme)]):
     phobias = await db.get_rankings()
     return phobias

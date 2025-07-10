@@ -1,6 +1,6 @@
 import psycopg
 from schemas import User, UserLogin, UserInDB
-from schemas import Phobia, PhobiaInDB
+from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
 from auth_controller import hash_password
 from os import getenv
@@ -108,44 +108,53 @@ async def get_phobias():
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "SELECT * FROM phobias")
+                "SELECT p.id, p.phobia_name, p.description, u.username, p.likes, " 
+                "(SELECT COUNT(*) FROM comments c WHERE c.phobia_id=p.id) AS comments, " 
+                "p.date FROM phobias p " 
+                "JOIN users u ON p.creator_id=u.id ")
             # devolver todos los datos que coinciden con busqueda
             phobias_db_data = await acur.fetchall() 
             # Limpieza de datos
             for phobia in phobias_db_data:
-                phobias.append(PhobiaInDB(
+                phobias.append(PhobiaOUT(
                     id=phobia[0],
                     phobia_name=phobia[1],
                     description=phobia[2],
-                    creator_id=phobia[3],
+                    creator=phobia[3],
                     likes=phobia[4],
-                    date=phobia[5]
+                    comments=phobia[5],
+                    date=phobia[6]
                 ))
     aconn.close()
     return phobias
 
 
 # Get phobia por su id en db
-async def get_phobia(phobia_id: int) -> PhobiaInDB | None:
+async def get_phobia(phobia_id: int) -> PhobiaOUT | None:
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "SELECT * FROM phobias " 
-                f"WHERE id={phobia_id}")
+                "SELECT p.id, p.phobia_name, p.description, u.username, p.likes, " 
+                "(SELECT COUNT(*) FROM comments c WHERE c.phobia_id=p.id) AS comments, " 
+                "p.date FROM phobias p " 
+                "JOIN users u ON p.creator_id=u.id " 
+                "WHERE id=%s",
+                (str(phobia_id),))
             phobia_db_data = await acur.fetchone() 
     aconn.close()
 
     if not phobia_db_data:
         return None    
     
-    return PhobiaInDB(
+    return PhobiaOUT(
         id=phobia_db_data[0],
         phobia_name=phobia_db_data[1],
         description=phobia_db_data[2],
-        creator_id=phobia_db_data[3],
+        creator=phobia_db_data[3],
         likes=phobia_db_data[4],
-        date=phobia_db_data[5]
+        comments=phobia_db_data[5],
+        date=phobia_db_data[6]
     )
 
 
@@ -207,7 +216,7 @@ async def get_comments(phobia_id: int):
                 "SELECT c.comment, u.username, c.date " 
                 "FROM comments c "
                 "JOIN users u ON c.creator_id = u.id "
-                "WHERE phobia_id=%s",
+                "WHERE c.phobia_id=%s",
                 (str(phobia_id),))
             comments_db_data = await acur.fetchall() 
             for comment in comments_db_data:
@@ -240,17 +249,23 @@ async def get_rankings():
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "SELECT * FROM phobias ORDER BY likes DESC")
+                "SELECT p.id, p.phobia_name, p.description, u.username, p.likes, " 
+                "(SELECT COUNT(*) FROM comments c WHERE c.phobia_id=p.id) AS comments, " 
+                "p.date FROM phobias p " 
+                "JOIN users u ON p.creator_id=u.id "
+                "ORDER BY p.likes DESC LIMIT 5")
+
             phobias_db_data = await acur.fetchall() 
             
             for phobia in phobias_db_data:
-                phobias_ranked.append(PhobiaInDB(
+                phobias_ranked.append(PhobiaOUT(
                     id=phobia[0],
                     phobia_name=phobia[1],
                     description=phobia[2],
-                    creator_id=phobia[3],
+                    creator=phobia[3],
                     likes=phobia[4],
-                    date=phobia[5]
+                    comments=phobia[5],
+                    date=phobia[6]
                 ))
     aconn.close()
     return phobias_ranked

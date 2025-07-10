@@ -47,6 +47,17 @@ class PhobiaInDB(BaseModel):
     creator_id: int
     likes: int
     date: datetime.date | None
+
+    
+class PhobiaOUT(BaseModel):
+    id: int
+    phobia_name: str
+    description: str | None
+    creator: str # username creador
+    likes: int
+    comments: int | None
+    date: datetime.date | None
+
     
 # Comentarios
 class Comment(BaseModel):

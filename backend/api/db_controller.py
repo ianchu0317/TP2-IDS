@@ -29,7 +29,7 @@ async def create_user(user_data: User):
                  user_data.email,
                  user_data.phone,
                  hashed_password))
-    aconn.close()
+    await aconn.close()
 
 
 # Obtener datos de usuario por login
@@ -42,7 +42,7 @@ async def get_user(user_data: UserLogin):
                 f"WHERE email='{user_data.email}'")
             # devolver datos del usuario encontrado
             user_db_data = await acur.fetchone() 
-    aconn.close()
+    await aconn.close()
     
     return UserInDB(
         id=user_db_data[0],
@@ -63,7 +63,7 @@ async def get_user_info(user_id: int) -> UserInDB | None:
                 "SELECT * FROM users " 
                 f"WHERE id={user_id}")
             user_db_data = await acur.fetchone() 
-    aconn.close()
+    await aconn.close()
     
     return UserInDB(
         id=user_db_data[0],
@@ -89,7 +89,7 @@ async def create_phobia(phobia_data: Phobia, user_id: int):
                  phobia_data.description,
                  user_id,
                  0))
-    aconn.close()
+    await aconn.close()
     # id y date se generan en db automaticamente
     return PhobiaInDB(
         id=None,  
@@ -125,7 +125,7 @@ async def get_phobias():
                     comments=phobia[5],
                     date=phobia[6]
                 ))
-    aconn.close()
+    await aconn.close()
     return phobias
 
 
@@ -142,7 +142,7 @@ async def get_phobia(phobia_id: int) -> PhobiaOUT | None:
                 "WHERE p.id=%s",
                 (str(phobia_id),))
             phobia_db_data = await acur.fetchone() 
-    aconn.close()
+    await aconn.close()
 
     if not phobia_db_data:
         return None    
@@ -168,7 +168,7 @@ async def update_phobia(phobia_id: int, phobia_data: Phobia):
                 f"WHERE id={phobia_id}",
                 (phobia_data.phobia_name,
                  phobia_data.description))
-    aconn.close()
+    await aconn.close()
     
 
 # Eliminar una fobia
@@ -180,7 +180,7 @@ async def delete_phobia(phobia_id: int):
                 "DELETE FROM phobias " 
                 "WHERE id=%s",
                 (str(phobia_id),))
-    aconn.close()
+    await aconn.close()
 
 
 
@@ -196,7 +196,7 @@ async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
                 (comment_data.comment,
                  user_id,
                  phobia_id,))
-    aconn.close()
+    await aconn.close()
     return CommentInDB(
         id=None,
         comment=comment_data.comment,
@@ -225,7 +225,7 @@ async def get_comments(phobia_id: int):
                     creator=comment[1],
                     date=comment[2]
                 ))
-    aconn.close()
+    await aconn.close()
     return comments
 
 
@@ -239,7 +239,7 @@ async def like_phobia(phobia_id: int):
             await acur.execute(
                 "UPDATE phobias SET likes=likes+1 WHERE id=%s",
                 (str(phobia_id),))    
-    aconn.close()
+    await aconn.close()
 
 
 # Obtener lista de fobias ordenadas descendente por laiks
@@ -267,5 +267,5 @@ async def get_rankings():
                     comments=phobia[5],
                     date=phobia[6]
                 ))
-    aconn.close()
+    await aconn.close()
     return phobias_ranked

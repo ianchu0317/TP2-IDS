@@ -57,5 +57,4 @@ class CommentInDB(BaseModel):
     comment: str
     creator_id: int
     phobia_id: int
-    likes: int
     date: datetime.date | None

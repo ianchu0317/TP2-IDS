@@ -182,19 +182,17 @@ async def create_comment(comment_data: Comment, user_id: int, phobia_id: int):
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "INSERT INTO comments (comment, creator_id, phobia_id, likes, date) " 
-                "VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)",
+                "INSERT INTO comments (comment, creator_id, phobia_id, date) " 
+                "VALUES (%s, %s, %s, CURRENT_TIMESTAMP)",
                 (comment_data.comment,
                  user_id,
-                 phobia_id,
-                 0))
+                 phobia_id,))
     aconn.close()
     return CommentInDB(
         id=None,
         comment=comment_data.comment,
         creator_id=user_id,
         phobia_id=phobia_id,
-        likes=0,
         date=None
     )
 
@@ -215,8 +213,7 @@ async def get_comments(phobia_id: int):
                     comment=comment[1],
                     creator_id=comment[2],
                     phobia_id=comment[3],
-                    likes=comment[4],
-                    date=comment[5]
+                    date=comment[4]
                 ))
     aconn.close()
     return comments

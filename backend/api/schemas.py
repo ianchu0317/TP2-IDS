@@ -58,3 +58,8 @@ class CommentInDB(BaseModel):
     creator_id: int
     phobia_id: int
     date: datetime.date | None
+
+class CommentOUT(BaseModel):
+    comment: str
+    creator: str # username creador
+    date: datetime.date 

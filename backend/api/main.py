@@ -4,7 +4,7 @@ from fastapi import Depends
 from typing import Annotated
 from schemas import User, UserLogin, UserInfo, Token
 from schemas import Phobia, PhobiaInDB
-from schemas import Comment, CommentInDB
+from schemas import Comment, CommentInDB, CommentOUT
 import db_controller as db
 import auth_controller as auth
 
@@ -162,7 +162,7 @@ async def create_comment(phobia_id: int,
 
 
 # Obtener comentarios de una fobia
-@app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentInDB])
+@app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentOUT])
 async def get_comments(phobia_id: int):
     comments = await db.get_comments(phobia_id)
     if not comments:

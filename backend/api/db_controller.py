@@ -1,7 +1,7 @@
 import psycopg
 from schemas import User, UserLogin, UserInDB
 from schemas import Phobia, PhobiaInDB
-from schemas import Comment, CommentInDB
+from schemas import Comment, CommentInDB, CommentOUT
 from auth_controller import hash_password
 from os import getenv
 
@@ -204,16 +204,17 @@ async def get_comments(phobia_id: int):
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "SELECT * FROM comments " 
-                f"WHERE phobia_id={phobia_id}")
+                "SELECT c.comment, u.username, c.date " 
+                "FROM comments c "
+                "JOIN users u ON c.creator_id = u.id "
+                "WHERE phobia_id=%s",
+                (str(phobia_id),))
             comments_db_data = await acur.fetchall() 
             for comment in comments_db_data:
-                comments.append(CommentInDB(
-                    id=comment[0],
-                    comment=comment[1],
-                    creator_id=comment[2],
-                    phobia_id=comment[3],
-                    date=comment[4]
+                comments.append(CommentOUT(
+                    comment=comment[0],
+                    creator=comment[1],
+                    date=comment[2]
                 ))
     aconn.close()
     return comments

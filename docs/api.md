@@ -125,39 +125,34 @@ Obtener lista de fobias
         "id": 3,
         "phobia_name": "fobias",
         "description": "testing",
-        "creator_id": 1,
+        "creator": "usuario 2",
         "likes": 0,
+        "comments", 0
         "date": "2025-07-07"
     },
     {
         "id": 7,
         "phobia_name": "fobias",
         "description": "color blanco",
-        "creator_id": 1,
+        "creator": "usuario 1",
         "likes": 0,
+        "comments": 3,
         "date": "2025-07-07"
     },
-    {
-        "id": 4,
-        "phobia_name": "eres un cute skibdii",
-        "description": "me gustan los skibidis con cabesita de pochoclo",
-        "creator_id": 1,
-        "likes": 0,
-        "date": "2025-07-07"
-    }
 ]
 ```
 
 ### `GET /phobias/{phobia_id}`
 
 **Respuesta**
-```
+```js
 {
     "id": 4,
     "phobia_name": "eres un cute skibdii",
     "description": "me gustan los skibidis con cabesita de pochoclo",
-    "creator_id": 1,
+    "creador": "skibidi",
     "likes": 0,
+    "comments": 3
     "date": "2025-07-07"
 }
 ```
@@ -219,27 +214,18 @@ Ver comentarios de una fobia
 ```js
 [
     {
-        "id": 1,
-        "comment": "testing comment",
-        "creator_id": 1,
-        "phobia_id": 3,
-        "likes": 0,
+        "comment": "blabla 1",
+        "creator": "skibidi 1",
         "date": "2025-07-07"
     },
     {
-        "id": 2,
-        "comment": "testing comment",
-        "creator_id": 1,
-        "phobia_id": 3,
-        "likes": 0,
+        "comment": "comentario 2",
+        "creator": "skibidi 2",
         "date": "2025-07-07"
     },
     {
-        "id": 3,
-        "comment": "testing comment",
-        "creator_id": 1,
-        "phobia_id": 3,
-        "likes": 0,
+        "comment": "comentario 3",
+        "creator": "skibidi 3",
         "date": "2025-07-07"
     }
 ]
@@ -248,13 +234,13 @@ Ver comentarios de una fobia
 ### GET /rankings
 
 Ver rankings de las fobias
-```
+```js
 [
     {
         "id": 5,
         "phobia_name": "fobias",
         "description": "testing",
-        "creator_id": 1,
+        "creator": "skibidi",
         "likes": 7,
         "date": "2025-07-07"
     },
@@ -262,24 +248,27 @@ Ver rankings de las fobias
         "id": 6,
         "phobia_name": "fobias",
         "description": "testing",
-        "creator_id": 1,
+        "creator": "skibidi",
         "likes": 0,
+        "comments": 0,
         "date": "2025-07-07"
     },
     {
         "id": 4,
         "phobia_name": "eres un cute skibdii",
         "description": "me gustan los skibidis con cabesita de pochoclo",
-        "creator_id": 1,
+        "creator": "skibidi",
         "likes": 0,
+        "comments": 0,
         "date": "2025-07-07"
     },
     {
         "id": 8,
         "phobia_name": "fobias",
         "description": "walkers",
-        "creator_id": 1,
+        "creator": "skibidi",
         "likes": 0,
+        "comments": 0,
         "date": "2025-07-07"
     }
 ]

@@ -125,6 +125,8 @@ Devuelve código 201 con el siguiente contenido
 }
 ```
 
+Devuelve 400 si hubo error creando
+
 
 ### `GET /phobias`
 
@@ -153,6 +155,7 @@ Obtener lista de fobias
     },
 ]
 ```
+
 
 ### `GET /phobias/{phobia_id}`
 
@@ -190,11 +193,32 @@ Actualizar un like más al contenido. No devuelve nada, sólo coidgo 200 OK.
 }
 ```
 
+- Devuelve código 204 sin nada si se hizo con éxito.
+
+- Devuelve 404 si fobia a actualizar no existe 
+
+- Devuelve 403 si no es usuario creador
+
+- Devuelve 400 si hubo error en servidor
+
+
 ### `DELETE /phobias/{phobia_id}`
 
 Eliminar una fobia. sólo el creador puede eliminar.
 
+- Devuelve 204 si se elimina
+
+- Devuelve 404 si no existe el que quiero eliminar
+
+- Devuelve 403 si no es usuario creador
+
+- Devuelve 400 si hubo error en servidor
+
+<br>
+
 ---
+
+<br>
 
 ## Comentarios
 

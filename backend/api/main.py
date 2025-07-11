@@ -25,6 +25,7 @@ async def register_user(user_data: User):
             status_code=400,
             detail="Datos inválidos (o usuario ya existe)")
 
+
 # Login usuario
 @app.post("/login", status_code=200)
 async def login_user(user_data: UserLogin):
@@ -51,6 +52,13 @@ async def login_user(user_data: UserLogin):
 async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
     return await db.get_user_info(user_id)
+
+
+# Obtener las fobias del usuario actual
+@app.get("/profile/phobias", status_code=200, response_model=list[PhobiaOUT])
+async def get_user_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
+    user_id = auth.get_id_from_token(token)
+    return await db.get_user_phobias(user_id)
 
 
 

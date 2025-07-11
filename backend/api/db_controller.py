@@ -80,6 +80,33 @@ async def get_user_info(user_id: int) -> UserInDB:
         date=user_db_data[3]
     )
 
+# Obtener fobias por id del usuario
+async def get_user_phobias(user_id: int) -> list[PhobiaOUT]:
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
+    phobias = []
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT p.id, p.phobia_name, p.description, u.username, p.likes, " 
+                "(SELECT COUNT(*) FROM comments c WHERE c.phobia_id=p.id) AS comments, " 
+                "p.date FROM phobias p " 
+                "JOIN users u ON p.creator_id=u.id " 
+                "WHERE p.creator_id=%s",
+                (user_id,))
+            phobias_db_data = await acur.fetchall()
+            for phobia in phobias_db_data:
+                phobias.append(PhobiaOUT(
+                    id=phobia[0],
+                    phobia_name=phobia[1],
+                    description=phobia[2],
+                    creator=phobia[3],
+                    likes=phobia[4],
+                    comments=phobia[5],
+                    date=phobia[6]
+                ))
+    await aconn.close()
+    return phobias
+
 
 
 #  **** Funciones de fobias ****

@@ -163,6 +163,18 @@ async def get_phobia(phobia_id: int) -> PhobiaOUT | None:
         date=phobia_db_data[6]
     )
 
+# Obtener User ID de una fobia
+async def get_user_id_from_phobia(phobia_id: int) -> int | None:
+    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
+    async with aconn:
+        async with aconn.cursor() as acur:
+            await acur.execute(
+                "SELECT creator_id FROM phobias " 
+                "WHERE id=%s",
+                (str(phobia_id),))
+            creator_id = await acur.fetchone() 
+    await aconn.close()
+    return creator_id
 
 # Actualizar fobia (título, descripción)
 async def update_phobia(phobia_id: int, phobia_data: Phobia) -> PhobiaInDB:

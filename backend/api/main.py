@@ -93,15 +93,14 @@ async def update_phobia(phobia_id: int,
                         phobia_data: Phobia,
                         token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
-    phobia_in_db = await db.get_phobia(phobia_id)
-    if phobia_in_db == None:
+    creator_id = await db.get_user_id_from_phobia(phobia_id)
+    if creator_id == None:
         raise HTTPException(
             status_code=404,
             detail="No se encuentra fobia a actualizar"
         )
-    user_in_db = phobia_in_db.creator_id
     # verificar que el usuario que actualiza la fobia es el creador
-    if user_id != user_in_db:
+    if user_id != creator_id[0]:
         raise HTTPException(
             status_code=403,
             detail="No sos el usuario creador lol"
@@ -120,28 +119,25 @@ async def update_phobia(phobia_id: int,
 async def delete_phobia(phobia_id: int, 
                         token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
-    phobia_in_db = await db.get_phobia(phobia_id)
-    if not phobia_in_db:
+    creator_id = await db.get_user_id_from_phobia(phobia_id)
+    if creator_id == None:
         raise HTTPException(
             status_code=404,
             detail="No se encuentra fobia a eliminar"
         )
-    user_in_db = phobia_in_db.creator_id
-        # verificar que el usuario que borra la fobia es el creador
-    if user_id != user_in_db:
+    # verificar que el usuario que actualiza la fobia es el creador
+    if user_id != creator_id[0]:
         raise HTTPException(
             status_code=403,
             detail="No sos el usuario creador lol"
         )
     try:     
-        await db.update_phobia(phobia_id)
+        await db.delete_phobia(phobia_id)
     except: 
         HTTPException(
             status_code=400,
-            detail="Error actualizando fobia"
+            detail="Error eliminando fobia"
         )
-
-
 
 # *** CRUD comentarios ***
 # Crear comentario en una fobia

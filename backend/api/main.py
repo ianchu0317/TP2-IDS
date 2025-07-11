@@ -56,18 +56,17 @@ async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
 
 # **** CRUD Fobias ****
 # Crear fobia
-@app.post("/phobias", status_code=201)
+@app.post("/phobias", status_code=201, response_model=PhobiaInDB)
 async def create_phobia(phobia_data: Phobia, 
                       token: Annotated[str, Depends(oauth2_scheme)]):
     # verificar token
     user_id = auth.get_id_from_token(token)
     try:
-        db_phobia = await db.create_phobia(phobia_data, user_id)
+        return await db.create_phobia(phobia_data, user_id)
     except:
         raise HTTPException(
             status_code=400,
             detail="Error creando fobia")
-    return db_phobia
 
 
 # Obtener todas las fobias en una lista
@@ -89,14 +88,18 @@ async def get_phobia(phobia_id: int):
 
 
 # Actualizar fobia (título, descripción)
-@app.put("/phobias/{phobia_id}", status_code=201)
+@app.put("/phobias/{phobia_id}", status_code=204)
 async def update_phobia(phobia_id: int,
                         phobia_data: Phobia,
                         token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
     phobia_in_db = await db.get_phobia(phobia_id)
+    if phobia_in_db == None:
+        raise HTTPException(
+            status_code=404,
+            detail="No se encuentra fobia a actualizar"
+        )
     user_in_db = phobia_in_db.creator_id
-    
     # verificar que el usuario que actualiza la fobia es el creador
     if user_id != user_in_db:
         raise HTTPException(
@@ -118,8 +121,13 @@ async def delete_phobia(phobia_id: int,
                         token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
     phobia_in_db = await db.get_phobia(phobia_id)
+    if not phobia_in_db:
+        raise HTTPException(
+            status_code=404,
+            detail="No se encuentra fobia a eliminar"
+        )
     user_in_db = phobia_in_db.creator_id
-    # verificar que el usuario que borra la fobia es el creador
+        # verificar que el usuario que borra la fobia es el creador
     if user_id != user_in_db:
         raise HTTPException(
             status_code=403,

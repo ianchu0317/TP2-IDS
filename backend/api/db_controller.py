@@ -63,7 +63,7 @@ async def get_user(user_data: UserLogin):
 
 
 # Obtener información registrada del usuario
-async def get_user_info(user_id: int) -> UserInDB | None:
+async def get_user_info(user_id: int) -> UserInDB:
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
@@ -84,7 +84,7 @@ async def get_user_info(user_id: int) -> UserInDB | None:
 
 #  **** Funciones de fobias ****
 # Crear fobia en DB
-async def create_phobia(phobia_data: Phobia, user_id: int):
+async def create_phobia(phobia_data: Phobia, user_id: int) -> PhobiaInDB:
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
@@ -165,7 +165,7 @@ async def get_phobia(phobia_id: int) -> PhobiaOUT | None:
 
 
 # Actualizar fobia (título, descripción)
-async def update_phobia(phobia_id: int, phobia_data: Phobia):
+async def update_phobia(phobia_id: int, phobia_data: Phobia) -> PhobiaInDB:
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:

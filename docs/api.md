@@ -92,17 +92,21 @@ Mandar token en header con la request
 }
 ```
 
+<br>
+
 ---
+
+<br>
 
 ## CRUD Fobias
 
-### `POST /phobias/{phobia_id}/comments`
+### `POST /phobias/`
 
 **Request**
 ```js
 {
-    "phobia_name": "fobias",
-    "description": "Pene blanco" 
+    "phobia_name": "turtufobia",
+    "description": "tengo miedo a las tortugas" 
 }
 ```
 
@@ -113,8 +117,8 @@ Devuelve código 201 con el siguiente contenido
 ```
 {
     "id": null,
-    "phobia_name": "fobias",
-    "description": "walkers",
+    "phobia_name": "turtufobia",
+    "description": "tengo miedo a las turtugas",
     "creator_id": 1,
     "likes": 0,
     "date": null

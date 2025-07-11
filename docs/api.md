@@ -19,23 +19,31 @@ Para iniciar los servicios se debe correr `docker compose pu` y levantar junto a
 **Formato request**
 ```js
 {
-    "username": "test",
-    "email": "testing@gmail.com",
+    "username": "skibidi",
+    "email": "skibidi@gmail.com",
     "phone": 123456,
-    "password": "1234"
+    "password": "123"
 }
 ```
 
-**Si hubo error**
+**Si hubo error** devuelve código 400 Bad request 
 ```js
 {
-    "detail": "Datos inválidos"
+    "detail": "Datos inválidos (o usuario ya existe)"
 }
 ```
 
 **Si todo sale bien**
 
-Si todo sale bien devuelve `código 201` creado y no devuelve nada
+Si todo sale bien devuelve `código 201` creado y devuelve datos ingresados
+```
+{
+    "username": "skibidi",
+    "email": "skibidi@gmail.com",
+    "phone": 123456,
+    "date": "2025-07-11"
+}
+```
 
 
 ### `POST /login`
@@ -62,7 +70,7 @@ Devuelve token para utilizar en el header de las otras requests
 
 **Respuesta (mal)**
 
-Devuelve código 401 con siguiente mensaje:
+Si datos ingresados no existen en db, entonces devuelve `401 (unauthorized)`:
 ```js
 {
     "detail": "Datos inválidos"

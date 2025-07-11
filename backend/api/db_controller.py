@@ -1,3 +1,4 @@
+import datetime
 import psycopg
 from schemas import User, UserLogin, UserInDB, UserInfo
 from schemas import Phobia, PhobiaInDB, PhobiaOUT
@@ -30,6 +31,12 @@ async def create_user(user_data: User) -> UserInfo:
                  user_data.phone,
                  hashed_password))
     await aconn.close()
+    return UserInfo(
+        username=user_data.username,
+        email=user_data.email,
+        phone=user_data.phone,
+        date=datetime.date.today()
+    )
 
 
 # Obtener datos de usuario por login

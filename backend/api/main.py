@@ -16,10 +16,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 # **** Autenticación de usuarios ****
 # Registrar usuario
-@app.post("/register", status_code=201)
+@app.post("/register", status_code=201, response_model=UserInfo)
 async def register_user(user_data: User):
     try:
-        await db.create_user(user_data)
+        return await db.create_user(user_data)
     except:
         raise HTTPException(
             status_code=400,
@@ -28,23 +28,22 @@ async def register_user(user_data: User):
 # Login usuario
 @app.post("/login", status_code=200)
 async def login_user(user_data: UserLogin):
-    user_db = await db.get_user(user_data)
-    if not user_db:
+    try: 
+        user_db = await db.get_user(user_data)
+        if auth.verify_password(user_data.password, user_db.hashed_password):    
+            return { 
+                "access_token": Token(
+                    token=auth.create_token(user_db),
+                    token_type="bearer"
+                    )
+                }
+        else: 
+            raise Exception
+    except: 
         raise HTTPException(
             status_code=401,
             detail="Datos inválidos"
         )
-    if not auth.verify_password(user_data.password, user_db.hashed_password):
-        raise HTTPException(
-            status_code=401,
-            detail="Datos inválidos"
-        )
-    return { 
-        "access_token": Token(
-            token=auth.create_token(user_db),
-            token_type="bearer"
-            )
-        }
 
 
 # Obtener información de un usuario

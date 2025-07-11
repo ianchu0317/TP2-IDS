@@ -23,7 +23,7 @@ async def register_user(user_data: User):
     except:
         raise HTTPException(
             status_code=400,
-            detail="Datos inválidos")
+            detail="Datos inválidos (o usuario ya existe)")
 
 # Login usuario
 @app.post("/login", status_code=200)
@@ -51,14 +51,7 @@ async def login_user(user_data: UserLogin):
 @app.get("/profile", status_code=200, response_model=UserInfo)
 async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
-    user_in_db = await db.get_user_info(user_id)
-
-    return UserInfo(
-        username=user_in_db.username,
-        email=user_in_db.email,
-        phone=user_in_db.phone,
-        date=user_in_db.date
-    )
+    return await db.get_user_info(user_id)
 
 
 

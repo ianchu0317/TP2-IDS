@@ -1,5 +1,5 @@
 import psycopg
-from schemas import User, UserLogin, UserInDB
+from schemas import User, UserLogin, UserInDB, UserInfo
 from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
 from auth_controller import hash_password
@@ -16,7 +16,7 @@ db_conn_info = f"""host={getenv('DB_HOST')}
 
 # **** Funciones de usuarios ****
 # Crear usuario en db
-async def create_user(user_data: User):
+async def create_user(user_data: User) -> UserInfo:
     hashed_password = hash_password(user_data.password) # Hash antes de almacenar
     
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
@@ -39,7 +39,8 @@ async def get_user(user_data: UserLogin):
         async with aconn.cursor() as acur:
             await acur.execute(
                 "SELECT * FROM users " 
-                f"WHERE email='{user_data.email}'")
+                "WHERE email=%s",
+                (user_data.email,))
             # devolver datos del usuario encontrado
             user_db_data = await acur.fetchone() 
     await aconn.close()
@@ -60,18 +61,16 @@ async def get_user_info(user_id: int) -> UserInDB | None:
     async with aconn:
         async with aconn.cursor() as acur:
             await acur.execute(
-                "SELECT * FROM users " 
-                f"WHERE id={user_id}")
+                "SELECT username, email, phone, register_date FROM users " 
+                "WHERE id=%s",
+                (str(user_id),))
             user_db_data = await acur.fetchone() 
     await aconn.close()
-    
-    return UserInDB(
-        id=user_db_data[0],
-        username=user_db_data[1],
-        email=user_db_data[2],
-        phone=user_db_data[3],
-        hashed_password=user_db_data[4],
-        date=user_db_data[5]
+    return UserInfo(
+        username=user_db_data[0],
+        email=user_db_data[1],
+        phone=user_db_data[2],
+        date=user_db_data[3]
     )
 
 
@@ -165,9 +164,10 @@ async def update_phobia(phobia_id: int, phobia_data: Phobia):
         async with aconn.cursor() as acur:
             await acur.execute(
                 "UPDATE phobias SET phobia_name=%s, description=%s " 
-                f"WHERE id={phobia_id}",
+                "WHERE id=%s",
                 (phobia_data.phobia_name,
-                 phobia_data.description))
+                 phobia_data.description,
+                 str(phobia_id),))
     await aconn.close()
     
 

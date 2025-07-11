@@ -148,13 +148,12 @@ async def create_comment(phobia_id: int,
     user_id = auth.get_id_from_token(token)
 
     try:
-        comment_db = await db.create_comment(comment_data, user_id, phobia_id)
+        return await db.create_comment(comment_data, user_id, phobia_id)
     except:
         raise HTTPException(
             status_code=400,
             detail="Error creando comentario"
         ) 
-    return comment_db
 
 
 # Obtener comentarios de una fobia
@@ -173,11 +172,11 @@ async def get_comments(phobia_id: int):
 # **** Rankings ****
 # Dar like a fobia
 @app.put("/phobias/{phobia_id}/like", status_code=200)
-async def like_phobia(phobia_id: int, token: Annotated[str, Depends(oauth2_scheme)]):
+async def like_phobia(phobia_id: int):
     await db.like_phobia(phobia_id)
 
 # Lista de fobias ordenadas por cantidad de likes
 @app.get("/rankings", status_code=200, response_model=list[PhobiaOUT])
-async def get_rankings(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_rankings():
     phobias = await db.get_rankings()
     return phobias

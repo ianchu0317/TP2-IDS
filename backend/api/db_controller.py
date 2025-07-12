@@ -117,20 +117,21 @@ async def create_phobia(phobia_data: Phobia, user_id: int) -> PhobiaInDB:
         async with aconn.cursor() as acur:
             await acur.execute(
                 "INSERT INTO phobias (phobia_name, description, creator_id, likes, date) " 
-                "VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)",
+                "VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP) RETURNING id",
                 (phobia_data.phobia_name,
                  phobia_data.description,
                  user_id,
                  0))
+            id_new_phobia = (await acur.fetchone())[0]
     await aconn.close()
     # id y date se generan en db automaticamente
     return PhobiaInDB(
-        id=None,  
+        id=id_new_phobia,  
         phobia_name=phobia_data.phobia_name,
         description=phobia_data.description,
         creator_id=user_id,
         likes=0,
-        date=None
+        date=datetime.date.today()
     )  
     
 

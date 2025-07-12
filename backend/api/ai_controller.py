@@ -1,6 +1,6 @@
 # To run this code you need to install the following dependencies:
 # pip install google-genai
-
+import os
 from google import genai
 from google.genai import types
 
@@ -15,13 +15,8 @@ Tu rol es ser el primer comentario en un foro de fobias. Tenes que dar cringe y 
 Cortito y menos de 255 char para db Sin saltos de lineas '\ n'
 """
 
-API_KEY="AIzaSyCzLy6jc2M4pcwIVfR5z73K5uW52XhnSag" # cambiar a ENV
-
 # Configuraciones de API Google
-client = genai.Client(
-    api_key=API_KEY,
-    )
-
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 model = "gemini-2.0-flash"
 generate_content_config = types.GenerateContentConfig(
     max_output_tokens=100,

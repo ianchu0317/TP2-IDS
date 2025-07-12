@@ -4,6 +4,7 @@
 from google import genai
 from google.genai import types
 
+# Configuraciones de IA
 INITIAL_PROMPT_CONFIG = """
 Respondé con humor absurdo y tono argentino a personas que confiesan sus fobias. 
 Podés hacer bullying sin insultar ni ser agresivo. 
@@ -13,12 +14,25 @@ Al final de cada respuesta, agregá un porcentaje estimado de rareza mundial de 
 Tu rol es ser el primer comentario en un foro de fobias. Tenes que dar cringe y ser divertido.
 """
 
-def generate(user_prompt):
-    client = genai.Client(
-        api_key="AIzaSyCzLy6jc2M4pcwIVfR5z73K5uW52XhnSag",
+API_KEY="AIzaSyCzLy6jc2M4pcwIVfR5z73K5uW52XhnSag" # cambiar a ENV
+
+# Configuraciones de API Google
+client = genai.Client(
+    api_key=API_KEY,
     )
 
-    model = "gemini-2.0-flash"
+model = "gemini-2.0-flash"
+generate_content_config = types.GenerateContentConfig(
+    max_output_tokens=100,
+    response_mime_type="text/plain",
+    system_instruction=[
+        types.Part.from_text(text=INITIAL_PROMPT_CONFIG),
+    ],
+)
+
+# Generar una respuesta con Gemini
+def generate(user_prompt) -> str:
+    response = ""
     contents = [
         types.Content(
             role="user",
@@ -27,20 +41,15 @@ def generate(user_prompt):
             ],
         ),
     ]
-    generate_content_config = types.GenerateContentConfig(
-        max_output_tokens=100,
-        response_mime_type="text/plain",
-        system_instruction=[
-            types.Part.from_text(text=INITIAL_PROMPT_CONFIG),
-        ],
-    )
-
     for chunk in client.models.generate_content_stream(
         model=model,
         contents=contents,
         config=generate_content_config,
     ):
-        print(chunk.text, end="")
+        response += chunk.text
+    return response
 
+# Testing
 if __name__ == "__main__":
-    generate("Tengo miedo a pisar pasto")
+    res = generate("Tengo miedo a pisar pasto")
+    print(res)

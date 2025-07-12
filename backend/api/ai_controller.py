@@ -31,7 +31,7 @@ generate_content_config = types.GenerateContentConfig(
 )
 
 # Generar una respuesta con Gemini
-def generate(user_prompt) -> str:
+async def generate(user_prompt) -> str:
     response = ""
     contents = [
         types.Content(

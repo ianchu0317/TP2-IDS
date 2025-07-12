@@ -7,6 +7,7 @@ from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
 import db_controller as db
 import auth_controller as auth
+import ai_controller as ai
 
 
 app = FastAPI()
@@ -70,7 +71,13 @@ async def create_phobia(phobia_data: Phobia,
     # verificar token
     user_id = auth.get_id_from_token(token)
     try:
-        return await db.create_phobia(phobia_data, user_id)
+        # crear fobia en db
+        phobia_db_data = await db.create_phobia(phobia_data, user_id)
+        # creaer primer comentario de IA
+        ai_res = await ai.generate(phobia_data.description)
+        ai_comment = Comment(comment=ai_res)
+        ai_comment_db = await db.create_comment(ai_comment, 1, phobia_db_data.id)
+        return phobia_db_data
     except:
         raise HTTPException(
             status_code=400,

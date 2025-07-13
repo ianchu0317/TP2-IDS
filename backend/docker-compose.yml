@@ -33,7 +33,7 @@ services:
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 120
       # Configuracion GEMINI
-      GEMINI_API_KEY: AIzaSyCzLy6jc2M4pcwIVfR5z73K5uW52XhnSag
+      GEMINI_API_KEY: AIzaSyCvghgxu0QUJB3G9OpsqPK7O8sTWRTGuHU
 
 volumes:
   db_data:

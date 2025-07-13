@@ -80,7 +80,7 @@ body {
   z-index: 3;
 }
 
-.username {
+.name {
   position: absolute;
   left: 291px;
   top: 331px;
@@ -90,7 +90,7 @@ body {
   z-index: 4;
 }
 
-.email {
+.username {
   position: absolute;
   left: 291px;
   top: 369px;
@@ -106,20 +106,18 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 60px;
-  height: 60px;
+  height: 90px;
   position: relative;
   z-index: 10;
   margin-top: 20px;
 }
 
 .logo {
-  width: 62px;
-  height: 38px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
-  font-size: 24px;
-  color: #FF4500;
-  letter-spacing: 0.5px;
-  line-height: 38px;
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
 }
 
 .nav-buttons {

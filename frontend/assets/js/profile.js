@@ -1,18 +1,20 @@
 const currentUser = {
+    name: "Juan Perez",
     username: "juan_perez",
-    email: "juan.perez@email.com",
-    avatarUrl: "../assets/images/avatar.jpg",
+    avatarUrl: "../assets/images/avatar.png",
     coverUrl: "../assets/images/header.png"
 };
 
 function loadProfile() {
+
+    document.title = `${currentUser.name} (@${currentUser.username}) / TuApp`;
     const usernameElement = document.querySelector('.username');
     if (usernameElement) {
         usernameElement.textContent = currentUser.username;
     }
-    const emailElement = document.querySelector('.email');
-    if (emailElement) {
-        emailElement.textContent = currentUser.email;
+    const nameElement = document.querySelector('.name');
+    if (nameElement) {
+        nameElement.textContent = currentUser.name;
     }
     
     const avatarElement = document.querySelector('.avatar');

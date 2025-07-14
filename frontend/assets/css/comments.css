@@ -43,12 +43,11 @@ body {
 }
 
 .logo {
-  width: 62px;
-  height: 38px;
-  font-size: 24px;
-  color: #FF4500;
-  letter-spacing: 0.5px;
-  line-height: 38px;
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
 }
 
 .nav-buttons {
@@ -69,6 +68,33 @@ body {
 
 .nav-button:hover {
   opacity: 0.8;
+}
+
+
+#post-card {
+  max-width: 900px;
+  margin: 40px auto 30px auto;
+  padding: 20px 24px;
+  background-color: #333338;;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  color: #ffffff;
+}
+
+#post-card .post-content {
+  font-size: 25px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+
+#post-card .post-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: #FF4500;;
+  opacity: 0.7;
 }
 
 .comments-section {

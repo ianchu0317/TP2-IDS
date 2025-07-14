@@ -1,3 +1,9 @@
+const postData = {
+    content: "No puedo con la gente con nariz grande. Ya lo dije. Me dan ansiedad. No es personal, es nasal.",
+    author: "AnonUser",
+    timestamp: Date.now() - (4 * 60 * 60 * 1000)
+};
+
 const commentsData = [
     {
         id: 1,
@@ -96,6 +102,25 @@ function sortComments(comments, sortBy = 'newest') {
     }
 }
 
+function renderPost() {
+  const postCard = document.getElementById('post-card');
+  if (!postCard) return;
+
+  
+  const timeAgo = getTimeAgo(postData.timestamp);
+  document.title = `${postData.author} en Fobium: "${postData.content}"`;
+
+  postCard.innerHTML = `
+  <div class="post-meta">
+  <span class="post-author">${postData.author}</span> · 
+  <span class="post-time">${timeAgo}</span>
+      </div>
+    <div class="post">
+      <p class="post-content">${postData.content}</p>
+    </div>
+  `;
+}
+
 function formatVotes(votes) {
     if (votes >= 1000) {
         return (votes / 1000).toFixed(1) + 'k';
@@ -170,11 +195,13 @@ function handleFilterChange() {
     renderComments();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const filterSelect = document.getElementById('filter-select');
-    if (filterSelect) {
-        filterSelect.value = "all";
-        filterSelect.addEventListener('change', handleFilterChange);
-    }
-    renderComments();
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('filter-select');
+  if (select) {
+    select.value = "all";
+    select.addEventListener('change', renderComments);
+  }
+
+  renderPost();       // 🔥 Asegura que el post se vea
+  renderComments();   // 💬 Renderiza los comentarios desde el principio
 });

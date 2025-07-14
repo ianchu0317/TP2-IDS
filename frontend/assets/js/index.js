@@ -38,101 +38,75 @@ function setRandomTitle() {
 const posts = [
     {
         id: 1,
-        text: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
-        author: "the_big_mothergoose",
-        timestamp: Date.now() - (6 * 60 * 60 * 1000),
+        phobia_name: "Xantofobia",
+        description: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
+        creator: "the_big_mothergoose",
         likes: 214,
-        comments: 13
+        comments: 13,
+        date: "2025-07-14"
     },
     {
         id: 2,
-        text: "Ayuda creo que me da miedo la gente fea",
-        author: "bwe_ahki",
-        timestamp: Date.now() - (45 * 60 * 1000),
+        phobia_name: "Miedo a la gente fea",
+        description: "Ayuda creo que me da miedo la gente fea",
+        creator: "bwe_ahki",
         likes: 100,
-        comments: 10
+        comments: 10,
+        date: "2025-07-14"
     },
     {
         id: 3,
-        text: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
-        author: "JoergS",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000),
+        phobia_name: "Omfalofobia",
+        description: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
+        creator: "JoergS",
         likes: 70,
-        comments: 2
+        comments: 2,
+        date: "2025-07-14"
     },
     {
         id: 4,
-        text: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
-        author: "satosaison",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000),
+        phobia_name: "Trauma por pelados",
+        description: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
+        creator: "satosaison",
         likes: 214,
-        comments: 13
+        comments: 13,
+        date: "2025-07-14"
     },
     {
         id: 5,
-        text: "Alguien más con Gefirofobia?",
-        author: "IHaeTypos",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000),
+        phobia_name: "Gefirofobia",
+        description: "Alguien más con Gefirofobia?",
+        creator: "IHaeTypos",
         likes: 214,
-        comments: 13
+        comments: 13,
+        date: "2025-07-14"
     },
     {
         id: 6,
-        text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia.",
-        author: "ashwin_3beauty",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000),
+        phobia_name: "Uranofobia",
+        description: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia.",
+        creator: "ashwin_3beauty",
         likes: 214,
         comments: 13,
+        date: "2025-07-14"
     },
     {
         id: 7,
-        text: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
-        author: "randomUser",
-        timestamp: Date.now() - (9 * 60 * 60 * 1000),
+        phobia_name: "Penterafobia",
+        description: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
+        creator: "randomUser",
         likes: 89,
-        comments: 25
+        comments: 25,
+        date: "2025-07-14"
     }
 ];
 
-function formatTimeAgo(timestamp) {
-    const now = Date.now();
-    const diff = now - timestamp;
-    
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
-    if (diff < 60 * 1000) { // Menos de 1 minuto
-        return seconds <= 1 ? 'ahora' : `${seconds} segundos`;
-    } else if (diff < 60 * 60 * 1000) { // Menos de 1 hora
-        return minutes === 1 ? '1 minuto' : `${minutes} minutos`;
-    } else if (diff < 24 * 60 * 60 * 1000) { // Menos de 1 día
-        return hours === 1 ? '1 hora' : `${hours} horas`;
-    } else {
-        return days === 1 ? '1 día' : `${days} días`;
-    }
-}
 
 function formatNumber(num) {
     if (num >= 1000) {
         return (num / 1000).toFixed(0) + 'K';
     }
     return num.toString();
-}
-
-function updateTimeAgoInCards() {
-    const postCards = document.querySelectorAll('.post-card');
-
-    postCards.forEach(card => {
-        const timestamp = Number(card.dataset.timestamp);
-        const timeElement = card.querySelector('.post-time');
-        if (timestamp && timeElement) {
-            const newTime = formatTimeAgo(timestamp);
-            console.log(`Actualizando card ${card.dataset.postId}: ${newTime}`);
-            timeElement.textContent = newTime;
-        }
-    });
 }
 
 function createPostCard(post) {
@@ -145,13 +119,14 @@ function createPostCard(post) {
     
     postCard.innerHTML = `
         <div class="post-content">
-            <p class="post-text">${post.text}</p>
+        <h3 class="post-title">${post.phobia_name}</h3>
+        <p class="post-text">${post.description}</p>
             ${promotedTag}
         </div>
         <div class="post-meta">
             <div class="post-info">
-                <span class="post-time">${formatTimeAgo(post.timestamp)}</span>
-                <span class="post-author">by ${post.author}</span>
+                <span class="post-date">${(post.date)}</span>
+                <span class="post-author">by ${post.creator}</span>
             </div>
             <div class="post-stats">
                 <div class="stat-item likes-btn" data-post-id="${post.id}">
@@ -234,7 +209,8 @@ function addNewPost(postData) {
         author: postData.author || 'anonymous',
         timestamp: Date.now(),
         likes: 0,
-        comments: 0
+        comments: 0,
+        date: new Date().toISOString().split('T')[0]
     };
     
     posts.unshift(newPost);

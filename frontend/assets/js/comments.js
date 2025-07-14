@@ -7,84 +7,64 @@ const postData = {
 const commentsData = [
     {
         id: 1,
-        text: "Acabo de entrar al post y ya me siento atacado 😭",
-        author: "CringePolicía",
-        timeAgo: "3 hours ago",
-        timestamp: Date.now() - (3 * 60 * 60 * 1000),
-        links: []
+        comment: "Acabo de entrar al post y ya me siento atacado 😭",
+        creator: "CringePolicía",
+        date: "2025-07-14"
     },
     {
         id: 2,
-        text: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
-        author: "ToontoPolarBear",
-        timeAgo: "3 hours ago",
-        timestamp: Date.now() - (3 * 60 * 60 * 1000),
-        links: []
+        comment: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
+        creator: "ToontoPolarBear",
+        date: "2025-07-14"
     },
     {
         id: 3,
-        text: "Entonces no veas mi foto de perfil, por tu bien.",
-        author: "DarwinTeMira",
-        timeAgo: "2 hours ago",
-        timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        links: []
+        comment: "Entonces no veas mi foto de perfil, por tu bien.",
+        creator: "DarwinTeMira",
+        date: "2025-07-14"
     },
     {
         id: 4,
-        text: "¿Y qué hacés cuando te ves al espejo recién levantadx? ¿Entrás en pánico?",
-        author: "NarizDePayaso",
-        timeAgo: "2 hours ago",
-        timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        links: []
+        comment: "¿Y qué hacés cuando te ves al espejo recién levantadx? ¿Entrás en pánico?",
+        creator: "NarizDePayaso",
+        date: "2025-07-14"
     },
     {
         id: 5,
-        text: "¡Alerta! Post que se va a arrepentir en 3... 2... 1...",
-        author: "PsicoLicenciadoEnYouTube",
-        timeAgo: "2 hours ago",
-        timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        links: []
+        comment: "¡Alerta! Post que se va a arrepentir en 3... 2... 1...",
+        creator: "PsicoLicenciadoEnYouTube",
+        date: "2025-07-14"
     },
     {
         id: 6,
-        text: "La belleza es subjetiva, pero tu comentario es objetivamente un llamado de atención.",
-        author: "ShrekFanPage",
-        timeAgo: "2 hours ago",
-        timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        links: ["https://ar.pinterest.com/pin/290693350965105609/"]
+        comment: "La belleza es subjetiva, pero tu comentario es objetivamente un llamado de atención.",
+        creator: "ShrekFanPage",
+        date: "2025-07-14"
     },
     {
         id: 7,
-        text: "A mí me pasa pero con la gente que no entiende memes. Cuestión de prioridades.",
-        author: "CriterioEstéticoViciado",
-        timeAgo: "2 hours ago",
-        timestamp: Date.now() - (2 * 60 * 60 * 1000),
-        links: []
+        comment: "A mí me pasa pero con la gente que no entiende memes. Cuestión de prioridades.",
+        creator: "CriterioEstéticoViciado",
+        date: "2025-07-14"
     }
 ];
 
-function getTimeAgo(timestamp) {
-    const now = Date.now();
-    const diffInSeconds = Math.floor((now - timestamp) / 1000);
-
-    if (diffInSeconds < 60) {
-        return 'just now';
-    } else if (diffInSeconds < 3600) {
-        const minutes = Math.floor(diffInSeconds / 60);
-        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else if (diffInSeconds < 86400) {
-        const hours = Math.floor(diffInSeconds / 3600);
-        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    } else if (diffInSeconds < 2592000) {
-        const days = Math.floor(diffInSeconds / 86400);
-        return `${days} day${days > 1 ? 's' : ''} ago`;
-    } else if (diffInSeconds < 31536000) {
-        const months = Math.floor(diffInSeconds / 2592000);
-        return `${months} month${months > 1 ? 's' : ''} ago`;
+// Función para formatear timestamp a fecha legible
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffTime = now - date;
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    
+    if (diffHours < 24) {
+        return `hace ${diffHours}h`;
     } else {
-        const years = Math.floor(diffInSeconds / 31536000);
-        return `${years} year${years > 1 ? 's' : ''} ago`;
+        return date.toLocaleDateString('es-ES');
     }
+}
+
+function dateToTimestamp(dateString) {
+    return new Date(dateString).getTime();
 }
 
 function sortComments(comments, sortBy = 'newest') {
@@ -92,55 +72,35 @@ function sortComments(comments, sortBy = 'newest') {
 
     switch(sortBy) {
         case 'newest':
-            return sortedComments.sort((a, b) => b.timestamp - a.timestamp);
+            return sortedComments.sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
         case 'oldest':
-            return sortedComments.sort((a, b) => a.timestamp - b.timestamp);
+            return sortedComments.sort((a, b) => dateToTimestamp(a.date) - dateToTimestamp(b.date));
         case 'top':
-            return sortedComments.sort((a, b) => b.votes - a.votes);
+            return sortedComments.sort((a, b) => (b.votes || 0) - (a.votes || 0));
         default:
-            return sortedComments.sort((a, b) => b.timestamp - a.timestamp);
+            return sortedComments.sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
     }
 }
 
 function renderPost() {
-  const postCard = document.getElementById('post-card');
-  if (!postCard) return;
-
-  
-  const timeAgo = getTimeAgo(postData.timestamp);
-  document.title = `${postData.author} en Fobium: "${postData.content}"`;
-
-  postCard.innerHTML = `
-  <div class="post-meta">
-  <span class="post-author">${postData.author}</span> · 
-  <span class="post-time">${timeAgo}</span>
-      </div>
-    <div class="post">
-      <p class="post-content">${postData.content}</p>
-    </div>
-  `;
-}
-
-function formatVotes(votes) {
-    if (votes >= 1000) {
-        return (votes / 1000).toFixed(1) + 'k';
-    }
-    return votes.toString();
-}
-
-function handleVote(commentId, isUpvote) {
-    const comment = commentsData.find(c => c.id === commentId);
-    if (!comment) return;
-
-    if (comment.userVoted) {
-        comment.votes -= 1;
-        comment.userVoted = false;
-    } else {
-        comment.votes += 1;
-        comment.userVoted = true;
+    const postCard = document.getElementById('post-card');
+    if (!postCard) {
+        console.error('post-card element not found');
+        return;
     }
 
-    renderComments();
+    const timeAgo = formatTimestamp(postData.timestamp);
+    document.title = `${postData.author} en Fobium: "${postData.content}"`;
+
+    postCard.innerHTML = `
+        <div class="post-meta">
+            <span class="post-author">${postData.author}</span> · 
+            <span class="post-time">${timeAgo}</span>
+        </div>
+        <div class="post">
+            <p class="post-content">${postData.content}</p>
+        </div>
+    `;
 }
 
 function processTextWithLinks(text) {
@@ -151,20 +111,14 @@ function createCommentElement(comment) {
     const commentDiv = document.createElement('div');
     commentDiv.className = 'comment';
 
-    const commentTextHtml = processTextWithLinks(comment.text);
-    let linksHtml = '';
-    if (comment.links && comment.links.length > 0) {
-        linksHtml = comment.links.map(link =>
-            `<a href="${link}" class="comment-link" target="_blank">${link}</a>`
-        ).join('');
-    }
+    const commentTextHtml = processTextWithLinks(comment.comment);
+    
     commentDiv.innerHTML = `
         <div class="comment-content">
-            <div class="comment-text">${commentTextHtml}</div>
-            ${linksHtml}
+            <div class="comment-comment">${commentTextHtml}</div>
             <div class="comment-meta">
-                <a href="#" class="comment-author">${comment.author}</a>
-                <span class="comment-time">${comment.timeAgo}</span>
+                <a href="#" class="comment-author">${comment.creator}</a>
+                <span class="comment-time">${comment.date}</span>
             </div>
         </div>
     `;
@@ -175,17 +129,26 @@ function renderComments() {
     const commentsList = document.getElementById('comments-list');
     const commentsCount = document.getElementById('comments-count');
     const filterSelect = document.getElementById('filter-select');
+    
+    if (!commentsList) {
+        console.error('comments-list element not found');
+        return;
+    }
+
     const filterValue = filterSelect ? filterSelect.value : "all";
 
     commentsList.innerHTML = '';
-    let sortedComments = [...commentsData].sort((a, b) => b.timestamp - a.timestamp);
+    let sortedComments = [...commentsData].sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
+    
     if (filterValue !== "all") {
         sortedComments = sortedComments.slice(0, parseInt(filterValue, 10));
     }
 
-    commentsCount.textContent = `${sortedComments.length} comments`;
+    if (commentsCount) {
+        commentsCount.textContent = `${sortedComments.length} comentarios`;
+    }
+
     sortedComments.forEach(comment => {
-        comment.timeAgo = getTimeAgo(comment.timestamp);
         const commentElement = createCommentElement(comment);
         commentsList.appendChild(commentElement);
     });
@@ -196,12 +159,31 @@ function handleFilterChange() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const select = document.getElementById('filter-select');
-  if (select) {
-    select.value = "all";
-    select.addEventListener('change', renderComments);
-  }
+    console.log('DOM loaded, initializing...');
+    
+    // Verificar que los elementos existen
+    const postCard = document.getElementById('post-card');
+    const commentsList = document.getElementById('comments-list');
+    const filterSelect = document.getElementById('filter-select');
+    
+    if (!postCard) {
+        console.error('Element post-card not found');
+        return;
+    }
+    
+    if (!commentsList) {
+        console.error('Element comments-list not found');
+        return;
+    }
+    
+    if (filterSelect) {
+        filterSelect.value = "all";
+        filterSelect.addEventListener('change', renderComments);
+    }
 
-  renderPost();       // 🔥 Asegura que el post se vea
-  renderComments();   // 💬 Renderiza los comentarios desde el principio
+    renderPost();
+    renderComments();
+    
+    console.log('Comments data:', commentsData);
+    console.log('Initialization complete');
 });

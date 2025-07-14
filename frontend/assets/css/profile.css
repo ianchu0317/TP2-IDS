@@ -80,7 +80,7 @@ body {
   z-index: 3;
 }
 
-.name {
+.username {
   position: absolute;
   left: 291px;
   top: 331px;
@@ -90,7 +90,7 @@ body {
   z-index: 4;
 }
 
-.username {
+.email {
   position: absolute;
   left: 291px;
   top: 369px;

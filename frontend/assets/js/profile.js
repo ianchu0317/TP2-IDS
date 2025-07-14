@@ -4,25 +4,22 @@ const profileImages = {
         "https://i.pinimg.com/736x/22/ba/9d/22ba9dde2b619be0a6c4609cc5e74c00.jpg",
         "https://sm.ign.com/t/ign_latam/screenshot/default/donkey-looking-up-in-shrek-3_ygqm.1280.jpg",
         "https://cdn.milenio.com/uploads/media/2022/01/15/pitbull-es-originario-de-cuba.jpg",
-        "https://pbs.twimg.com/media/EIW55xzXsAAxVRH.jpg:large"
+        "https://pbs.twimg.com/media/EIW55xzXsAAxVRH.jpg:large",
+        "../images/avatar.png"
     ],
     headers: [
         "https://i.pinimg.com/1200x/5a/0f/19/5a0f19e56192d5af11740c0687b7362b.jpg",
         "https://i.pinimg.com/736x/71/13/fc/7113fcaceeec72ef46612da32fb2265e.jpg",
         "https://i.pinimg.com/736x/8d/24/28/8d2428b557a076fb3bb23461357ab91f.jpg",
         "https://i.pinimg.com/1200x/12/44/00/1244001b46621d3ea128fbcf2bf706df.jpg",
-        "https://i.pinimg.com/1200x/9a/26/f1/9a26f1d7fa00223cd4cf46c601ac52b2.jpg"
+        "https://i.pinimg.com/1200x/9a/26/f1/9a26f1d7fa00223cd4cf46c601ac52b2.jpg",
+        "../images/header.png"
     ]
 };
 
 const posts = [];
+let currentUser = null;
 
-const currentUser = {
-    name: "Juan Perez",
-    username: "juan_perez",
-    avatarUrl: "../assets/images/avatar.png",
-    coverUrl: "../assets/images/header.png"
-};
 
 function getRandomIndex(username, arrayLength) {
     let hash = 0;
@@ -89,7 +86,7 @@ function loadProfile() {
     currentUser.avatarUrl = randomImages.avatar;
     currentUser.coverUrl = randomImages.header;
 
-    document.title = `${currentUser.name} (@${currentUser.username}) / TuApp`;
+    document.title = `(@${currentUser.username}) / Fobium`;
     const usernameElement = document.querySelector('.username');
     if (usernameElement) {
         usernameElement.textContent = currentUser.username;
@@ -98,6 +95,11 @@ function loadProfile() {
     if (nameElement) {
         nameElement.textContent = currentUser.name;
     }
+
+    const emailElement = document.querySelector('.email');
+    if (emailElement) {
+        emailElement.textContent = currentUser.email;
+    }
     
     const avatarElement = document.querySelector('.avatar');
     if (avatarElement) {
@@ -105,6 +107,16 @@ function loadProfile() {
         avatarElement.onerror = function() {
             this.src = "../assets/images/avatar.png";
         };
+    }
+
+    const phoneElement = document.querySelector('.phone');
+    if (phoneElement) {
+        phoneElement.textContent = currentUser.phone;
+    }
+
+    const dateElement = document.querySelector('.date');
+    if (dateElement) {
+        dateElement.textContent = new Date(currentUser.date).toLocaleDateString();
     }
 
     const coverElement = document.querySelector('.cover-img');
@@ -133,5 +145,11 @@ function applyRandomImagesToUser(user) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    currentUser = {
+    "username": "ianchu0317",
+    "email": "ianchu0317@gmail.com",
+    "phone": 123456,
+    "date": "2025-07-07"
+    };
     loadProfile();
 });

@@ -150,11 +150,23 @@ body {
   padding-bottom: 12px;
 }
 
-.post-time {
+.post-date {
   font-family: 'Roboto Regular', Arial, sans-serif;
   font-size: 12px;
   color: #FFFFFF;
   opacity: 0.6;
+}
+
+.post-title{
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #FFFFFF;
+  opacity: 0.87;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
 }
 
 .post-author {

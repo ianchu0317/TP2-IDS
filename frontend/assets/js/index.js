@@ -20,6 +20,7 @@ const renderedPosts = new Set();
 const POSTS_PER_PAGE = 20;
 let currentPage = 0;
 let isLoading = false;
+let posts = [];
 
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
@@ -35,72 +36,6 @@ function setRandomTitle() {
     }
 }
 
-const posts = [
-    {
-        id: 1,
-        phobia_name: "Xantofobia",
-        description: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
-        creator: "the_big_mothergoose",
-        likes: 214,
-        comments: 13,
-        date: "2025-07-14"
-    },
-    {
-        id: 2,
-        phobia_name: "Miedo a la gente fea",
-        description: "Ayuda creo que me da miedo la gente fea",
-        creator: "bwe_ahki",
-        likes: 100,
-        comments: 10,
-        date: "2025-07-14"
-    },
-    {
-        id: 3,
-        phobia_name: "Omfalofobia",
-        description: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
-        creator: "JoergS",
-        likes: 70,
-        comments: 2,
-        date: "2025-07-14"
-    },
-    {
-        id: 4,
-        phobia_name: "Trauma por pelados",
-        description: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
-        creator: "satosaison",
-        likes: 214,
-        comments: 13,
-        date: "2025-07-14"
-    },
-    {
-        id: 5,
-        phobia_name: "Gefirofobia",
-        description: "Alguien más con Gefirofobia?",
-        creator: "IHaeTypos",
-        likes: 214,
-        comments: 13,
-        date: "2025-07-14"
-    },
-    {
-        id: 6,
-        phobia_name: "Uranofobia",
-        description: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia.",
-        creator: "ashwin_3beauty",
-        likes: 214,
-        comments: 13,
-        date: "2025-07-14"
-    },
-    {
-        id: 7,
-        phobia_name: "Penterafobia",
-        description: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
-        creator: "randomUser",
-        likes: 89,
-        comments: 25,
-        date: "2025-07-14"
-    }
-];
-
 
 function formatNumber(num) {
     if (num >= 1000) {
@@ -113,9 +48,6 @@ function createPostCard(post) {
     const postCard = document.createElement('div');
     postCard.className = 'post-card';
     postCard.dataset.postId = post.id;
-    postCard.dataset.timestamp = post.timestamp;
-    
-    const promotedTag = post.isPromoted ? '<span class="promoted-tag">promoted by</span>' : '';
     
     const isLiked = userLikes.has(post.id);
     const likeClass = isLiked ? 'liked' : '';
@@ -125,7 +57,6 @@ function createPostCard(post) {
         <div class="post-content">
         <h3 class="post-title">${post.phobia_name}</h3>
         <p class="post-text">${post.description}</p>
-            ${promotedTag}
         </div>
         <div class="post-meta">
             <div class="post-info">
@@ -206,25 +137,26 @@ function renderPosts(loadMore = false) {
     return newPostsCount;
 }
 
-function addNewPost(postData) {
-    const newPost = {
-        id: Date.now(),
-        text: postData.text,
-        author: postData.author || 'anonymous',
-        timestamp: Date.now(),
-        likes: 0,
-        comments: 0,
-        date: new Date().toISOString().split('T')[0]
-    };
-    
-    posts.unshift(newPost);
-    
-    renderPosts();
-    
-    const postsGrid = document.getElementById('postsGrid');
-    if (postsGrid) {
-        postsGrid.scrollTop = 0;
+posts = [{
+    id: 999,
+    phobia_name: "Testfobia",
+    description: "Esta fobia es para probar si se renderiza bien 🤓",
+    creator: "tester_supremo",
+    likes: 42,
+    comments: 3,
+    date: "2025-07-15"
+}];
+
+async function fetchPhobias() {
+    try {
+        const response = await fetch("http://localhost:8000/phobias");
+        if (!response.ok) throw new Error("No se pudo obtener fobias");
+        posts = await response.json();
+        renderPosts();
+    } catch (error) {
+        console.error("Error al cargar fobias:", error);
     }
+    renderPosts();
 }
 
 function loadMorePosts() {
@@ -277,27 +209,6 @@ function setupEventListeners() {
     if (!postsGrid) return;
     
     postsGrid.addEventListener('click', (e) => {
-        const likesBtn = e.target.closest('.likes-btn');
-        const commentsBtn = e.target.closest('.comments-btn');
-        
-        if (likesBtn) {
-            const postId = parseInt(likesBtn.dataset.postId);
-            toggleLike(postId, likesBtn);
-        }
-        
-        if (commentsBtn) {
-            const postId = parseInt(commentsBtn.dataset.postId);
-            window.location.href = `pages/comments.html?post=${postId}`;
-        }
-    });
-}
-
-function setupEventListeners() {
-    const postsGrid = document.getElementById('postsGrid');
-    if (!postsGrid) return;
-    
-    postsGrid.addEventListener('click', (e) => {
-        // Prevenir propagación para evitar conflictos
         e.stopPropagation();
         
         const likesBtn = e.target.closest('.likes-btn');
@@ -320,7 +231,7 @@ function setupEventListeners() {
 }
 
 
-function toggleLike(postId, likesBtn) {
+async function toggleLike(postId, likesBtn) {
     const post = posts.find(p => p.id === postId);
     if (!post) {
         console.error(`Post con ID ${postId} no encontrado`);
@@ -335,29 +246,38 @@ function toggleLike(postId, likesBtn) {
         return;
     }
 
-    const isCurrentlyLiked = userLikes.has(postId);
+    try {
+        await fetch(`http://localhost:8000/phobias/${postId}/like`, {
+            method: 'PUT',
+        });
 
-    if (isCurrentlyLiked) {
-        userLikes.delete(postId);
-        post.likes -= 1;
-        likesBtn.classList.remove('liked');
-        likeIcon.setAttribute('fill', 'none');
-        likesBtn.style.transform = 'scale(0.9)';
-    } else {
-        userLikes.add(postId);
-        post.likes += 1;
-        likesBtn.classList.add('liked');
-        likeIcon.setAttribute('fill', 'currentColor');
-        likesBtn.style.transform = 'scale(1.1)';
+        const isCurrentlyLiked = userLikes.has(postId);
+
+        if (isCurrentlyLiked) {
+            userLikes.delete(postId);
+            post.likes -= 1;
+            likesBtn.classList.remove('liked');
+            likeIcon.setAttribute('fill', 'none');
+            likesBtn.style.transform = 'scale(0.9)';
+        } else {
+            userLikes.add(postId);
+            post.likes += 1;
+            likesBtn.classList.add('liked');
+            likeIcon.setAttribute('fill', 'currentColor');
+            likesBtn.style.transform = 'scale(1.1)';
+        }
+
+        setTimeout(() => {
+            likesBtn.style.transform = 'scale(1)';
+        }, 150);
+
+        likesCount.textContent = formatNumber(post.likes);
+        console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
+    } catch (error) {
+        console.error("Error al enviar el like al backend:", error);
     }
-
-    setTimeout(() => {
-        likesBtn.style.transform = 'scale(1)';
-    }, 150);
-
-    likesCount.textContent = formatNumber(post.likes);
-    console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
 }
+
 
 function updateTimeAgoInCards() {
     console.log('Actualizando timestamps...');
@@ -367,6 +287,7 @@ function updateTimeAgoInCards() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, inicializando aplicación optimizada...');
     setRandomTitle();
+    //fetchPhobias();
     renderPosts();
     setupEventListeners();
     setupInfiniteScroll();

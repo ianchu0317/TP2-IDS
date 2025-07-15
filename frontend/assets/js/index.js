@@ -117,6 +117,10 @@ function createPostCard(post) {
     
     const promotedTag = post.isPromoted ? '<span class="promoted-tag">promoted by</span>' : '';
     
+    const isLiked = userLikes.has(post.id);
+    const likeClass = isLiked ? 'liked' : '';
+    const fillAttribute = isLiked ? 'fill="currentColor"' : 'fill="none"';
+
     postCard.innerHTML = `
         <div class="post-content">
         <h3 class="post-title">${post.phobia_name}</h3>
@@ -248,6 +252,26 @@ function setupInfiniteScroll() {
     });
 }
 
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
+    }
+    
+    try {
+        window.location.href = `pages/comments.html?post=${postId}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
+        
+        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
+        
+    }
+}
+
 function setupEventListeners() {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) return;
@@ -258,53 +282,87 @@ function setupEventListeners() {
         
         if (likesBtn) {
             const postId = parseInt(likesBtn.dataset.postId);
-            toggleLike(postId);
+            toggleLike(postId, likesBtn);
         }
         
         if (commentsBtn) {
             const postId = parseInt(commentsBtn.dataset.postId);
-            console.log(`Abrir comentarios para post ${postId}`);
+            window.location.href = `pages/comments.html?post=${postId}`;
         }
     });
 }
 
-function toggleLike(postId) {
+function setupEventListeners() {
+    const postsGrid = document.getElementById('postsGrid');
+    if (!postsGrid) return;
+    
+    postsGrid.addEventListener('click', (e) => {
+        // Prevenir propagación para evitar conflictos
+        e.stopPropagation();
+        
+        const likesBtn = e.target.closest('.likes-btn');
+        const commentsBtn = e.target.closest('.comments-btn');
+        
+        if (likesBtn) {
+            const postId = parseInt(likesBtn.dataset.postId);
+            console.log(`Click en likes del post ${postId}`);
+            toggleLike(postId, likesBtn);
+        }
+        
+        if (commentsBtn) {
+            const postId = parseInt(commentsBtn.dataset.postId);
+            console.log(`Click en comments del post ${postId}`);
+            handleComments(postId);
+        }
+    });
+    
+    console.log('Event listeners configurados correctamente');
+}
+
+
+function toggleLike(postId, likesBtn) {
     const post = posts.find(p => p.id === postId);
-    if (!post) return;
-    const likesBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
-    const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
-    const likeIcon = likesBtn?.querySelector('svg');
-    
-    if (!likesBtn || !likesCount || !likeIcon) return;
-    
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        return;
+    }
+
+    const likesCount = likesBtn.querySelector('.likes-count');
+    const likeIcon = likesBtn.querySelector('svg');
+
+    if (!likesCount || !likeIcon) {
+        console.error(`Elementos internos no encontrados en post ${postId}`);
+        return;
+    }
+
     const isCurrentlyLiked = userLikes.has(postId);
-    
+
     if (isCurrentlyLiked) {
         userLikes.delete(postId);
         post.likes -= 1;
         likesBtn.classList.remove('liked');
         likeIcon.setAttribute('fill', 'none');
-        
         likesBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            likesBtn.style.transform = 'scale(1)';
-        }, 150);
-        
     } else {
         userLikes.add(postId);
         post.likes += 1;
         likesBtn.classList.add('liked');
         likeIcon.setAttribute('fill', 'currentColor');
         likesBtn.style.transform = 'scale(1.1)';
-        setTimeout(() => {
-            likesBtn.style.transform = 'scale(1)';
-        }, 150);
     }
-    
+
+    setTimeout(() => {
+        likesBtn.style.transform = 'scale(1)';
+    }, 150);
+
     likesCount.textContent = formatNumber(post.likes);
-    
     console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
 }
+
+function updateTimeAgoInCards() {
+    console.log('Actualizando timestamps...');
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, inicializando aplicación optimizada...');

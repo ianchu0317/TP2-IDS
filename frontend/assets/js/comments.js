@@ -1,4 +1,5 @@
 const postData = {
+    id: 3,
     content: "No puedo con la gente con nariz grande. Ya lo dije. Me dan ansiedad. No es personal, es nasal.",
     author: "AnonUser",
     timestamp: Date.now() - (4 * 60 * 60 * 1000)
@@ -9,47 +10,40 @@ const commentsData = [
         id: 1,
         comment: "Acabo de entrar al post y ya me siento atacado 😭",
         creator: "CringePolicía",
+        creator_id: 1,
+        phobia_id: 3,
         date: "2025-07-14"
     },
     {
         id: 2,
         comment: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
         creator: "ToontoPolarBear",
+        creator_id: 2,
+        phobia_id: 3,
         date: "2025-07-14"
     },
     {
         id: 3,
         comment: "Entonces no veas mi foto de perfil, por tu bien.",
         creator: "DarwinTeMira",
+        creator_id: 3,
+        phobia_id: 3,
         date: "2025-07-14"
     },
     {
         id: 4,
         comment: "¿Y qué hacés cuando te ves al espejo recién levantadx? ¿Entrás en pánico?",
         creator: "NarizDePayaso",
-        date: "2025-07-14"
-    },
-    {
-        id: 5,
-        comment: "¡Alerta! Post que se va a arrepentir en 3... 2... 1...",
-        creator: "PsicoLicenciadoEnYouTube",
-        date: "2025-07-14"
-    },
-    {
-        id: 6,
-        comment: "La belleza es subjetiva, pero tu comentario es objetivamente un llamado de atención.",
-        creator: "ShrekFanPage",
-        date: "2025-07-14"
-    },
-    {
-        id: 7,
-        comment: "A mí me pasa pero con la gente que no entiende memes. Cuestión de prioridades.",
-        creator: "CriterioEstéticoViciado",
+        creator_id: 4,
+        phobia_id: 3,
         date: "2025-07-14"
     }
 ];
 
-// Función para formatear timestamp a fecha legible
+function getCommentsByPostId(postId) {
+    return commentsData.filter(comment => comment.phobia_id === postId);
+}
+
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
     const now = new Date();
@@ -138,7 +132,8 @@ function renderComments() {
     const filterValue = filterSelect ? filterSelect.value : "all";
 
     commentsList.innerHTML = '';
-    let sortedComments = [...commentsData].sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
+    let postComments = getCommentsByPostId(postData.id);
+    let sortedComments = sortComments(postComments, 'newest');
     
     if (filterValue !== "all") {
         sortedComments = sortedComments.slice(0, parseInt(filterValue, 10));

@@ -22,6 +22,9 @@ let currentPage = 0;
 let isLoading = false;
 let posts = [];
 
+const API_BASE_URL = 'http://localhost:8000';
+const USE_MOCK_DATA = true;
+
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
     return inspirationalPhrases[randomIndex];
@@ -137,26 +140,57 @@ function renderPosts(loadMore = false) {
     return newPostsCount;
 }
 
-posts = [{
-    id: 999,
-    phobia_name: "Testfobia",
-    description: "Esta fobia es para probar si se renderiza bien 🤓",
-    creator: "tester_supremo",
-    likes: 42,
-    comments: 3,
-    date: "2025-07-15"
-}];
+function getMockPosts() {
+    return [
+        {
+            id: 999,
+            phobia_name: "Testfobia",
+            description: "Esta fobia es para probar si se renderiza bien 🤓",
+            creator: "tester_supremo",
+            likes: 42,
+            comments: 3,
+            date: "2025-07-15"
+        },
+        {
+            id: 998,
+            phobia_name: "Mockfobia",
+            description: "Miedo a los datos falsos en desarrollo",
+            creator: "dev_anxiety",
+            likes: 128,
+            comments: 7,
+            date: "2025-07-14"
+        }
+    ];
+}
 
 async function fetchPhobias() {
     try {
-        const response = await fetch("http://localhost:8000/phobias");
-        if (!response.ok) throw new Error("No se pudo obtener fobias");
-        posts = await response.json();
+        if (USE_MOCK_DATA) {
+            console.log('Usando datos mock para testing');
+            posts = getMockPosts();
+            renderPosts();
+            return;
+        }
+
+        console.log('Fetching phobias from API...');
+        const response = await fetch(`${API_BASE_URL}/phobias`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Datos recibidos de la API:', data);
+        
+        posts = data;
         renderPosts();
+        
     } catch (error) {
         console.error("Error al cargar fobias:", error);
+        console.log('Fallback a datos mock debido al error');
+        posts = getMockPosts();
+        renderPosts();
     }
-    renderPosts();
 }
 
 function loadMorePosts() {
@@ -239,42 +273,72 @@ async function toggleLike(postId, likesBtn) {
     }
 
     const likesCount = likesBtn.querySelector('.likes-count');
-    const likeIcon = likesBtn.querySelector('svg');
+    const likeIcon = likesBtn.querySelector('svg path');
 
     if (!likesCount || !likeIcon) {
         console.error(`Elementos internos no encontrados en post ${postId}`);
         return;
     }
 
-    try {
-        await fetch(`http://localhost:8000/phobias/${postId}/like`, {
-            method: 'PUT',
-        });
+    const isCurrentlyLiked = userLikes.has(postId);
+    
+    // Optimistic update - actualizar UI inmediatamente
+    if (isCurrentlyLiked) {
+        userLikes.delete(postId);
+        post.likes -= 1;
+        likesBtn.classList.remove('liked');
+        likeIcon.setAttribute('fill', 'none');
+    } else {
+        userLikes.add(postId);
+        post.likes += 1;
+        likesBtn.classList.add('liked');
+        likeIcon.setAttribute('fill', 'currentColor');
+    }
 
-        const isCurrentlyLiked = userLikes.has(postId);
+    // Animación visual
+    likesBtn.style.transform = isCurrentlyLiked ? 'scale(0.9)' : 'scale(1.1)';
+    setTimeout(() => {
+        likesBtn.style.transform = 'scale(1)';
+    }, 150);
 
-        if (isCurrentlyLiked) {
-            userLikes.delete(postId);
-            post.likes -= 1;
-            likesBtn.classList.remove('liked');
-            likeIcon.setAttribute('fill', 'none');
-            likesBtn.style.transform = 'scale(0.9)';
-        } else {
-            userLikes.add(postId);
-            post.likes += 1;
-            likesBtn.classList.add('liked');
-            likeIcon.setAttribute('fill', 'currentColor');
-            likesBtn.style.transform = 'scale(1.1)';
+    likesCount.textContent = formatNumber(post.likes);
+    console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
+
+    // Intentar enviar a la API solo si no estamos en modo mock
+    if (!USE_MOCK_DATA) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/phobias/${postId}/like`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            console.log(`Like enviado exitosamente al backend para post ${postId}`);
+            
+        } catch (error) {
+            console.error("Error al enviar el like al backend:", error);
+            
+            // Revertir el cambio optimista si falló la API
+            if (isCurrentlyLiked) {
+                userLikes.add(postId);
+                post.likes += 1;
+                likesBtn.classList.add('liked');
+                likeIcon.setAttribute('fill', 'currentColor');
+            } else {
+                userLikes.delete(postId);
+                post.likes -= 1;
+                likesBtn.classList.remove('liked');
+                likeIcon.setAttribute('fill', 'none');
+            }
+            
+            likesCount.textContent = formatNumber(post.likes);
+            console.log(`Like revertido debido al error. Total: ${post.likes}`);
         }
-
-        setTimeout(() => {
-            likesBtn.style.transform = 'scale(1)';
-        }, 150);
-
-        likesCount.textContent = formatNumber(post.likes);
-        console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
-    } catch (error) {
-        console.error("Error al enviar el like al backend:", error);
     }
 }
 
@@ -287,8 +351,7 @@ function updateTimeAgoInCards() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, inicializando aplicación optimizada...');
     setRandomTitle();
-    //fetchPhobias();
-    renderPosts();
+    fetchPhobias();
     setupEventListeners();
     setupInfiniteScroll();
     setInterval(updateTimeAgoInCards, 60 * 1000);

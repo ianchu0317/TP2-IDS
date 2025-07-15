@@ -49,7 +49,7 @@ function createNoPostsElement() {
         <div class="no-posts-content">
             <img src="../assets/images/no-posts.png" alt="No posts" class="no-posts-avatar" onerror="this.src='../assets/images/avatar.png'">
             <h3>No hay posts todavía</h3>
-            <p>¡${currentUser.name} aún no ha publicado nada!</p>
+            <p>¡${currentUser.username} aún no ha publicado nada!</p>
             <p>Cuando lo haga, sus posts aparecerán aquí.</p>
         </div>
     `;

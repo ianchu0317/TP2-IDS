@@ -11,3 +11,15 @@ body {
     -webkit-font-smoothing: antialiased; 
   }
   
+  .create_post-container {
+    background: #333338; 
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); 
+    width: 100%;
+    max-width: 450px;
+    box-sizing: border-box;
+    border: 1px solid #333338; 
+    position: relative;
+    transform: translateZ(0);
+  }

@@ -41,20 +41,18 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 60px;
-  height: 60px;
+  height: 90px;
   position: relative;
   z-index: 10;
   margin-top: 20px;
 }
 
 .logo {
-  width: 62px;
-  height: 38px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
-  font-size: 24px;
-  color: #FF4500;
-  letter-spacing: 0.5px;
-  line-height: 38px;
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
 }
 
 .nav-buttons {
@@ -152,11 +150,23 @@ body {
   padding-bottom: 12px;
 }
 
-.post-time {
+.post-date {
   font-family: 'Roboto Regular', Arial, sans-serif;
   font-size: 12px;
   color: #FFFFFF;
   opacity: 0.6;
+}
+
+.post-title{
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #FFFFFF;
+  opacity: 0.87;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
 }
 
 .post-author {
@@ -196,7 +206,52 @@ body {
   fill: currentColor;
 }
 
-/* Responsive */
+.likes-btn {
+  transition: all 0.3s ease;
+}
+
+.likes-btn.liked {
+  color: #FF4500 !important;
+  opacity: 1 !important;
+}
+
+.likes-btn.liked .icon {
+  fill: #FF4500;
+  stroke: #FF4500;
+}
+
+.likes-btn.liked:hover {
+  color: #FF4500 !important;
+  opacity: 0.8 !important;
+}
+
+.likes-btn .icon {
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.post-title{
+  animation: fadeIn 0.5s ease-out;
+}
+
+.page-title{
+  animation: fadeIn 0.5s ease-out;
+}
+
 @media (max-width: 1200px) {
   .nav-button:nth-child(1) {
     left: 70%;

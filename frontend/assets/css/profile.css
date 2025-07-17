@@ -106,20 +106,18 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 60px;
-  height: 60px;
+  height: 90px;
   position: relative;
   z-index: 10;
   margin-top: 20px;
 }
 
 .logo {
-  width: 62px;
-  height: 38px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
-  font-size: 24px;
-  color: #FF4500;
-  letter-spacing: 0.5px;
-  line-height: 38px;
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
 }
 
 .nav-buttons {
@@ -140,4 +138,89 @@ body {
 
 .nav-button:hover {
   opacity: 0.8;
+}
+
+.posts-container {
+    max-width: 1130px;
+    margin: 0 auto 20px auto;
+    padding: 0 75px;
+    position: absolute;
+    top: 430px;
+    left: 0;
+    right: 0;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 60px 20px;
+    background: #1A1D1F;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    margin-top: 20px;
+}
+
+.no-posts-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.no-posts-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+    border: 3px solid #333;
+}
+
+.no-posts h3 {
+    color: #FFFFFF;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.no-posts p {
+    color: #B0B0B0;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    gap: 15px;
+    padding: 15px 4%;
+  }
+  
+  .profile-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .profile-details {
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-buttons {
+    gap: 12px;
+  }
+  
+  .profile-section {
+    padding: 0 2%;
+  }
+  
+  .posts-container {
+    padding: 0 2%;
+  }
+  
+  .profile-info {
+    padding: 0 12px;
+  }
 }

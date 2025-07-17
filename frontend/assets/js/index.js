@@ -20,6 +20,10 @@ const renderedPosts = new Set();
 const POSTS_PER_PAGE = 20;
 let currentPage = 0;
 let isLoading = false;
+let posts = [];
+
+const API_BASE_URL = 'http://localhost:8000';
+const USE_MOCK_DATA = true;
 
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
@@ -35,84 +39,6 @@ function setRandomTitle() {
     }
 }
 
-const posts = [
-    {
-        id: 1,
-        text: "Creo que tengo Xantofobia. Estaba viendo Jorge el curioso y ese tipo vestido de amarillo me dio pesadillas",
-        author: "the_big_mothergoose",
-        timestamp: Date.now() - (6 * 60 * 60 * 1000),
-        likes: 214,
-        comments: 13
-    },
-    {
-        id: 2,
-        text: "Ayuda creo que me da miedo la gente fea",
-        author: "bwe_ahki",
-        timestamp: Date.now() - (45 * 60 * 1000),
-        likes: 100,
-        comments: 10
-    },
-    {
-        id: 3,
-        text: "La Omfalofobia es un problema serio, le vi el ombligo a Tini y supe mi condición",
-        author: "JoergS",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000),
-        likes: 70,
-        comments: 2
-    },
-    {
-        id: 4,
-        text: "Fui a la juntada de Cordoba sobre los pelados y no esperaba que me generara un trauma, busco psicologo",
-        author: "satosaison",
-        timestamp: Date.now() - (7 * 60 * 60 * 1000),
-        likes: 214,
-        comments: 13
-    },
-    {
-        id: 5,
-        text: "Alguien más con Gefirofobia?",
-        author: "IHaeTypos",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000),
-        likes: 214,
-        comments: 13
-    },
-    {
-        id: 6,
-        text: "Vivo en Bahia Blanca y creo que desde ahi medio pueblo tiene Uranofobia.",
-        author: "ashwin_3beauty",
-        timestamp: Date.now() - (8 * 60 * 60 * 1000),
-        likes: 214,
-        comments: 13,
-    },
-    {
-        id: 7,
-        text: "Sabían que existe una fobia a las suegras? Penterafobia, no están locos muchachos",
-        author: "randomUser",
-        timestamp: Date.now() - (9 * 60 * 60 * 1000),
-        likes: 89,
-        comments: 25
-    }
-];
-
-function formatTimeAgo(timestamp) {
-    const now = Date.now();
-    const diff = now - timestamp;
-    
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
-    if (diff < 60 * 1000) { // Menos de 1 minuto
-        return seconds <= 1 ? 'ahora' : `${seconds} segundos`;
-    } else if (diff < 60 * 60 * 1000) { // Menos de 1 hora
-        return minutes === 1 ? '1 minuto' : `${minutes} minutos`;
-    } else if (diff < 24 * 60 * 60 * 1000) { // Menos de 1 día
-        return hours === 1 ? '1 hora' : `${hours} horas`;
-    } else {
-        return days === 1 ? '1 día' : `${days} días`;
-    }
-}
 
 function formatNumber(num) {
     if (num >= 1000) {
@@ -121,37 +47,24 @@ function formatNumber(num) {
     return num.toString();
 }
 
-function updateTimeAgoInCards() {
-    const postCards = document.querySelectorAll('.post-card');
-
-    postCards.forEach(card => {
-        const timestamp = Number(card.dataset.timestamp);
-        const timeElement = card.querySelector('.post-time');
-        if (timestamp && timeElement) {
-            const newTime = formatTimeAgo(timestamp);
-            console.log(`Actualizando card ${card.dataset.postId}: ${newTime}`);
-            timeElement.textContent = newTime;
-        }
-    });
-}
-
 function createPostCard(post) {
     const postCard = document.createElement('div');
     postCard.className = 'post-card';
     postCard.dataset.postId = post.id;
-    postCard.dataset.timestamp = post.timestamp;
     
-    const promotedTag = post.isPromoted ? '<span class="promoted-tag">promoted by</span>' : '';
-    
+    const isLiked = userLikes.has(post.id);
+    const likeClass = isLiked ? 'liked' : '';
+    const fillAttribute = isLiked ? 'fill="currentColor"' : 'fill="none"';
+
     postCard.innerHTML = `
         <div class="post-content">
-            <p class="post-text">${post.text}</p>
-            ${promotedTag}
+        <h3 class="post-title">${post.phobia_name}</h3>
+        <p class="post-text">${post.description}</p>
         </div>
         <div class="post-meta">
             <div class="post-info">
-                <span class="post-time">${formatTimeAgo(post.timestamp)}</span>
-                <span class="post-author">by ${post.author}</span>
+                <span class="post-date">${(post.date)}</span>
+                <span class="post-author">by ${post.creator}</span>
             </div>
             <div class="post-stats">
                 <div class="stat-item likes-btn" data-post-id="${post.id}">
@@ -227,23 +140,56 @@ function renderPosts(loadMore = false) {
     return newPostsCount;
 }
 
-function addNewPost(postData) {
-    const newPost = {
-        id: Date.now(),
-        text: postData.text,
-        author: postData.author || 'anonymous',
-        timestamp: Date.now(),
-        likes: 0,
-        comments: 0
-    };
-    
-    posts.unshift(newPost);
-    
-    renderPosts();
-    
-    const postsGrid = document.getElementById('postsGrid');
-    if (postsGrid) {
-        postsGrid.scrollTop = 0;
+function getMockPosts() {
+    return [
+        {
+            id: 999,
+            phobia_name: "Testfobia",
+            description: "Esta fobia es para probar si se renderiza bien 🤓",
+            creator: "tester_supremo",
+            likes: 42,
+            comments: 3,
+            date: "2025-07-15"
+        },
+        {
+            id: 998,
+            phobia_name: "Mockfobia",
+            description: "Miedo a los datos falsos en desarrollo",
+            creator: "dev_anxiety",
+            likes: 128,
+            comments: 7,
+            date: "2025-07-14"
+        }
+    ];
+}
+
+async function fetchPhobias() {
+    try {
+        if (USE_MOCK_DATA) {
+            console.log('Usando datos mock para testing');
+            posts = getMockPosts();
+            renderPosts();
+            return;
+        }
+
+        console.log('Fetching phobias from API...');
+        const response = await fetch(`${API_BASE_URL}/phobias`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Datos recibidos de la API:', data);
+        
+        posts = data;
+        renderPosts();
+        
+    } catch (error) {
+        console.error("Error al cargar fobias:", error);
+        console.log('Fallback a datos mock debido al error');
+        posts = getMockPosts();
+        renderPosts();
     }
 }
 
@@ -272,68 +218,140 @@ function setupInfiniteScroll() {
     });
 }
 
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
+    }
+    
+    try {
+        window.location.href = `pages/comments.html?post=${postId}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
+        
+        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
+        
+    }
+}
+
 function setupEventListeners() {
     const postsGrid = document.getElementById('postsGrid');
     if (!postsGrid) return;
     
     postsGrid.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
         const likesBtn = e.target.closest('.likes-btn');
         const commentsBtn = e.target.closest('.comments-btn');
         
         if (likesBtn) {
             const postId = parseInt(likesBtn.dataset.postId);
-            toggleLike(postId);
+            console.log(`Click en likes del post ${postId}`);
+            toggleLike(postId, likesBtn);
         }
         
         if (commentsBtn) {
             const postId = parseInt(commentsBtn.dataset.postId);
-            console.log(`Abrir comentarios para post ${postId}`);
+            console.log(`Click en comments del post ${postId}`);
+            handleComments(postId);
         }
     });
+    
+    console.log('Event listeners configurados correctamente');
 }
 
-function toggleLike(postId) {
+
+async function toggleLike(postId, likesBtn) {
     const post = posts.find(p => p.id === postId);
-    if (!post) return;
-    const likesBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
-    const likesCount = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
-    const likeIcon = likesBtn?.querySelector('svg');
-    
-    if (!likesBtn || !likesCount || !likeIcon) return;
-    
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        return;
+    }
+
+    const likesCount = likesBtn.querySelector('.likes-count');
+    const likeIcon = likesBtn.querySelector('svg path');
+
+    if (!likesCount || !likeIcon) {
+        console.error(`Elementos internos no encontrados en post ${postId}`);
+        return;
+    }
+
     const isCurrentlyLiked = userLikes.has(postId);
     
+    // Optimistic update - actualizar UI inmediatamente
     if (isCurrentlyLiked) {
         userLikes.delete(postId);
         post.likes -= 1;
         likesBtn.classList.remove('liked');
         likeIcon.setAttribute('fill', 'none');
-        
-        likesBtn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            likesBtn.style.transform = 'scale(1)';
-        }, 150);
-        
     } else {
         userLikes.add(postId);
         post.likes += 1;
         likesBtn.classList.add('liked');
         likeIcon.setAttribute('fill', 'currentColor');
-        likesBtn.style.transform = 'scale(1.1)';
-        setTimeout(() => {
-            likesBtn.style.transform = 'scale(1)';
-        }, 150);
     }
-    
+
+    // Animación visual
+    likesBtn.style.transform = isCurrentlyLiked ? 'scale(0.9)' : 'scale(1.1)';
+    setTimeout(() => {
+        likesBtn.style.transform = 'scale(1)';
+    }, 150);
+
     likesCount.textContent = formatNumber(post.likes);
-    
     console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
+
+    // Intentar enviar a la API solo si no estamos en modo mock
+    if (!USE_MOCK_DATA) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/phobias/${postId}/like`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            console.log(`Like enviado exitosamente al backend para post ${postId}`);
+            
+        } catch (error) {
+            console.error("Error al enviar el like al backend:", error);
+            
+            // Revertir el cambio optimista si falló la API
+            if (isCurrentlyLiked) {
+                userLikes.add(postId);
+                post.likes += 1;
+                likesBtn.classList.add('liked');
+                likeIcon.setAttribute('fill', 'currentColor');
+            } else {
+                userLikes.delete(postId);
+                post.likes -= 1;
+                likesBtn.classList.remove('liked');
+                likeIcon.setAttribute('fill', 'none');
+            }
+            
+            likesCount.textContent = formatNumber(post.likes);
+            console.log(`Like revertido debido al error. Total: ${post.likes}`);
+        }
+    }
 }
+
+
+function updateTimeAgoInCards() {
+    console.log('Actualizando timestamps...');
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, inicializando aplicación optimizada...');
     setRandomTitle();
-    renderPosts();
+    fetchPhobias();
     setupEventListeners();
     setupInfiniteScroll();
     setInterval(updateTimeAgoInCards, 60 * 1000);

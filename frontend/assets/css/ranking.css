@@ -41,13 +41,11 @@ body {
 }
 
 .logo {
-  width: 62px;
-  height: 38px;
-  font-family: 'Roboto Regular', Arial, sans-serif;
-  font-size: 24px;
-  color: #FF4500;
-  letter-spacing: 0.5px;
-  line-height: 38px;
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
 }
 
 .nav-buttons {
@@ -68,4 +66,318 @@ body {
 
 .nav-button:hover {
   opacity: 0.8;
+}
+
+.page-title {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 24px;
+  color: #FFFFFF;
+  opacity: 0.87;
+  line-height: 29px;
+  text-align: center;
+  margin: 60px 0 40px;
+}
+
+.ranking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+
+.post-card {
+  background-color: #333338;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+  max-width: 550px;
+  min-width: 300px;
+}
+
+.post-card:hover {
+  border-color: #FF4500;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 69, 0, 0.1);
+}
+
+
+.post-content {
+  position: relative;
+  z-index: 1;
+}
+
+
+.post-title {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  text-transform: capitalize;
+}
+
+
+.post-text {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #FFFFFF;
+  opacity: 0.87;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+.post-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+
+.post-meta-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Ya existen pero podés ajustar detalles si querés */
+.post-author {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 12px;
+  color: #FF4500;
+  font-weight: 500;
+}
+
+.post-date {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 12px;
+  color: #FFFFFF;
+  opacity: 0.6;
+
+}
+
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  order: 2;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  opacity: 0.6;
+}
+
+.stat-item:hover {
+  opacity: 1;
+  color:#FF4500;
+}
+
+.stat-item .icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.likes-btn {
+  transition: all 0.3s ease;
+}
+
+.likes-btn.liked {
+  color: #FF4500 !important;
+  opacity: 1 !important;
+}
+
+.likes-btn.liked .icon {
+  fill: #FF4500;
+  stroke: #FF4500;
+}
+
+.likes-btn.liked:hover {
+  color: #FF4500 !important;
+  opacity: 0.8 !important;
+}
+
+.likes-btn .icon {
+  transition: all 0.3s ease;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.ranking-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 40px 0;
+}
+
+.ranking-star {
+  width: 30px;
+  height: 30px;
+  animation: spin-star 3s infinite linear;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.page-title {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 24px;
+  color: #FFFFFF;
+  opacity: 0.87;
+  line-height: 29px;
+  margin: 0;
+}
+
+@keyframes spin-star {
+  0% { transform: rotate(0deg); opacity: 1; }
+  45% { opacity: 0; }
+  50% { transform: rotate(-180deg); opacity: 0; }
+  55% { opacity: 0; }
+  100% { transform: rotate(-360deg); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .post-card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .post-title {
+    font-size: 16px;
+  }
+  
+  .post-text {
+    font-size: 13px;
+  }
+  
+  .post-meta {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .post-stats {
+    gap: 12px;
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  .stat-item {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .stat-item .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .post-card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  
+  .post-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .post-text {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .post-meta {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  
+  .post-stats {
+    gap: 8px;
+  }
+  
+  .stat-item {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  
+  .stat-item .icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .post-title {
+    font-size: 14px;
+  }
+  
+  .post-text {
+    font-size: 12px;
+  }
+  
+  .post-author {
+    font-size: 11px;
+  }
+  
+  .post-date {
+    font-size: 10px;
+  }
+  
+  .stat-item {
+    padding: 4px 6px;
+    font-size: 9px;
+  }
+  
+  .stat-item .icon {
+    width: 11px;
+    height: 11px;
+  }
 }

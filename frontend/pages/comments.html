@@ -10,28 +10,30 @@
 <body>
     <div class="container">
         <header class="header">
-            <div class="logo">LOGO</div>
+            <img src="../assets/images/logo.png" alt="Logo Fobias" class="logo">
             <nav class="nav-buttons">
-                <a href="#" class="nav-button">CREATE POST</a>
-                <a href="#" class="nav-button">RANKINGS</a>
-                <a href="#" class="nav-button">PROFILE</a>
+                <a href="../pages/create_post.html" class="nav-button">CREATE POST</a>
+                <a href="../pages/ranking.html" class="nav-button">RANKINGS</a>
+                <a href="../pages/profile.html" class="nav-button">PROFILE</a>
             </nav>
         </header>
-        <main class="comments-section">
-            <div class="comments-header">
-                <div class="comments-count" id="comments-count"></div>
-                <div class="filter-container">
-                    <select class="filter-select" id="filter-select">
-                        <option value="5"> Showing top 5</option>
-                        <option value="10"> Showing top 10</option>
-                        <option value="20">Showing top 20</option>
-                        <option value="all">Show all</option>
-                    </select>
+        <main class="main-content">
+            <div class="post-card" id="post-card"> 
+            </div>
+            <section class="comments-section">
+                <div class="comments-header">
+                    <div class="comments-count" id="comments-count"></div>
+                    <div class="filter-container">
+                        <select class="filter-select" id="filter-select">
+                            <option value="5"> Showing top 5</option>
+                            <option value="10"> Showing top 10</option>
+                            <option value="20">Showing top 20</option>
+                            <option value="all">Show all</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-
-            <div class="comments-list" id="comments-list">
-            </div>
+                <div class="comments-list" id="comments-list"></div>
+            </section>
         </main>
         <script src="../assets/js/comments.js"></script>
 </body>

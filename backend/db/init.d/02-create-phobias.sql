@@ -4,5 +4,10 @@ CREATE TABLE IF NOT EXISTS phobias (
   description  TEXT,
   creator_id   INT NOT NULL,
   likes        INT DEFAULT 0,
-  date         DATE NOT NULL
+  date         DATE NOT NULL DEFAULT CURRENT DATE,
+
+  -- definimos la foreing key hacia user.id
+  CONSTRAINT fk_phobias_creator
+  FOREIGN KEY (creator_id)
+  REFERENCES users(id)
 );

@@ -10,17 +10,17 @@
 </head>
 <body>
     <div class="login-container">
-        <form class="login-form" action="/login" method="POST">
+        <form class="login-form" id="loginForm">
             <h2>Iniciar Sesión</h2>
 
             <div class="form-group">
-                <i class="fas fa-user icon"></i>
-                <input type="text" name="usuario" placeholder="Usuario" required>
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
             </div>
 
             <div class="form-group password-group">
                 <i class="fas fa-lock icon"></i>
-                <input type="password" name="contrasena" placeholder="Contraseña" id="password" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
                 <i class="toggle-password" id="togglePassword"></i>
             </div>
 
@@ -29,9 +29,12 @@
             <p class="forgot-password"><a href="/recuperar_contrasena" class="forgot-password">¿Olvidaste tu contraseña?</a></p>
 
             <div class="signup-link">
-                <p>¿No tienes cuenta? <a href="/registro" class="signup-text">¡Crea una ahora aquí!</a></p>
+                <p>¿No tienes cuenta? <a href="register.html" class="signup-text">¡Crea una ahora aquí!</a></p>
             </div>
         </form>
     </div>
+
+    <!-- Vincular el archivo JavaScript -->
+    <script src="../assets/js/login.js"></script>
 </body>
 </html>

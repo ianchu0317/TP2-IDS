@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends
 from typing import Annotated
 from schemas import User, UserLogin, UserInfo, Token
@@ -11,6 +12,14 @@ import ai_controller as ai
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 

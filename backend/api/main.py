@@ -183,13 +183,7 @@ async def create_comment(phobia_id: int,
 # Obtener comentarios de una fobia
 @app.get("/phobias/{phobia_id}/comments", status_code=200, response_model=list[CommentOUT])
 async def get_comments(phobia_id: int):
-    comments = await db.get_comments(phobia_id)
-    if not comments:
-        raise HTTPException(
-            status_code=404,
-            detail="No hay comentarios para esta fobia"
-        )
-    return comments
+    return await db.get_comments(phobia_id)
 
 
 

@@ -158,7 +158,7 @@ async def delete_phobia(phobia_id: int,
     try:     
         await db.delete_phobia(phobia_id)
     except: 
-        HTTPException(
+        raise HTTPException(
             status_code=400,
             detail="Error eliminando fobia"
         )

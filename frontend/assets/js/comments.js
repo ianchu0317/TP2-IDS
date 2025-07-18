@@ -188,7 +188,6 @@ function renderPost() {
             <p class="post-content">${content}</p>
             <div class="post-stats">
                 <span class="likes-count">${currentPostData.likes || 0} likes</span>
-                <span class="comments-count">${commentsCount} comentarios</span>
             </div>
         </div>
     `;

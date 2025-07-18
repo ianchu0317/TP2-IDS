@@ -118,8 +118,10 @@ function handleLike(postId, button) {
 }
 
 function handleComment(postId) {
-    console.log(`Comentar en post ${postId}`);
+    console.log(`Redirigiendo a comentarios del post ${postId}`);
+    window.location.href = `comments.html?id=${postId}`;
 }
+
 
 function handleShare(postId) {
     console.log(`Compartir post ${postId}`);

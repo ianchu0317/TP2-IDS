@@ -9,27 +9,27 @@
 </head>
 <body>  
     <div class="login-container">
-        <form class="login-form" action="/registro" method="POST">
+        <form class="login-form" id="registerForm">
             <h2>Registro de Usuario</h2>
 
             <div class="form-group">
                 <i class="fas fa-user icon"></i>
-                <input type="text" name="usuario" placeholder="Nombre de Usuario" required>
+                <input type="text" id="username" placeholder="Nombre de Usuario" required>
             </div>
             
             <div class="form-group">
                 <i class="fas fa-envelope icon"></i>
-                <input type="email" name="email" placeholder="Correo Electrónico" required>
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
             </div>
 
             <div class="form-group">
                 <i class="fas fa-phone"></i>
-                <input type="phone" name="phone" placeholder="Telefono" required>
+                <input type="number" id="phone" placeholder="Teléfono" required>
             </div>
             
             <div class="form-group">
                 <i class="fas fa-lock icon"></i>
-                <input type="password" name="contrasena" id="password" placeholder="Contraseña" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
                 <i class="toggle-password" id="togglePassword"></i>
             </div>                              
             
@@ -41,5 +41,8 @@
             
         </form>
     </div>
+
+    <!-- archivo script de js para registrar usuario -->
+    <script src="../assets/js/register.js"></script>
 </body>
 </html>

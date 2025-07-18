@@ -70,12 +70,11 @@ body {
   opacity: 0.8;
 }
 
-
 .post-card {
   max-width: 900px;
   margin: 40px auto 30px auto;
   padding: 20px 24px;
-  background-color: #333338;;
+  background-color: #333338;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   font-family: 'Roboto Regular', Arial, sans-serif;
   color: #ffffff;
@@ -88,16 +87,128 @@ body {
   opacity: 0.9;
 }
 
-.post.author {
-  
-}
-
 #post-card .post-meta {
   display: flex;
   gap: 10px;
   font-size: 13px;
-  color: #FF4500;;
+  color: #FF4500;
   opacity: 0.7;
+}
+
+.comments-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.comments-count {
+  color: #FFFFFF;
+  font-size: 16px;
+  opacity: 0.87;
+}
+
+.comment-form-section {
+  max-width: 900px;
+  margin: 0 auto 30px auto;
+  padding: 0 20px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.comment-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 12px;
+  background-color: #161618;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.comment-textarea:focus {
+  outline: none;
+  border-color: #FF4500;
+}
+
+.comment-textarea::placeholder {
+  color: #888;
+  opacity: 0.7;
+}
+
+.character-count {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 12px;
+  color: #888;
+  background-color: #161618;
+  padding: 2px 6px;
+  border-radius: 3px;
+  opacity: 0.7;
+}
+
+/* ACA MODIFIQUE para que los botones siempre se vean */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.cancel-btn, .submit-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cancel-btn {
+  background-color: #444;
+  color: #fff;
+  opacity: 0.7;
+}
+
+.cancel-btn:hover {
+  opacity: 1;
+}
+
+.submit-btn {
+  background-color: #FF4500;
+  color: #fff;
+}
+
+.submit-btn:hover {
+  opacity: 0.8;
+}
+
+.submit-btn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .comments-section {

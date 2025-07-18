@@ -114,16 +114,17 @@ async function postComment(phobiaId, commentText) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({
                 comment: commentText
             })
         });
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         return await response.json();
     } catch (error) {
         console.error('Error posting comment:', error);
@@ -251,7 +252,7 @@ async function handleCommentSubmit(commentText) {
         return;
     }
 
-    const submitButton = document.getElementById('submit-comment');
+    const submitButton = document.getElementById('submit-btn');
     if (submitButton) {
         submitButton.disabled = true;
         submitButton.textContent = 'Enviando...';
@@ -325,7 +326,7 @@ async function initializePage() {
 
         const commentForm = document.getElementById('comment-form');
         const commentInput = document.getElementById('comment-input');
-        const submitButton = document.getElementById('submit-comment');
+        const submitButton = document.getElementById('submit-btn');
 
         if (commentForm && commentInput && submitButton) {
             commentForm.addEventListener('submit', (e) => {

@@ -69,6 +69,25 @@ body {
     box-sizing: border-box;
   }
 
+  .form-group input:focus {
+    background-color: rgba(0, 0, 0, 0.1); 
+    border-color: #000; 
+  }
+  
+  .form-group input::placeholder {
+    color: #666; 
+  }
+  
+  .form-desc input:focus {
+    background-color: rgba(0, 0, 0, 0.1); 
+    border-color: #000; 
+  }
+  
+  .form-desc input::placeholder {
+    color: #666; 
+  }
+  
+
   .btn {
     width: 100%;
     padding: 14px;

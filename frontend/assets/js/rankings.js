@@ -6,6 +6,9 @@ const titles = [
     "Las joyas de la comunidad. Brillan más que tu ansiedad"
 ];
 
+const API_BASE_URL = 'http://localhost:8000';
+const USE_MOCK_DATA = false;
+
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * titles.length);
     return titles[randomIndex];
@@ -72,7 +75,6 @@ function renderPosts(posts) {
     addEventListeners();
 }
 
-
 function addEventListeners() {
     document.querySelectorAll('.likes-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -101,7 +103,6 @@ function addEventListeners() {
     });
 }
 
-
 function handleLike(postId, button) {
     const likeCount = button.querySelector('.like-count');
     let currentLikes = parseInt(likeCount.textContent);
@@ -111,17 +112,14 @@ function handleLike(postId, button) {
         button.classList.remove('liked');
         likeCount.textContent = currentLikes - 1;
     } else {
-        // Like
         button.classList.add('liked');
         likeCount.textContent = currentLikes + 1;
     }
 }
 
-
 function handleComment(postId) {
     console.log(`Comentar en post ${postId}`);
 }
-
 
 function handleShare(postId) {
     console.log(`Compartir post ${postId}`);
@@ -137,21 +135,9 @@ function handleShare(postId) {
     }
 }
 
-async function loadPosts() {
-    try {
-        const response = await fetch('/api/posts');
-        const posts = await response.json();
-        renderPosts(posts);
-    } catch (error) {
-        console.error('Error al cargar posts:', error);
-        document.getElementById('rankingContainer').innerHTML = 
-            '<div class="error">Error al cargar los posts</div>';
-    }
-}
 
-
-function loadSamplePosts() {
-    const samplePosts = [
+function getSamplePosts() {
+    return [
         {
             "id": 5,
             "phobia_name": "fobias",
@@ -168,16 +154,65 @@ function loadSamplePosts() {
             "likes": 0,
             "comments": 0,
             "date": "2025-07-07"
+        },
+        {
+            "id": 4,
+            "phobia_name": "eres un cute skibdii",
+            "description": "me gustan los skibidis con cabesita de pochoclo",
+            "creator": "skibidi",
+            "likes": 0,
+            "comments": 0,
+            "date": "2025-07-07"
+        },
+        {
+            "id": 8,
+            "phobia_name": "fobias",
+            "description": "walkers",
+            "creator": "skibidi",
+            "likes": 0,
+            "comments": 0,
+            "date": "2025-07-07"
         }
     ];
-    
+}
+
+async function loadPosts() {
+    try {
+        if (USE_MOCK_DATA) {
+            console.log('Usando datos mock para testing');
+            const samplePosts = getSamplePosts();
+            renderPosts(samplePosts);
+            return;
+        }
+
+        console.log('Cargando posts desde API...');
+        const response = await fetch(`${API_BASE_URL}/rankings`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const posts = await response.json();
+        console.log('Posts recibidos de la API:', posts);
+        renderPosts(posts);
+        
+    } catch (error) {
+        console.error('Error al cargar posts:', error);
+        console.log('Fallback a datos mock debido al error');
+        const samplePosts = getSamplePosts();
+        renderPosts(samplePosts);
+    }
+}
+
+function loadSamplePosts() {
+    const samplePosts = getSamplePosts();
     renderPosts(samplePosts);
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     setRandomTitle();
-    loadSamplePosts();
+    loadPosts();
 });
+
 window.renderPosts = renderPosts;
 window.loadPosts = loadPosts;

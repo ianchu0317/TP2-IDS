@@ -23,7 +23,7 @@ let isLoading = false;
 let posts = [];
 
 const API_BASE_URL = 'http://localhost:8000';
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
@@ -281,8 +281,6 @@ async function toggleLike(postId, likesBtn) {
     }
 
     const isCurrentlyLiked = userLikes.has(postId);
-    
-    // Optimistic update - actualizar UI inmediatamente
     if (isCurrentlyLiked) {
         userLikes.delete(postId);
         post.likes -= 1;
@@ -294,8 +292,6 @@ async function toggleLike(postId, likesBtn) {
         likesBtn.classList.add('liked');
         likeIcon.setAttribute('fill', 'currentColor');
     }
-
-    // Animación visual
     likesBtn.style.transform = isCurrentlyLiked ? 'scale(0.9)' : 'scale(1.1)';
     setTimeout(() => {
         likesBtn.style.transform = 'scale(1)';
@@ -303,8 +299,6 @@ async function toggleLike(postId, likesBtn) {
 
     likesCount.textContent = formatNumber(post.likes);
     console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
-
-    // Intentar enviar a la API solo si no estamos en modo mock
     if (!USE_MOCK_DATA) {
         try {
             const response = await fetch(`${API_BASE_URL}/phobias/${postId}/like`, {

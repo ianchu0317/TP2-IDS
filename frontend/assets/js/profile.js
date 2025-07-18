@@ -20,6 +20,29 @@ const profileImages = {
 const posts = [];
 let currentUser = null;
 
+function safeUpdateElement(selector, content, isImage = false) {
+    const element = document.querySelector(selector);
+    if (!element) {
+        console.warn(`Element with selector "${selector}" not found`);
+        return false;
+    }
+    
+    if (isImage) {
+        element.src = content;
+    } else {
+        element.textContent = content;
+    }
+    return true;
+}
+
+function setupImageErrorHandler(selector, fallbackSrc) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.onerror = function() {
+            this.src = fallbackSrc;
+        };
+    }
+}
 
 function getRandomIndex(username, arrayLength) {
     let hash = 0;
@@ -81,58 +104,81 @@ function loadUserPosts() {
 }
 
 function loadProfile() {
+    if (!currentUser) {
+        console.error('No hay usuario para cargar');
+        return;
+    }
 
     const randomImages = getRandomProfileImages(currentUser.username);
     currentUser.avatarUrl = randomImages.avatar;
     currentUser.coverUrl = randomImages.header;
 
     document.title = `(@${currentUser.username}) / Fobium`;
-    const usernameElement = document.querySelector('.username');
-    if (usernameElement) {
-        usernameElement.textContent = currentUser.username;
-    }
-    const nameElement = document.querySelector('.name');
-    if (nameElement) {
-        nameElement.textContent = currentUser.name;
-    }
-
-    const emailElement = document.querySelector('.email');
-    if (emailElement) {
-        emailElement.textContent = currentUser.email;
-    }
     
-    const avatarElement = document.querySelector('.avatar');
-    if (avatarElement) {
-        avatarElement.src = currentUser.avatarUrl;
-        avatarElement.onerror = function() {
-            this.src = "../assets/images/avatar.png";
-        };
-    }
-
-    const phoneElement = document.querySelector('.phone');
-    if (phoneElement) {
-        phoneElement.textContent = currentUser.phone;
-    }
-
-    const dateElement = document.querySelector('.date');
-    if (dateElement) {
-        dateElement.textContent = new Date(currentUser.date).toLocaleDateString();
-    }
-
-    const coverElement = document.querySelector('.cover-img');
-    if (coverElement) {
-        coverElement.src = currentUser.coverUrl;
-        coverElement.onerror = function() {
-            this.src = "../assets/images/header.png";
-        };
-    }
+    safeUpdateElement('.username', currentUser.username);
+    safeUpdateElement('.name', currentUser.name || currentUser.username);
+    safeUpdateElement('.email', currentUser.email || 'Email no disponible');
+    safeUpdateElement('.phone', formatPhone(currentUser.phone));
+    safeUpdateElement('.date', formatDate(currentUser.date));
+    
+    safeUpdateElement('.avatar', currentUser.avatarUrl, true);
+    safeUpdateElement('.cover-img', currentUser.coverUrl, true);
+    
+    setupImageErrorHandler('.avatar', "../assets/images/avatar.png");
+    setupImageErrorHandler('.cover-img', "../assets/images/header.png");
     
     const userPosts = posts.filter(post => post.user === currentUser.username);
     const totalLikes = userPosts.reduce((sum, post) => sum + post.likes, 0);
     
     console.log(`Posts del usuario: ${userPosts.length}`);
     console.log(`Total de likes: ${totalLikes}`);
+    
     loadUserPosts();
+}
+
+async function fetchUserProfile() {
+    try {
+        const token = localStorage.getItem('authToken');
+        
+        const response = await fetch('/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const userData = await response.json();
+        return userData;
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        throw error;
+    }
+}
+
+async function loadProfileFromAPI() {
+    try {
+        const userData = await fetchUserProfile();
+        currentUser = userData;
+        loadProfile();
+    } catch (error) {
+        console.error('Error loading profile from API:', error);
+        showErrorMessage('Error al cargar el perfil. Por favor, inténtalo de nuevo.');
+    }
+}
+
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    
+    const container = document.querySelector('.profile-container') || document.body;
+    container.insertBefore(errorDiv, container.firstChild);
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
 }
 
 function applyRandomImagesToUser(user) {
@@ -144,12 +190,10 @@ function applyRandomImagesToUser(user) {
     };
 }
 
+function initProfile() {
+    loadProfileFromAPI();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    currentUser = {
-    "username": "ianchu0317",
-    "email": "ianchu0317@gmail.com",
-    "phone": 123456,
-    "date": "2025-07-07"
-    };
-    loadProfile();
+    initProfile();
 });

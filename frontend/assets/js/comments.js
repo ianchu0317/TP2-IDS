@@ -1,11 +1,14 @@
 const API_BASE_URL = 'http://localhost:8000';
-const USE_HARDCODED_DATA = true;
+const USE_HARDCODED_DATA = false;
 
 const hardcodedPostData = {
-    id: 3,
-    content: "No puedo con la gente con nariz grande. Ya lo dije. Me dan ansiedad. No es personal, es nasal.",
-    author: "AnonUser",
-    timestamp: Date.now() - (4 * 60 * 60 * 1000)
+    "id": 3,
+    "phobia_name": "fobias",
+    "description": "testing",
+    "creador": "usuario 2",
+    "likes": 0,
+    "comments": 0,
+    "date": "2025-07-07"
 };
 
 const hardcodedCommentsData = [
@@ -69,9 +72,15 @@ function getPhobiaIdFromUrl() {
 async function fetchPostData(phobiaId) {
     try {
         const response = await fetch(`${API_BASE_URL}/phobias/${phobiaId}`);
+        
+        if (response.status === 404) {
+            console.warn(`Fobia con ID ${phobiaId} no encontrada`);
+            return null;
+        }
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         return await response.json();
     } catch (error) {
         console.error('Error fetching post data:', error);
@@ -82,9 +91,15 @@ async function fetchPostData(phobiaId) {
 async function fetchComments(phobiaId) {
     try {
         const response = await fetch(`${API_BASE_URL}/phobias/${phobiaId}/comments`);
+        if (response.status === 404) {
+            console.log(`No hay comentarios para la fobia ${phobiaId}`);
+            return [];
+        }
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         return await response.json();
     } catch (error) {
         console.error('Error fetching comments:', error);
@@ -112,7 +127,7 @@ async function postComment(phobiaId, commentText) {
         return await response.json();
     } catch (error) {
         console.error('Error posting comment:', error);
-        return null;
+        throw error;
     }
 }
 
@@ -136,48 +151,15 @@ async function getComments(phobiaId) {
     if (USE_HARDCODED_DATA) {
         return hardcodedCommentsData.filter(comment => comment.phobia_id === phobiaId);
     }
-    
+
     const apiComments = await fetchComments(phobiaId);
-    
-    if (apiComments && apiComments.length > 0) {
+
+    if (apiComments) {
         return apiComments;
     }
-    
-    console.warn('Using hardcoded comments as fallback');
-    return hardcodedCommentsData.filter(comment => comment.phobia_id === phobiaId);
-}
 
-
-function formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffTime = now - date;
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-    
-    if (diffHours < 24) {
-        return `hace ${diffHours}h`;
-    } else {
-        return date.toLocaleDateString('es-ES');
-    }
-}
-
-function dateToTimestamp(dateString) {
-    return new Date(dateString).getTime();
-}
-
-function sortComments(comments, sortBy = 'newest') {
-    const sortedComments = [...comments];
-
-    switch(sortBy) {
-        case 'newest':
-            return sortedComments.sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
-        case 'oldest':
-            return sortedComments.sort((a, b) => dateToTimestamp(a.date) - dateToTimestamp(b.date));
-        case 'top':
-            return sortedComments.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-        default:
-            return sortedComments.sort((a, b) => dateToTimestamp(b.date) - dateToTimestamp(a.date));
-    }
+    console.warn('Fallo el fetch, devolviendo []');
+    return [];
 }
 
 function renderPost() {
@@ -187,20 +169,29 @@ function renderPost() {
         return;
     }
 
-    const timeAgo = formatTimestamp(currentPostData.timestamp);
-    document.title = `${currentPostData.author} en Fobium: "${currentPostData.content}"`;
+    const rawDate = currentPostData.date;
+    const author = currentPostData.creador;
+    const content = currentPostData.description;
+    const phobiaName = currentPostData.phobia_name;
+    const commentsCount = currentPostData.comments || 0;
+    
+    document.title = `${author} en Fobium: "${content}"`;
 
     postCard.innerHTML = `
         <div class="post-meta">
-            <span class="post-author">${currentPostData.author}</span> · 
-            <span class="post-time">${timeAgo}</span>
+            <span class="post-author">${author}</span> · 
+            <span class="post-time">${rawDate}</span>
         </div>
         <div class="post">
-            <p class="post-content">${currentPostData.content}</p>
+            <h3 class="post-title">${phobiaName}</h3>
+            <p class="post-content">${content}</p>
+            <div class="post-stats">
+                <span class="likes-count">${currentPostData.likes || 0} likes</span>
+                <span class="comments-count">${commentsCount} comentarios</span>
+            </div>
         </div>
     `;
 }
-
 
 function createCommentElement(comment) {
     const commentDiv = document.createElement('div');
@@ -315,6 +306,10 @@ async function initializePage() {
         console.log('Phobia ID:', currentPhobiaId);
 
         currentPostData = await getPostData(currentPhobiaId);
+        if (!currentPostData) {
+            throw new Error('No se pudo cargar el post. Verifica que el ID sea correcto.');
+        }
+        
         console.log('Post data loaded:', currentPostData);
 
         currentCommentsData = await getComments(currentPhobiaId);
@@ -343,7 +338,6 @@ async function initializePage() {
                 handleCommentSubmit(commentInput.value);
             });
         }
-
         console.log('Page initialization complete');
     } catch (error) {
         console.error('Error initializing page:', error);
@@ -351,13 +345,13 @@ async function initializePage() {
         if (errorContainer) {
             errorContainer.innerHTML = `
                 <div class="error-message">
-                    <p>Error al cargar el contenido. Por favor, recarga la página.</p>
+                    <p>Error: ${error.message}</p>
+                    <p>Por favor, verifica el ID del post y recarga la página.</p>
                 </div>
             `;
         }
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', initializePage);
 

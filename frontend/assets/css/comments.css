@@ -71,7 +71,7 @@ body {
 }
 
 
-#post-card {
+.post-card {
   max-width: 900px;
   margin: 40px auto 30px auto;
   padding: 20px 24px;
@@ -88,6 +88,9 @@ body {
   opacity: 0.9;
 }
 
+.post.author {
+  
+}
 
 #post-card .post-meta {
   display: flex;
@@ -209,6 +212,25 @@ body {
 .comment-time {
   color: #FFFFFF;
   opacity: 0.5;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comments-section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
 }
 
 @media (max-width: 1024px) {

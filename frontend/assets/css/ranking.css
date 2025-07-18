@@ -34,7 +34,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 60px;
-  height: 60px;
+  height: 90px;
   position: relative;
   z-index: 10;
   margin-top: 20px;
@@ -68,14 +68,23 @@ body {
   opacity: 0.8;
 }
 
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32px;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
 .page-title {
   font-family: 'Roboto Regular', Arial, sans-serif;
   font-size: 24px;
   color: #FFFFFF;
   opacity: 0.87;
   line-height: 29px;
-  text-align: center;
-  margin: 60px 0 40px;
+  display: inline-block;
+  margin-bottom: 20px;
 }
 
 .ranking-container {
@@ -90,22 +99,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   gap: 20px;
 }
-
 
 .post-card {
   background-color: #333338;
   border-radius: 12px;
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
-  width: fit-content;
-  max-width: 550px;
-  min-width: 300px;
+  width: 100%;
+  max-width: 900px;
+  min-height: 140px;
 }
 
 .post-card:hover {
@@ -114,12 +122,10 @@ body {
   box-shadow: 0 8px 25px rgba(255, 69, 0, 0.1);
 }
 
-
 .post-content {
   position: relative;
   z-index: 1;
 }
-
 
 .post-title {
   font-family: 'Roboto Medium', Arial, sans-serif;
@@ -130,7 +136,6 @@ body {
   line-height: 1.5;
   text-transform: capitalize;
 }
-
 
 .post-text {
   font-family: 'Roboto Regular', Arial, sans-serif;
@@ -143,14 +148,12 @@ body {
   overflow-wrap: break-word;
 }
 
-
 .post-info {
   display: flex;
   align-items: center;
   gap: 8px;
   padding-bottom: 12px;
 }
-
 
 .post-meta-line {
   display: flex;
@@ -159,7 +162,6 @@ body {
   gap: 10px;
 }
 
-/* Ya existen pero podés ajustar detalles si querés */
 .post-author {
   font-family: 'Roboto Medium', Arial, sans-serif;
   font-size: 12px;
@@ -172,7 +174,6 @@ body {
   font-size: 12px;
   color: #FFFFFF;
   opacity: 0.6;
-
 }
 
 .post-stats {
@@ -228,7 +229,6 @@ body {
   transition: all 0.3s ease;
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -246,10 +246,14 @@ body {
 
 .ranking-title-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  gap: 10px;
-  margin: 40px 0;
+  gap: 15px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 900px;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
 .ranking-star {
@@ -257,15 +261,6 @@ body {
   height: 30px;
   animation: spin-star 3s infinite linear;
   transition: opacity 0.5s ease-in-out;
-}
-
-.page-title {
-  font-family: 'Roboto Regular', Arial, sans-serif;
-  font-size: 24px;
-  color: #FFFFFF;
-  opacity: 0.87;
-  line-height: 29px;
-  margin: 0;
 }
 
 @keyframes spin-star {
@@ -276,10 +271,83 @@ body {
   100% { transform: rotate(-360deg); opacity: 1; }
 }
 
+@media (max-width: 1200px) {
+  .header {
+    padding: 0 40px;
+  }
+  
+  .nav-buttons {
+    gap: 20px;
+  }
+  
+  .post-card {
+    max-width: 700px;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 700px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    padding: 0 30px;
+  }
+  
+  .nav-buttons {
+    gap: 15px;
+  }
+  
+  .nav-button {
+    font-size: 13px;
+  }
+  
+  .post-card {
+    max-width: 600px;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 600px;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
+  .header {
+    height: auto;
+    position: relative;
+    flex-direction: column;
+    padding: 20px 30px;
+    gap: 20px;
+  }
+  
+  .logo {
+    font-size: 22px;
+  }
+  
+  .nav-buttons {
+    gap: 25px;
+  }
+  
+  .main-content {
+    padding-top: 40px;
+  }
+  
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 30px;
+  }
+  
   .post-card {
     padding: 16px;
     margin-bottom: 16px;
+    max-width: 95%;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 95%;
+    justify-content: center;
   }
   
   .post-title {
@@ -314,9 +382,39 @@ body {
 }
 
 @media (max-width: 576px) {
+  .header {
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    font-size: 20px;
+  }
+  
+  .nav-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .nav-button {
+    font-size: 12px;
+  }
+  
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 25px;
+  }
+  
   .post-card {
     padding: 14px;
     margin-bottom: 14px;
+    max-width: 100%;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 100%;
+    gap: 10px;
+    justify-content: center;
   }
   
   .post-title {
@@ -350,6 +448,28 @@ body {
 }
 
 @media (max-width: 480px) {
+  .header {
+    padding: 12px 15px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .nav-buttons {
+    gap: 12px;
+  }
+  
+  .nav-button {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+  
+  .page-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
   .post-card {
     padding: 12px;
     margin-bottom: 12px;
@@ -379,5 +499,36 @@ body {
   .stat-item .icon {
     width: 11px;
     height: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: 10px 12px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  .nav-buttons {
+    gap: 10px;
+  }
+  
+  .nav-button {
+    font-size: 10px;
+  }
+  
+  .page-title {
+    font-size: 16px;
+  }
+  
+  .post-card {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .post-text {
+    font-size: 13px;
   }
 }

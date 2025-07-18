@@ -78,6 +78,8 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   font-family: 'Roboto Regular', Arial, sans-serif;
   color: #ffffff;
+  border-radius: 8px;
+  width: 95%;
 }
 
 #post-card .post-content {
@@ -93,12 +95,14 @@ body {
   font-size: 13px;
   color: #FF4500;
   opacity: 0.7;
+  flex-wrap: wrap;
 }
 
 .comments-section {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 95%;
 }
 
 .comments-header {
@@ -106,6 +110,8 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .comments-count {
@@ -118,6 +124,7 @@ body {
   max-width: 900px;
   margin: 0 auto 30px auto;
   padding: 0 20px;
+  width: 95%;
 }
 
 .comment-form {
@@ -166,12 +173,12 @@ body {
   opacity: 0.7;
 }
 
-/* ACA MODIFIQUE para que los botones siempre se vean */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 15px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .cancel-btn, .submit-btn {
@@ -184,6 +191,7 @@ body {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  min-width: 80px;
 }
 
 .cancel-btn {
@@ -211,29 +219,11 @@ body {
   opacity: 0.5;
 }
 
-.comments-section {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.comments-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.comments-count {
-  color: #FFFFFF;
-  font-size: 16px;
-  opacity: 0.87;
-}
-
 .filter-container {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .filter-label {
@@ -250,6 +240,7 @@ body {
   cursor: pointer;
   font-size: 14px;
   opacity: 0.87;
+  border: 1px solid #444;
 }
 
 .filter-select:hover {
@@ -272,7 +263,7 @@ body {
   background-color: #333338;
   padding: 15px;
   position: relative;
-  border-bottom: 1px solid #333338;
+  border-bottom: 1px solid #444;
 }
 
 .comment:first-child {
@@ -299,6 +290,8 @@ body {
   line-height: 1.5;
   margin-bottom: 5px;
   opacity: 0.87;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .comment-meta {
@@ -308,6 +301,7 @@ body {
   font-size: 12px;
   color: #FFFFFF;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 .comment-author {
@@ -344,22 +338,67 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
-@media (max-width: 1024px) {
-  .comments-section {
-    max-width: 100%;
-    padding: 0 15px;
-  }
-  
+
+@media (max-width: 1200px) {
   .header {
-    padding: 0 15px;
+    padding: 0 40px;
   }
   
   .nav-buttons {
-    gap: 15px;
+    gap: 30px;
+  }
+  
+  .post-card {
+    max-width: 800px;
+    padding: 18px 20px;
+  }
+  
+  .comments-section, .comment-form-section {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 30px;
+  }
+  
+  .nav-buttons {
+    gap: 25px;
   }
   
   .nav-button {
     font-size: 13px;
+  }
+  
+  .post-card {
+    max-width: 700px;
+    padding: 16px 18px;
+  }
+  
+  #post-card .post-content {
+    font-size: 22px;
+  }
+  
+  .comments-section, .comment-form-section {
+    max-width: 700px;
+    padding: 0 15px;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .post-card {
+    max-width: 600px;
+    padding: 16px;
+  }
+  
+  #post-card .post-content {
+    font-size: 20px;
+  }
+  
+  .comments-section, .comment-form-section {
+    max-width: 600px;
   }
 }
 
@@ -367,18 +406,20 @@ body {
   .header {
     height: auto;
     min-height: 60px;
-    padding: 15px;
+    padding: 15px 20px;
     flex-direction: column;
     gap: 15px;
+    margin-top: 10px;
   }
   
   .logo {
-    font-size: 20px;
+    height: 100px;
   }
   
   .nav-buttons {
     justify-content: center;
-    gap: 12px;
+    gap: 20px;
+    flex-wrap: wrap;
   }
   
   .nav-button {
@@ -386,14 +427,25 @@ body {
     padding: 5px 10px;
   }
   
-  .comments-section {
+  .post-card {
+    margin: 20px auto;
+    padding: 16px;
+    width: 98%;
+  }
+  
+  #post-card .post-content {
+    font-size: 18px;
+  }
+  
+  .comments-section, .comment-form-section {
     padding: 0 10px;
+    width: 98%;
   }
   
   .comments-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 15px;
   }
   
   .filter-container {
@@ -402,25 +454,11 @@ body {
   }
   
   .filter-select {
-    min-width: 120px;
+    min-width: 140px;
   }
   
   .comment {
     padding: 12px;
-  }
-  
-  .vote-section {
-    min-width: 40px;
-    margin-right: 10px;
-  }
-  
-  .vote-arrow svg {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .vote-count {
-    font-size: 12px;
   }
   
   .comment-text {
@@ -431,19 +469,29 @@ body {
     font-size: 11px;
     gap: 8px;
   }
+  
+  .form-actions {
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    flex: 1;
+    max-width: 120px;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .header {
-    padding: 10px;
+    padding: 12px 15px;
   }
   
   .logo {
-    font-size: 18px;
+    height: 80px;
   }
   
   .nav-buttons {
-    gap: 8px;
+    gap: 15px;
   }
   
   .nav-button {
@@ -451,26 +499,39 @@ body {
     padding: 4px 8px;
   }
   
-  .comments-section {
-    padding: 0 5px;
+  .post-card {
+    margin: 15px auto;
+    padding: 14px;
+  }
+  
+  #post-card .post-content {
+    font-size: 16px;
+  }
+  
+  #post-card .post-meta {
+    font-size: 12px;
+  }
+  
+  .comments-section, .comment-form-section {
+    padding: 0 8px;
+  }
+  
+  .comments-count {
+    font-size: 14px;
+  }
+  
+  .filter-label {
+    font-size: 13px;
+  }
+  
+  .filter-select {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-width: 120px;
   }
   
   .comment {
     padding: 10px;
-  }
-  
-  .vote-section {
-    min-width: 35px;
-    margin-right: 8px;
-  }
-  
-  .vote-arrow svg {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .vote-count {
-    font-size: 11px;
   }
   
   .comment-text {
@@ -482,27 +543,33 @@ body {
     gap: 6px;
   }
   
-  .filter-select {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
-  .filter-label {
+  .comment-textarea {
     font-size: 13px;
+    padding: 10px;
   }
   
-  .comments-count {
-    font-size: 14px;
+  .cancel-btn, .submit-btn {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+  
+  .character-count {
+    font-size: 10px;
   }
 }
 
-@media (max-width: 320px) {
+
+@media (max-width: 480px) {
   .header {
-    padding: 8px;
+    padding: 10px 12px;
   }
   
   .logo {
-    font-size: 16px;
+    height: 70px;
+  }
+  
+  .nav-buttons {
+    gap: 12px;
   }
   
   .nav-button {
@@ -510,13 +577,36 @@ body {
     padding: 3px 6px;
   }
   
-  .comment {
-    padding: 8px;
+  .post-card {
+    margin: 10px auto;
+    padding: 12px;
   }
   
-  .vote-section {
-    min-width: 30px;
-    margin-right: 6px;
+  #post-card .post-content {
+    font-size: 15px;
+  }
+  
+  .comments-section, .comment-form-section {
+    padding: 0 6px;
+  }
+  
+  .comments-header {
+    gap: 10px;
+  }
+  
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .filter-select {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .comment {
+    padding: 8px;
   }
   
   .comment-text {
@@ -524,6 +614,129 @@ body {
   }
   
   .comment-meta {
+    font-size: 9px;
+    gap: 4px;
+  }
+  
+  .form-actions {
+    gap: 8px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: 8px 10px;
+  }
+  
+  .logo {
+    height: 60px;
+  }
+  
+  .nav-buttons {
+    gap: 8px;
+  }
+  
+  .nav-button {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+  
+  .post-card {
+    margin: 8px auto;
+    padding: 10px;
+  }
+  
+  #post-card .post-content {
+    font-size: 14px;
+  }
+  
+  .comments-section, .comment-form-section {
+    padding: 0 4px;
+  }
+  
+  .comments-count {
+    font-size: 12px;
+  }
+  
+  .filter-label {
+    font-size: 11px;
+  }
+  
+  .filter-select {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+  
+  .comment {
+    padding: 6px;
+  }
+  
+  .comment-text {
+    font-size: 10px;
+  }
+  
+  .comment-meta {
+    font-size: 8px;
+    gap: 3px;
+  }
+  
+  .comment-textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    min-width: 60px;
+  }
+  
+  .character-count {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 280px) {
+  .header {
+    padding: 6px 8px;
+  }
+  
+  .logo {
+    height: 50px;
+  }
+  
+  .nav-buttons {
+    gap: 6px;
+  }
+  
+  .post-card {
+    margin: 6px auto;
+    padding: 8px;
+  }
+  
+  #post-card .post-content {
+    font-size: 13px;
+  }
+  
+  .comments-section, .comment-form-section {
+    padding: 0 3px;
+  }
+  
+  .comment {
+    padding: 4px;
+  }
+  
+  .comment-text {
+    font-size: 9px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    padding: 4px 8px;
     font-size: 9px;
   }
 }

@@ -17,7 +17,7 @@ const profileImages = {
     ]
 };
 
-const posts = [];
+let posts = [];
 let currentUser = null;
 
 function safeUpdateElement(selector, content, isImage = false) {
@@ -64,6 +64,52 @@ function getRandomProfileImages(username) {
     };
 }
 
+
+let userLikes = new Set();
+
+function createPostCard(post) {
+    const postCard = document.createElement('div');
+    postCard.className = 'post-card';
+    postCard.dataset.postId = post.id;
+    
+    const isLiked = userLikes.has(post.id);
+    const likeClass = isLiked ? 'liked' : '';
+    const fillAttribute = isLiked ? 'fill="currentColor"' : 'fill="none"';
+
+    postCard.innerHTML = `
+        <div class="post-content">
+        <h3 class="post-title">${post.phobia_name}</h3>
+        <p class="post-text">${post.description}</p>
+        </div>
+        <div class="post-meta">
+            <div class="post-info">
+                <span class="post-date">${(post.date)}</span>
+                <span class="post-author">by ${post.creator}</span>
+            </div>
+            <div class="post-stats">
+                <div class="stat-item likes-btn" data-post-id="${post.id}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 14l5-5 5 5"/>
+                    </svg>
+                    <span class="likes-count">${formatNumber(post.likes)}</span>
+                </div>
+                <div class="stat-item comments-btn" data-post-id="${post.id}">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                    <span class="comments-count">${post.comments}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return postCard;
+}
+
+function createPostElement(post) {
+    return createPostCard(post);
+}
+
 function createNoPostsElement() {
     const noPostsDiv = document.createElement('div');
     noPostsDiv.className = 'no-posts';
@@ -72,7 +118,7 @@ function createNoPostsElement() {
         <div class="no-posts-content">
             <img src="../assets/images/no-posts.png" alt="No posts" class="no-posts-avatar" onerror="this.src='../assets/images/avatar.png'">
             <h3>No hay posts todavía</h3>
-            <p>¡${currentUser.username} aún no ha publicado nada!</p>
+            <p>¡${currentUser?.username || 'El usuario'} aún no ha publicado nada!</p>
             <p>Cuando lo haga, sus posts aparecerán aquí.</p>
         </div>
     `;
@@ -80,8 +126,45 @@ function createNoPostsElement() {
     return noPostsDiv;
 }
 
+function showNoPostsMessage() {
+    const postsContainer = document.querySelector('.posts-container');
+    
+    if (!postsContainer) {
+        console.error('No se encontró el contenedor de posts');
+        return;
+    }
+    
+    postsContainer.innerHTML = '';
+    const noPostsElement = createNoPostsElement();
+    postsContainer.appendChild(noPostsElement);
+    console.log('Mostrando mensaje de no posts');
+}
+
+async function fetchPhobias() {
+    try {
+        const token = localStorage.getItem('authToken');
+        
+        const response = await fetch('/phobias', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const phobias = await response.json();
+        return phobias;
+    } catch (error) {
+        console.error('Error fetching phobias:', error);
+        return [];
+    }
+}
+
 function loadUserPosts() {
-    const userPosts = posts.filter(post => post.user === currentUser.username);
+    const userPosts = posts.filter(post => post.creator === currentUser?.username);
     const postsContainer = document.querySelector('.posts-container');
     
     if (!postsContainer) {
@@ -89,23 +172,44 @@ function loadUserPosts() {
         return userPosts;
     }
     postsContainer.innerHTML = '';
-    
-    if (userPosts.length === 0) {
+    if (userPosts.length === 0 || !currentUser) {
         const noPostsElement = createNoPostsElement();
         postsContainer.appendChild(noPostsElement);
         console.log('No hay posts para mostrar');
     } else {
-        const postsMessage = document.createElement('div');
-        postsMessage.innerHTML = `<p>El usuario tiene ${userPosts.length} posts</p>`;
-        postsContainer.appendChild(postsMessage);
+        userPosts.forEach(post => {
+            const postCard = createPostCard(post);
+            postsContainer.appendChild(postCard);
+        });
+        console.log(`Mostrando ${userPosts.length} posts del usuario`);
+        setupPostEventListeners();
     }
     
     return userPosts;
 }
 
+function loadDefaultProfile() {
+    document.title = "Perfil / Fobium";
+    
+    safeUpdateElement('.username', 'usuario');
+    safeUpdateElement('.name', 'Nombre del Usuario');
+    safeUpdateElement('.email', 'email@ejemplo.com');
+    
+    safeUpdateElement('.avatar', "../assets/images/avatar.png", true);
+    safeUpdateElement('.cover-img', "../assets/images/header.png", true);
+    
+    setupImageErrorHandler('.avatar', "../assets/images/avatar.png");
+    setupImageErrorHandler('.cover-img', "../assets/images/header.png");
+    
+    showNoPostsMessage();
+    
+    console.log('Perfil por defecto cargado');
+}
+
 function loadProfile() {
     if (!currentUser) {
-        console.error('No hay usuario para cargar');
+        console.warn('No hay usuario para cargar, mostrando perfil por defecto');
+        loadDefaultProfile();
         return;
     }
 
@@ -118,8 +222,6 @@ function loadProfile() {
     safeUpdateElement('.username', currentUser.username);
     safeUpdateElement('.name', currentUser.name || currentUser.username);
     safeUpdateElement('.email', currentUser.email || 'Email no disponible');
-    safeUpdateElement('.phone', formatPhone(currentUser.phone));
-    safeUpdateElement('.date', formatDate(currentUser.date));
     
     safeUpdateElement('.avatar', currentUser.avatarUrl, true);
     safeUpdateElement('.cover-img', currentUser.coverUrl, true);
@@ -127,7 +229,7 @@ function loadProfile() {
     setupImageErrorHandler('.avatar', "../assets/images/avatar.png");
     setupImageErrorHandler('.cover-img', "../assets/images/header.png");
     
-    const userPosts = posts.filter(post => post.user === currentUser.username);
+    const userPosts = posts.filter(post => post.creator === currentUser.username);
     const totalLikes = userPosts.reduce((sum, post) => sum + post.likes, 0);
     
     console.log(`Posts del usuario: ${userPosts.length}`);
@@ -160,12 +262,20 @@ async function fetchUserProfile() {
 
 async function loadProfileFromAPI() {
     try {
-        const userData = await fetchUserProfile();
+        const [userData, phobias] = await Promise.all([
+            fetchUserProfile(),
+            fetchPhobias()
+        ]);
+        
         currentUser = userData;
+        posts = phobias;
+        
+        console.log('Datos cargados:', { user: userData, posts: phobias.length });
         loadProfile();
     } catch (error) {
         console.error('Error loading profile from API:', error);
         showErrorMessage('Error al cargar el perfil. Por favor, inténtalo de nuevo.');
+        loadDefaultProfile();
     }
 }
 
@@ -191,7 +301,113 @@ function applyRandomImagesToUser(user) {
 }
 
 function initProfile() {
+    loadDefaultProfile();
     loadProfileFromAPI();
+}
+
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
+
+function formatPostDate(date) {
+    return date || 'Fecha no disponible';
+}
+
+function setupPostEventListeners() {
+    document.querySelectorAll('.likes-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = parseInt(this.dataset.postId);
+            handleLike(postId);
+        });
+    });
+    
+    document.querySelectorAll('.comments-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = parseInt(this.dataset.postId);
+            handleComments(postId);
+        });
+    });
+}
+
+function handleLike(postId) {
+    console.log(`Intentando dar like al post ${postId}`);
+    toggleLike(postId);
+}
+
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    viewComments(postId);
+}
+
+
+async function toggleLike(postId) {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`/phobias/${postId}/like`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                // Toggle like state
+                if (userLikes.has(postId)) {
+                    userLikes.delete(postId);
+                    post.likes = Math.max(0, post.likes - 1);
+                } else {
+                    userLikes.add(postId);
+                    post.likes += 1;
+                }
+                const likesCountElement = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
+                if (likesCountElement) {
+                    likesCountElement.textContent = formatNumber(post.likes);
+                }
+                
+                // Actualizar clase de like
+                const likesBtn = document.querySelector(`[data-post-id="${postId}"] .likes-btn`);
+                if (likesBtn) {
+                    if (userLikes.has(postId)) {
+                        likesBtn.classList.add('liked');
+                    } else {
+                        likesBtn.classList.remove('liked');
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error toggling like:', error);
+    }
+}
+
+function viewComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
+    }
+    
+    try {
+        window.location.href = `comments.html?post=${postId}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
+        
+        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
+        
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

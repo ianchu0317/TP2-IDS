@@ -31,3 +31,34 @@ body {
     color: #FFFFFF; 
   }
   
+  .form-group {
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    border: 2px solid rgba(0, 0, 0, 0.3); 
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.05); 
+    color: #FFFFFF; 
+    outline: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .form-desc input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    border: 2px solid rgba(0, 0, 0, 0.3); 
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.05); 
+    color: #FFFFFF; 
+    outline: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }

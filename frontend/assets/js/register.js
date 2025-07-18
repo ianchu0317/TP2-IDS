@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Enviar request a tu API
-            const response = await fetch('http://api.fobium.com/register', {
+            const response = await fetch('https://api.fobium.com/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

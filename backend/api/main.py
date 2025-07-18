@@ -132,7 +132,7 @@ async def update_phobia(phobia_id: int,
     try:     
         await db.update_phobia(phobia_id, phobia_data)
     except: 
-        HTTPException(
+        raise HTTPException(
             status_code=400,
             detail="Error actualizando fobia"
         )

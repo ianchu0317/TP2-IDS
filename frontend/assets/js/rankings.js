@@ -6,7 +6,7 @@ const titles = [
     "Las joyas de la comunidad. Brillan más que tu ansiedad"
 ];
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://api.fobium.com';
 const USE_MOCK_DATA = false;
 
 function getRandomPhrase() {

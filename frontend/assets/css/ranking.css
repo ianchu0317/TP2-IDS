@@ -203,7 +203,9 @@ body {
 .stat-item .icon {
   width: 16px;
   height: 16px;
-  fill: currentColor;
+  flex-shrink: 0;
+  stroke-width: 2;
+  transition: all 0.3s ease;
 }
 
 .likes-btn {
@@ -311,6 +313,11 @@ body {
     max-width: 600px;
     justify-content: center;
   }
+
+  .stat-item .icon {
+    width: 15px;
+    height: 15px;
+}
 }
 
 @media (max-width: 768px) {
@@ -323,7 +330,7 @@ body {
   }
   
   .logo {
-    font-size: 22px;
+    height: 120px;
   }
   
   .nav-buttons {
@@ -355,7 +362,7 @@ body {
   }
   
   .post-text {
-    font-size: 13px;
+    font-size: 15px;
   }
   
   .post-meta {
@@ -365,19 +372,19 @@ body {
   }
   
   .post-stats {
-    gap: 12px;
+    gap: 16px;
     width: 100%;
-    justify-content: space-around;
+    justify-content: flex-start;
   }
   
   .stat-item {
-    padding: 6px 10px;
-    font-size: 11px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
   
   .stat-item .icon {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -423,7 +430,7 @@ body {
   }
   
   .post-text {
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 12px;
   }
   
@@ -437,13 +444,13 @@ body {
   }
   
   .stat-item {
-    padding: 5px 8px;
+    padding: 6px 10px;
     font-size: 10px;
   }
   
   .stat-item .icon {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -480,7 +487,7 @@ body {
   }
   
   .post-text {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .post-author {
@@ -492,13 +499,13 @@ body {
   }
   
   .stat-item {
-    padding: 4px 6px;
-    font-size: 9px;
+    padding: 6px 8px;
+    font-size: 11px;
   }
   
   .stat-item .icon {
-    width: 11px;
-    height: 11px;
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -529,6 +536,16 @@ body {
   }
   
   .post-text {
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .stat-item {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .stat-item .icon {
+    width: 12px;
+    height: 12px;
   }
 }

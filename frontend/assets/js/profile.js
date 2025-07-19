@@ -238,11 +238,37 @@ function loadProfile() {
     loadUserPosts();
 }
 
+// Función para verificar si hay token y es válido
+function checkAuthentication() {
+    const token = localStorage.getItem('access_token');
+    
+    if (!token) {
+        alert('Debes iniciar sesión para ver tu perfil');
+        window.location.href = 'login.html';
+        return false;
+    }
+    
+    return token;
+}
+
+// Función para manejar errores de autenticación
+function handleAuthError(response) {
+    if (response.status === 401) {
+        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+        localStorage.removeItem('access_token');
+        window.location.href = 'login.html';
+        return true;
+    }
+    return false;
+}
+
+// Modificar la función fetchUserProfile
 async function fetchUserProfile() {
     try {
-        const token = localStorage.getItem('authToken');
+        const token = checkAuthentication();
+        if (!token) return null;
         
-        const response = await fetch('/profile', {
+        const response = await fetch('https://api.fobium.com/profile', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -250,8 +276,10 @@ async function fetchUserProfile() {
         });
         
         if (!response.ok) {
+            if (handleAuthError(response)) return null;
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         const userData = await response.json();
         return userData;
     } catch (error) {
@@ -260,12 +288,49 @@ async function fetchUserProfile() {
     }
 }
 
+// Modificar la función fetchPhobias para usar el endpoint correcto
+async function fetchUserPhobias() {
+    try {
+        const token = checkAuthentication();
+        if (!token) return [];
+        
+        const response = await fetch('https://api.fobium.com/profile/phobias', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            if (handleAuthError(response)) return [];
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const phobias = await response.json();
+        return phobias;
+    } catch (error) {
+        console.error('Error fetching user phobias:', error);
+        return [];
+    }
+}
+
+// Modificar la función loadProfileFromAPI
 async function loadProfileFromAPI() {
     try {
+        // Verificar autenticación al inicio
+        if (!checkAuthentication()) {
+            return;
+        }
+        
         const [userData, phobias] = await Promise.all([
             fetchUserProfile(),
-            fetchPhobias()
+            fetchUserPhobias()
         ]);
+        
+        if (!userData) {
+            loadDefaultProfile();
+            return;
+        }
         
         currentUser = userData;
         posts = phobias;
@@ -279,137 +344,36 @@ async function loadProfileFromAPI() {
     }
 }
 
-function showErrorMessage(message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    
-    const container = document.querySelector('.profile-container') || document.body;
-    container.insertBefore(errorDiv, container.firstChild);
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 5000);
-}
-
-function applyRandomImagesToUser(user) {
-    const randomImages = getRandomProfileImages(user.username);
-    return {
-        ...user,
-        avatarUrl: randomImages.avatar,
-        coverUrl: randomImages.header
-    };
-}
-
+// Modificar la función initProfile
 function initProfile() {
+    // Verificar autenticación antes de cargar cualquier cosa
+    if (!checkAuthentication()) {
+        return;
+    }
+    
     loadDefaultProfile();
     loadProfileFromAPI();
 }
 
-function formatNumber(num) {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
+// Agregar función de logout
+function logout() {
+    localStorage.removeItem('access_token');
+    alert('Sesión cerrada exitosamente');
+    window.location.href = 'login.html';
 }
 
-function formatPostDate(date) {
-    return date || 'Fecha no disponible';
-}
+// ...existing code... (mantener todas las otras funciones como están)
 
-function setupPostEventListeners() {
-    document.querySelectorAll('.likes-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const postId = parseInt(this.dataset.postId);
-            handleLike(postId);
-        });
-    });
-    
-    document.querySelectorAll('.comments-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const postId = parseInt(this.dataset.postId);
-            handleComments(postId);
-        });
-    });
-}
-
-function handleLike(postId) {
-    console.log(`Intentando dar like al post ${postId}`);
-    toggleLike(postId);
-}
-
-function handleComments(postId) {
-    console.log(`Intentando abrir comentarios para post ${postId}`);
-    viewComments(postId);
-}
-
-
-async function toggleLike(postId) {
-    try {
-        const token = localStorage.getItem('authToken');
-        const response = await fetch(`/phobias/${postId}/like`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (response.ok) {
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                // Toggle like state
-                if (userLikes.has(postId)) {
-                    userLikes.delete(postId);
-                    post.likes = Math.max(0, post.likes - 1);
-                } else {
-                    userLikes.add(postId);
-                    post.likes += 1;
-                }
-                const likesCountElement = document.querySelector(`[data-post-id="${postId}"] .likes-count`);
-                if (likesCountElement) {
-                    likesCountElement.textContent = formatNumber(post.likes);
-                }
-                
-                // Actualizar clase de like
-                const likesBtn = document.querySelector(`[data-post-id="${postId}"] .likes-btn`);
-                if (likesBtn) {
-                    if (userLikes.has(postId)) {
-                        likesBtn.classList.add('liked');
-                    } else {
-                        likesBtn.classList.remove('liked');
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Error toggling like:', error);
-    }
-}
-
-function viewComments(postId) {
-    console.log(`Intentando abrir comentarios para post ${postId}`);
-    
-    const post = posts.find(p => p.id === postId);
-    if (!post) {
-        console.error(`Post con ID ${postId} no encontrado`);
-        alert('Post no encontrado');
-        return;
-    }
-    
-    try {
-        window.location.href = `comments.html?post=${postId}`;
-    } catch (error) {
-        console.error('Error al redireccionar a comments.html:', error);
-        
-        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
-        
-    }
-}
-
+// Al final del archivo, modificar el DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
-    initProfile();
+    // Verificar autenticación antes de inicializar
+    if (checkAuthentication()) {
+        initProfile();
+    }
+    
+    // Agregar listener para botón de logout si existe
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
 });

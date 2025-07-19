@@ -1,4 +1,4 @@
-const titles = [
+const RANDOM_TITLES = [
     "Top de tops. Sin lugar para los débiles",
     "Los más likeados. El Olimpo de las fobias",
     "Camino al podio de la paranoia",
@@ -7,23 +7,16 @@ const titles = [
 ];
 
 const API_BASE_URL = 'https://api.fobium.com';
-const USE_MOCK_DATA = false;
-
-function getRandomPhrase() {
-    const randomIndex = Math.floor(Math.random() * titles.length);
-    return titles[randomIndex];
-}
 
 function setRandomTitle() {
-    const titleElement = document.getElementById('Title');
-    if (titleElement) {
-        const randomPhrase = getRandomPhrase();
-        titleElement.textContent = randomPhrase;
-        console.log("Título actualizado con:", randomPhrase);
-    }
+    const titleElement = document.getElementById('title');
+    if (!titleElement) return;
+    
+    const randomIndex = Math.floor(Math.random() * RANDOM_TITLES.length);
+    titleElement.textContent = RANDOM_TITLES[randomIndex];
 }
 
-function createPostCard(post, ranking) {
+function createPostCard(post, index) {
     const card = document.createElement('div');
     card.className = 'post-card';
     card.dataset.postId = post.id;
@@ -92,15 +85,6 @@ function addEventListeners() {
             handleComment(postId);
         });
     });
-    
-    document.querySelectorAll('.share-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const postId = this.dataset.id;
-            handleShare(postId);
-        });
-    });
 }
 
 function handleLike(postId, button) {
@@ -122,71 +106,8 @@ function handleComment(postId) {
     window.location.href = `comments.html?id=${postId}`;
 }
 
-
-function handleShare(postId) {
-    console.log(`Compartir post ${postId}`);
-    if (navigator.share) {
-        navigator.share({
-            title: 'Post interesante',
-            text: 'Mira este post sobre fobias',
-            url: window.location.href
-        });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Enlace copiado al portapapeles');
-    }
-}
-
-
-function getSamplePosts() {
-    return [
-        {
-            "id": 5,
-            "phobia_name": "fobias",
-            "description": "testing",
-            "creator": "skibidi",
-            "likes": 7,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 6,
-            "phobia_name": "fobias",
-            "description": "testing",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 4,
-            "phobia_name": "eres un cute skibdii",
-            "description": "me gustan los skibidis con cabesita de pochoclo",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 8,
-            "phobia_name": "fobias",
-            "description": "walkers",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        }
-    ];
-}
-
 async function loadPosts() {
     try {
-        if (USE_MOCK_DATA) {
-            console.log('Usando datos mock para testing');
-            const samplePosts = getSamplePosts();
-            renderPosts(samplePosts);
-            return;
-        }
-
         console.log('Cargando posts desde API...');
         const response = await fetch(`${API_BASE_URL}/rankings`);
         
@@ -200,21 +121,12 @@ async function loadPosts() {
         
     } catch (error) {
         console.error('Error al cargar posts:', error);
-        console.log('Fallback a datos mock debido al error');
-        const samplePosts = getSamplePosts();
-        renderPosts(samplePosts);
+        const container = document.getElementById('rankingContainer');
+        container.innerHTML = '<div class="error-message">Error al cargar los posts. Inténtalo de nuevo más tarde.</div>';
     }
-}
-
-function loadSamplePosts() {
-    const samplePosts = getSamplePosts();
-    renderPosts(samplePosts);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     setRandomTitle();
     loadPosts();
 });
-
-window.renderPosts = renderPosts;
-window.loadPosts = loadPosts;

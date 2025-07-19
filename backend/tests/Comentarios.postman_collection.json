@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "3d688957-b9e8-49db-b6e0-0265ae1bf97c",
+		"name": "Comentarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42507783",
+		"_collection_link": "https://testing-9734.postman.co/workspace/TP2---IDS-Fobias~f8933695-e950-4b34-b08c-85e54cb2e581/collection/42507783-3d688957-b9e8-49db-b6e0-0265ae1bf97c?action=share&source=collection_link&creator=42507783"
+	},
+	"item": [
+		{
+			"name": "Comentar",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxOTE3MzU4LCJleHAiOjE3NTE5MTg1NTh9.IXuUBG7uqc1fqe8Esl9MgyeTN0KYCb1UVtbRALrJHmc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"comment\": \"testing comment\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/3/comments",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"3",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver comentarios de una fobia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODk1MDkxLCJleHAiOjE3NTE4OTU2OTF9.SMReLKCMYmLrKQtanO3wbPrgw97KGhmeX0ZcUAe-Adw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/3/comments",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"3",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver Ranking",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODk4NjE4LCJleHAiOjE3NTE4OTkyMTh9.vmKkQlFjliZLhxn-PTzHfrAdwFJOu6cokMGQqecnuq8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/rankings",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"rankings"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "44eb65ec-9eee-4167-b8f6-284b4ffefff3",
+		"name": "Autenticacion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42507783",
+		"_collection_link": "https://testing-9734.postman.co/workspace/TP2---IDS-Fobias~f8933695-e950-4b34-b08c-85e54cb2e581/collection/42507783-44eb65ec-9eee-4167-b8f6-284b4ffefff3?action=share&source=collection_link&creator=42507783"
+	},
+	"item": [
+		{
+			"name": "Registrar Usuario",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"pepito123\",\n    \"email\": \"pepito@gmail.com\",\n    \"phone\": 123456,\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/register",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Usuario",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"pepito@gmail.com\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/login",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver Información usuario",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJwZXBpdG8xMjMiLCJpYXQiOjE3NTE5MTkxMDQsImV4cCI6MTc1MTkyMDMwNH0.EXNhklenSy2myT5IFn0ghHKhR6zGq0SxyWgkT5EW01M",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/profile",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

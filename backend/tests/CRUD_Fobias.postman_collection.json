@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "34d4e019-ded2-4fe3-ab24-325f60d85f03",
+		"name": "CRUD Fobias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42507783",
+		"_collection_link": "https://testing-9734.postman.co/workspace/TP2---IDS-Fobias~f8933695-e950-4b34-b08c-85e54cb2e581/collection/42507783-34d4e019-ded2-4fe3-ab24-325f60d85f03?action=share&source=collection_link&creator=42507783"
+	},
+	"item": [
+		{
+			"name": "Crear Fobia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxOTE1ODA0LCJleHAiOjE3NTE5MTcwMDR9.yDhlmTGt_14mEskFK7uwKDkUKfSo1bdbYrzptwjhBcc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phobia_name\": \"fobias\",\n    \"description\": \"walkers\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista Fobias",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODUzNTg5LCJleHAiOjE3NTE4NTQxODl9.V-df1wltmWKqQlvbxKLPrIzAmVg1aCxQaHxdbAcLQA8CYd",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver Fobia Específica",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU2MDA5LCJleHAiOjE3NTE4NTY2MDl9.V5r20ve_luXpvJhuAJ1jkAuYqZellcfdUzkWkarTEmI",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/10",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar Like",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODk4NjE4LCJleHAiOjE3NTE4OTkyMTh9.vmKkQlFjliZLhxn-PTzHfrAdwFJOu6cokMGQqecnuq8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/5/like",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"5",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar contenido de una fobia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU2OTkzLCJleHAiOjE3NTE4NTc1OTN9._QrjfPM381e-p9Vk5zXHlHIhP5srjKeT8YeggRf6SFk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phobia_name\": \"eres un cute skibdii\",\n    \"description\": \"me gustan los skibidis con cabesita de pochoclo\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/4",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar una Fobia",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU4NDI4LCJleHAiOjE3NTE4NTkwMjh9.0leHkrGdIS3WpGxuNycXnNoc6RX3npS8ny5Twpk4fWA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://phobia-api.ianchenn.com/phobias/5",
+					"protocol": "https",
+					"host": [
+						"phobia-api",
+						"ianchenn",
+						"com"
+					],
+					"path": [
+						"phobias",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

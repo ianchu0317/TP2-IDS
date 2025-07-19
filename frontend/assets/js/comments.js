@@ -153,7 +153,6 @@ function renderPost() {
     const content = currentPostData.description;
     const phobiaName = currentPostData.phobia_name;
     const commentsCount = currentPostData.comments || 0;
-    console.log(rawDate, author, content, phobiaName, commentsCount);
 
     document.title = `${author} en Fobium: "${content}"`;
 
@@ -204,17 +203,9 @@ function renderComments() {
     const filterValue = filterSelect ? filterSelect.value : "all";
 
     commentsList.innerHTML = '';
-    let sortedComments = sortComments(currentCommentsData, 'newest');
-    
-    if (filterValue !== "all") {
-        sortedComments = sortedComments.slice(0, parseInt(filterValue, 10));
-    }
+    console.log(currentCommentsData);
 
-    if (commentsCount) {
-        commentsCount.textContent = `${sortedComments.length} comentarios`;
-    }
-
-    sortedComments.forEach(comment => {
+    currentCommentsData.forEach(comment => {
         const commentElement = createCommentElement(comment);
         commentsList.appendChild(commentElement);
     });

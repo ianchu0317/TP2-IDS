@@ -1,4 +1,4 @@
-const titles = [
+const RANDOM_TITLES = [
     "Top de tops. Sin lugar para los débiles",
     "Los más likeados. El Olimpo de las fobias",
     "Camino al podio de la paranoia",
@@ -8,21 +8,15 @@ const titles = [
 
 const API_BASE_URL = 'https://api.fobium.com';
 
-function getRandomPhrase() {
-    const randomIndex = Math.floor(Math.random() * titles.length);
-    return titles[randomIndex];
-}
-
 function setRandomTitle() {
-    const titleElement = document.getElementById('Title');
-    if (titleElement) {
-        const randomPhrase = getRandomPhrase();
-        titleElement.textContent = randomPhrase;
-        console.log("Título actualizado con:", randomPhrase);
-    }
+    const titleElement = document.getElementById('title');
+    if (!titleElement) return;
+    
+    const randomIndex = Math.floor(Math.random() * RANDOM_TITLES.length);
+    titleElement.textContent = RANDOM_TITLES[randomIndex];
 }
 
-function createPostCard(post, ranking) {
+function createPostCard(post, index) {
     const card = document.createElement('div');
     card.className = 'post-card';
     card.dataset.postId = post.id;
@@ -91,15 +85,6 @@ function addEventListeners() {
             handleComment(postId);
         });
     });
-    
-    document.querySelectorAll('.share-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const postId = this.dataset.id;
-            handleShare(postId);
-        });
-    });
 }
 
 function handleLike(postId, button) {
@@ -119,21 +104,6 @@ function handleLike(postId, button) {
 function handleComment(postId) {
     console.log(`Redirigiendo a comentarios del post ${postId}`);
     window.location.href = `comments.html?id=${postId}`;
-}
-
-
-function handleShare(postId) {
-    console.log(`Compartir post ${postId}`);
-    if (navigator.share) {
-        navigator.share({
-            title: 'Post interesante',
-            text: 'Mira este post sobre fobias',
-            url: window.location.href
-        });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Enlace copiado al portapapeles');
-    }
 }
 
 async function loadPosts() {
@@ -160,6 +130,3 @@ document.addEventListener('DOMContentLoaded', function() {
     setRandomTitle();
     loadPosts();
 });
-
-window.renderPosts = renderPosts;
-window.loadPosts = loadPosts;

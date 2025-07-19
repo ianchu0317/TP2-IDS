@@ -149,10 +149,9 @@ function renderPost() {
     }
 
     const rawDate = currentPostData.date;
-    const author = currentPostData.creador;
+    const author = currentPostData.creator;
     const content = currentPostData.description;
     const phobiaName = currentPostData.phobia_name;
-    const commentsCount = currentPostData.comments || 0;
 
     document.title = `${author} en Fobium: "${content}"`;
 

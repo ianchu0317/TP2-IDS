@@ -215,6 +215,7 @@ function handleFilterChange() {
 }
 
 async function handleCommentSubmit(commentText) {
+    console.log('Handling comment submit:', commentText);
     if (!commentText.trim()) {
         alert('El comentario no puede estar vacío');
         return;
@@ -225,38 +226,19 @@ async function handleCommentSubmit(commentText) {
         submitButton.disabled = true;
         submitButton.textContent = 'Enviando...';
     }
-
     try {
-        if (USE_HARDCODED_DATA) {
-            const newComment = {
-                id: currentCommentsData.length + 1,
-                comment: commentText,
-                creator: "Usuario Anónimo",
-                creator_id: 999,
-                phobia_id: currentPhobiaId,
-                date: new Date().toISOString().split('T')[0]
-            };
+        newComment = await postComment(currentPhobiaId, commentText);
             
-            currentCommentsData.push(newComment);
+        if (newComment) {
+            currentCommentsData = await getComments(currentPhobiaId);
             renderComments();
+            
             const commentInput = document.getElementById('comment-input');
             if (commentInput) {
                 commentInput.value = '';
             }
         } else {
-            const newComment = await postComment(currentPhobiaId, commentText);
-            
-            if (newComment) {
-                currentCommentsData = await getComments(currentPhobiaId);
-                renderComments();
-                
-                const commentInput = document.getElementById('comment-input');
-                if (commentInput) {
-                    commentInput.value = '';
-                }
-            } else {
-                alert('Error al enviar el comentario. Inténtalo de nuevo.');
-            }
+            alert('Error al enviar el comentario. Inténtalo de nuevo.');
         }
     } catch (error) {
         console.error('Error submitting comment:', error);
@@ -297,14 +279,15 @@ async function initializePage() {
         const submitButton = document.getElementById('submit-btn');
 
         if (commentForm && commentInput && submitButton) {
-            commentForm.addEventListener('submit', (e) => {
+            commentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                handleCommentSubmit(commentInput.value);
+                await handleCommentSubmit(commentInput.value);
             });
 
-            submitButton.addEventListener('click', (e) => {
+            submitButton.addEventListener('click', async (e) => {
                 e.preventDefault();
-                handleCommentSubmit(commentInput.value);
+                console.log('Comment form submitted:', commentInput.value);
+                await handleCommentSubmit(commentInput.value);
             });
         }
         console.log('Page initialization complete');

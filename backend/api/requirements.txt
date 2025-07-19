@@ -1,5 +1,0 @@
-fastapi[standard]
-psycopg[binary]
-passlib[bcrypt]
-pyjwt
-google-genai

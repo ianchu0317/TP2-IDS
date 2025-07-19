@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (response.ok) {
                 alert('Post creado exitosamente!');
-                window.location.href = 'profile.html';
+                window.location.href = '../index.html';
             } else if (response.status === 401) {
                 alert('No autorizado. Por favor, inicia sesión nuevamente.');
                 window.location.href = 'login.html';

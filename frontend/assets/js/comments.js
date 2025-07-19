@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://api.fobium.com';
 const USE_HARDCODED_DATA = false;
 
 const hardcodedPostData = {
@@ -13,35 +13,13 @@ const hardcodedPostData = {
 
 const hardcodedCommentsData = [
     {
-        id: 1,
         comment: "Acabo de entrar al post y ya me siento atacado 😭",
         creator: "CringePolicía",
-        creator_id: 1,
-        phobia_id: 3,
         date: "2025-07-14"
     },
     {
-        id: 2,
         comment: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
         creator: "ToontoPolarBear",
-        creator_id: 2,
-        phobia_id: 3,
-        date: "2025-07-14"
-    },
-    {
-        id: 3,
-        comment: "Entonces no veas mi foto de perfil, por tu bien.",
-        creator: "DarwinTeMira",
-        creator_id: 3,
-        phobia_id: 3,
-        date: "2025-07-14"
-    },
-    {
-        id: 4,
-        comment: "¿Y qué hacés cuando te ves al espejo recién levantadx? ¿Entrás en pánico?",
-        creator: "NarizDePayaso",
-        creator_id: 4,
-        phobia_id: 3,
         date: "2025-07-14"
     }
 ];
@@ -52,7 +30,7 @@ let currentPhobiaId = null;
 
 function getPhobiaIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const phobiaId = urlParams.get('id') || urlParams.get('phobia_id');
+    const phobiaId = urlParams.get('post');
     
     if (phobiaId) {
         return parseInt(phobiaId, 10);
@@ -175,7 +153,8 @@ function renderPost() {
     const content = currentPostData.description;
     const phobiaName = currentPostData.phobia_name;
     const commentsCount = currentPostData.comments || 0;
-    
+    console.log(rawDate, author, content, phobiaName, commentsCount);
+
     document.title = `${author} en Fobium: "${content}"`;
 
     postCard.innerHTML = `

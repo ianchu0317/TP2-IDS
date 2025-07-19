@@ -88,6 +88,7 @@ async function fetchComments(phobiaId) {
 
 async function postComment(phobiaId, commentText) {
     try {
+        const token = localStorage.getItem('access_token');
         const response = await fetch(`${API_BASE_URL}/phobias/${phobiaId}/comments`, {
             method: 'POST',
             headers: {

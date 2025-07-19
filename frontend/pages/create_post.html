@@ -9,20 +9,22 @@
 </head>
 <body>
     <div class="create_post-container">
-        <form class="create_post-form" action="/ranking" method="POST">
+        <form class="create_post-form" id="createPostForm">
             <h2>Fobia</h2>
 
             <div class="form-group">
-                <input type="text" name="fobia" placeholder="Fobia" required>
+                <input type="text" id="phobia_name" placeholder="Fobia" required>
             </div>
 
             <div class="form-desc">
-                <input type="text" name="descripcion" placeholder="Descripcion de la Fobia" required>
+                <input type="text" id="description" placeholder="Descripcion de la Fobia" required>
             </div>
 
             <button type="submit" class="btn">Crear Post</button>
 
         </form>
     </div>
+
+    <script src="../assets/js/create_post.js"></script>
 </body>
 </html>

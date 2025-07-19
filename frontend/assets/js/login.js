@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 
                 // Guardar el token en localStorage
-                localStorage.setItem('access_token', result.access_token);
+                localStorage.setItem('access_token', result.access_token.token);
                 
                 alert('Login exitoso!');
                 // Redirigir al dashboard o página principal

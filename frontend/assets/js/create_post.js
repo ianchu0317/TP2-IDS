@@ -42,8 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 alert('Post creado exitosamente!');
                 window.location.href = 'profile.html';
+            } else if (response.status === 401) {
+                alert('No autorizado. Por favor, inicia sesión nuevamente.');
+                window.location.href = 'login.html';
             } else {
-                alert('Error al crear el post');
+                const errorData = await response.json();
+                alert(`Error al crear el post: ${errorData.message}`);
             }
         } catch (error) {
             alert('Error de conexión');

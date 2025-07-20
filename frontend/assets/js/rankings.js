@@ -101,9 +101,24 @@ function handleLike(postId, button) {
     }
 }
 
-function handleComment(postId) {
-    console.log(`Redirigiendo a comentarios del post ${postId}`);
-    window.location.href = `../comments.html?post=${postId}`;
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
+    }
+    
+    try {
+        window.location.href = `../pages/comments.html?post=${postId}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
+        
+        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
+        
+    }
 }
 
 async function loadPosts() {

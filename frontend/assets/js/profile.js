@@ -19,6 +19,31 @@ const profileImages = {
 
 let posts = [];
 let currentUser = null;
+let userLikes = new Set();
+
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
+
+
+function formatDate(dateString) {
+    if (!dateString) return 'Fecha no disponible';
+    
+    try {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    } catch (error) {
+        return dateString;
+    }
+}
 
 function safeUpdateElement(selector, content, isImage = false) {
     const element = document.querySelector(selector);
@@ -64,9 +89,6 @@ function getRandomProfileImages(username) {
     };
 }
 
-
-let userLikes = new Set();
-
 function createPostCard(post) {
     const postCard = document.createElement('div');
     postCard.className = 'post-card';
@@ -74,40 +96,37 @@ function createPostCard(post) {
     
     const isLiked = userLikes.has(post.id);
     const likeClass = isLiked ? 'liked' : '';
-    const fillAttribute = isLiked ? 'fill="currentColor"' : 'fill="none"';
-
+    
     postCard.innerHTML = `
-        <div class="post-content">
-        <h3 class="post-title">${post.phobia_name}</h3>
-        <p class="post-text">${post.description}</p>
+        <div class="post-header">
+            <h3 class="post-title">${post.phobia_name || post.title || 'Fobia sin nombre'}</h3>
         </div>
-        <div class="post-meta">
-            <div class="post-info">
-                <span class="post-date">${(post.date)}</span>
-                <span class="post-author">by ${post.creator}</span>
+        <div class="post-description">
+            <p class="post-text">${post.description || 'Sin descripción'}</p>
+        </div>
+        <div class="post-footer">
+            <div class="post-meta-info">
+                <span class="post-author">${post.creator || post.author || currentUser?.username}</span>
+                <span class="post-date">${formatDate(post.date || post.created_at)}</span>
             </div>
-            <div class="post-stats">
-                <div class="stat-item likes-btn" data-post-id="${post.id}">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="post-actions">
+                <div class="action-item likes-btn ${likeClass}" data-post-id="${post.id}">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M7 14l5-5 5 5"/>
                     </svg>
-                    <span class="likes-count">${formatNumber(post.likes)}</span>
+                    <span class="action-count">${formatNumber(post.likes || 0)}</span>
                 </div>
-                <div class="stat-item comments-btn" data-post-id="${post.id}">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="action-item comments-btn" data-post-id="${post.id}">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                     </svg>
-                    <span class="comments-count">${post.comments}</span>
+                    <span class="action-count">${post.comments || 0}</span>
                 </div>
             </div>
         </div>
     `;
     
     return postCard;
-}
-
-function createPostElement(post) {
-    return createPostCard(post);
 }
 
 function createNoPostsElement() {
@@ -140,44 +159,82 @@ function showNoPostsMessage() {
     console.log('Mostrando mensaje de no posts');
 }
 
-async function fetchPhobias() {
-    try {
-        const token = localStorage.getItem('authToken');
-        
-        const response = await fetch('/phobias', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+function showErrorMessage(message) {
+    const postsContainer = document.querySelector('.posts-container');
+    if (postsContainer) {
+        postsContainer.innerHTML = `
+            <div class="error-message">
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+
+function setupPostEventListeners() {
+    document.querySelectorAll('.likes-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            toggleLike(postId);
         });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const phobias = await response.json();
-        return phobias;
-    } catch (error) {
-        console.error('Error fetching phobias:', error);
-        return [];
+    });
+}
+
+
+function toggleLike(postId) {
+    const likeBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
+    const likesCount = likeBtn.querySelector('.action-count');
+    
+    if (userLikes.has(postId)) {
+        userLikes.delete(postId);
+        likeBtn.classList.remove('liked');
+        const currentCount = parseInt(likesCount.textContent) || 0;
+        likesCount.textContent = formatNumber(Math.max(0, currentCount - 1));
+    } else {
+        userLikes.add(postId);
+        likeBtn.classList.add('liked');
+        const currentCount = parseInt(likesCount.textContent) || 0;
+        likesCount.textContent = formatNumber(currentCount + 1);
     }
 }
 
 function loadUserPosts() {
-    const userPosts = posts.filter(post => post.creator === currentUser?.username);
+    console.log('loadUserPosts called');
+    console.log('Current posts:', posts);
+    console.log('Current user:', currentUser);
+    
     const postsContainer = document.querySelector('.posts-container');
     
     if (!postsContainer) {
         console.error('No se encontró el contenedor de posts');
-        return userPosts;
+        return [];
     }
+    
     postsContainer.innerHTML = '';
-    if (userPosts.length === 0 || !currentUser) {
+    
+    let userPosts = [];
+    if (posts && posts.length > 0) {
+        if (currentUser && currentUser.username) {
+            userPosts = posts.filter(post => 
+                post.creator === currentUser.username || 
+                post.author === currentUser.username ||
+                post.user_id === currentUser.id
+            );
+        } else {
+            userPosts = posts;
+        }
+    }
+    
+    console.log(`Posts filtrados: ${userPosts.length}`);
+    
+    if (userPosts.length === 0) {
         const noPostsElement = createNoPostsElement();
         postsContainer.appendChild(noPostsElement);
         console.log('No hay posts para mostrar');
     } else {
-        userPosts.forEach(post => {
+        userPosts.forEach((post, index) => {
+            console.log(`Creando post ${index + 1}:`, post);
             const postCard = createPostCard(post);
             postsContainer.appendChild(postCard);
         });
@@ -191,15 +248,14 @@ function loadUserPosts() {
 function loadDefaultProfile() {
     document.title = "Perfil / Fobium";
     
-    safeUpdateElement('.username', 'usuario');
-    safeUpdateElement('.name', 'Nombre del Usuario');
-    safeUpdateElement('.email', 'email@ejemplo.com');
+    safeUpdateElement('#user-username', 'usuario');
+    safeUpdateElement('#user-email', 'email@ejemplo.com');
     
-    safeUpdateElement('.avatar', "../assets/images/avatar.png", true);
-    safeUpdateElement('.cover-img', "../assets/images/header.png", true);
+    safeUpdateElement('#avatar', "../assets/images/avatar.png", true);
+    safeUpdateElement('#cover-img', "../assets/images/header.png", true);
     
-    setupImageErrorHandler('.avatar', "../assets/images/avatar.png");
-    setupImageErrorHandler('.cover-img', "../assets/images/header.png");
+    setupImageErrorHandler('#avatar', "../assets/images/avatar.png");
+    setupImageErrorHandler('#cover-img', "../assets/images/header.png");
     
     showNoPostsMessage();
     
@@ -207,6 +263,8 @@ function loadDefaultProfile() {
 }
 
 function loadProfile() {
+    console.log('loadProfile called with user:', currentUser);
+    
     if (!currentUser) {
         console.warn('No hay usuario para cargar, mostrando perfil por defecto');
         loadDefaultProfile();
@@ -219,39 +277,32 @@ function loadProfile() {
 
     document.title = `(@${currentUser.username}) / Fobium`;
     
-    safeUpdateElement('.username', currentUser.username);
-    safeUpdateElement('.name', currentUser.name || currentUser.username);
-    safeUpdateElement('.email', currentUser.email || 'Email no disponible');
+    safeUpdateElement('#user-username', currentUser.username);
+    safeUpdateElement('#user-email', currentUser.email || 'Email no disponible');
     
-    safeUpdateElement('.avatar', currentUser.avatarUrl, true);
-    safeUpdateElement('.cover-img', currentUser.coverUrl, true);
+    safeUpdateElement('#avatar', currentUser.avatarUrl, true);
+    safeUpdateElement('#cover-img', currentUser.coverUrl, true);
     
-    setupImageErrorHandler('.avatar', "../assets/images/avatar.png");
-    setupImageErrorHandler('.cover-img', "../assets/images/header.png");
-    
-    const userPosts = posts.filter(post => post.creator === currentUser.username);
-    const totalLikes = userPosts.reduce((sum, post) => sum + post.likes, 0);
-    
-    console.log(`Posts del usuario: ${userPosts.length}`);
-    console.log(`Total de likes: ${totalLikes}`);
+    setupImageErrorHandler('#avatar', "../assets/images/avatar.png");
+    setupImageErrorHandler('#cover-img', "../assets/images/header.png");
     
     loadUserPosts();
 }
 
-// Función para verificar si hay token y es válido
 function checkAuthentication() {
     const token = localStorage.getItem('access_token');
     
     if (!token) {
+        console.log('No token found, redirecting to login');
         alert('Debes iniciar sesión para ver tu perfil');
         window.location.href = 'login.html';
         return false;
     }
     
+    console.log('Token found:', token.substring(0, 20) + '...');
     return token;
 }
 
-// Función para manejar errores de autenticación
 function handleAuthError(response) {
     if (response.status === 401) {
         alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
@@ -262,11 +313,12 @@ function handleAuthError(response) {
     return false;
 }
 
-// Modificar la función fetchUserProfile
 async function fetchUserProfile() {
     try {
         const token = checkAuthentication();
         if (!token) return null;
+        
+        console.log('Fetching user profile...');
         
         const response = await fetch('https://api.fobium.com/profile', {
             headers: {
@@ -275,12 +327,15 @@ async function fetchUserProfile() {
             }
         });
         
+        console.log('Profile response status:', response.status);
+        
         if (!response.ok) {
             if (handleAuthError(response)) return null;
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const userData = await response.json();
+        console.log('User data received:', userData);
         return userData;
     } catch (error) {
         console.error('Error fetching user profile:', error);
@@ -288,11 +343,12 @@ async function fetchUserProfile() {
     }
 }
 
-// Modificar la función fetchPhobias para usar el endpoint correcto
 async function fetchUserPhobias() {
     try {
         const token = checkAuthentication();
         if (!token) return [];
+        
+        console.log('Fetching user phobias...');
         
         const response = await fetch('https://api.fobium.com/profile/phobias', {
             headers: {
@@ -301,12 +357,15 @@ async function fetchUserPhobias() {
             }
         });
         
+        console.log('Phobias response status:', response.status);
+        
         if (!response.ok) {
             if (handleAuthError(response)) return [];
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const phobias = await response.json();
+        console.log('Phobias data received:', phobias);
         return phobias;
     } catch (error) {
         console.error('Error fetching user phobias:', error);
@@ -314,10 +373,10 @@ async function fetchUserPhobias() {
     }
 }
 
-// Modificar la función loadProfileFromAPI
 async function loadProfileFromAPI() {
     try {
-        // Verificar autenticación al inicio
+        console.log('Starting loadProfileFromAPI...');
+        
         if (!checkAuthentication()) {
             return;
         }
@@ -327,15 +386,23 @@ async function loadProfileFromAPI() {
             fetchUserPhobias()
         ]);
         
+        console.log('API responses received:', { userData, phobias });
+        
         if (!userData) {
+            console.log('No user data, loading default profile');
             loadDefaultProfile();
             return;
         }
         
         currentUser = userData;
-        posts = phobias;
+        posts = phobias || [];
         
-        console.log('Datos cargados:', { user: userData, posts: phobias.length });
+        console.log('Data loaded successfully:', { 
+            user: userData, 
+            postsCount: posts.length,
+            posts: posts 
+        });
+        
         loadProfile();
     } catch (error) {
         console.error('Error loading profile from API:', error);
@@ -344,9 +411,9 @@ async function loadProfileFromAPI() {
     }
 }
 
-// Modificar la función initProfile
 function initProfile() {
-    // Verificar autenticación antes de cargar cualquier cosa
+    console.log('Initializing profile...');
+    
     if (!checkAuthentication()) {
         return;
     }
@@ -355,23 +422,19 @@ function initProfile() {
     loadProfileFromAPI();
 }
 
-// Agregar función de logout
 function logout() {
     localStorage.removeItem('access_token');
     alert('Sesión cerrada exitosamente');
     window.location.href = 'login.html';
 }
 
-// ...existing code... (mantener todas las otras funciones como están)
-
-// Al final del archivo, modificar el DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Verificar autenticación antes de inicializar
+    console.log('DOM loaded, starting profile initialization...');
+    
     if (checkAuthentication()) {
         initProfile();
     }
     
-    // Agregar listener para botón de logout si existe
     const logoutBtn = document.querySelector('.logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);

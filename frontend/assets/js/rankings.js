@@ -103,7 +103,7 @@ function handleLike(postId, button) {
 
 function handleComment(postId) {
     console.log(`Redirigiendo a comentarios del post ${postId}`);
-    window.location.href = `assets/pages/comments.html?post=${postId}`;
+    window.location.href = `../comments.html?post=${postId}`;
 }
 
 async function loadPosts() {

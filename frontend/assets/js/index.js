@@ -23,7 +23,6 @@ let isLoading = false;
 let posts = [];
 
 const API_BASE_URL = 'https://api.fobium.com';
-const USE_MOCK_DATA = false;
 
 function getRandomPhrase() {
     const randomIndex = Math.floor(Math.random() * inspirationalPhrases.length);
@@ -140,38 +139,8 @@ function renderPosts(loadMore = false) {
     return newPostsCount;
 }
 
-function getMockPosts() {
-    return [
-        {
-            id: 999,
-            phobia_name: "Testfobia",
-            description: "Esta fobia es para probar si se renderiza bien 🤓",
-            creator: "tester_supremo",
-            likes: 42,
-            comments: 3,
-            date: "2025-07-15"
-        },
-        {
-            id: 998,
-            phobia_name: "Mockfobia",
-            description: "Miedo a los datos falsos en desarrollo",
-            creator: "dev_anxiety",
-            likes: 128,
-            comments: 7,
-            date: "2025-07-14"
-        }
-    ];
-}
-
 async function fetchPhobias() {
     try {
-        if (USE_MOCK_DATA) {
-            console.log('Usando datos mock para testing');
-            posts = getMockPosts();
-            renderPosts();
-            return;
-        }
-
         console.log('Fetching phobias from API...');
         const response = await fetch(`${API_BASE_URL}/phobias`);
         
@@ -187,9 +156,6 @@ async function fetchPhobias() {
         
     } catch (error) {
         console.error("Error al cargar fobias:", error);
-        console.log('Fallback a datos mock debido al error');
-        posts = getMockPosts();
-        renderPosts();
     }
 }
 
@@ -299,7 +265,6 @@ async function toggleLike(postId, likesBtn) {
 
     likesCount.textContent = formatNumber(post.likes);
     console.log(`Post ${postId} ${isCurrentlyLiked ? 'unliked' : 'liked'}. Total: ${post.likes}`);
-    if (!USE_MOCK_DATA) {
         try {
             const response = await fetch(`${API_BASE_URL}/phobias/${postId}/like`, {
                 method: 'PUT',
@@ -313,11 +278,8 @@ async function toggleLike(postId, likesBtn) {
             }
 
             console.log(`Like enviado exitosamente al backend para post ${postId}`);
-            
         } catch (error) {
             console.error("Error al enviar el like al backend:", error);
-            
-            // Revertir el cambio optimista si falló la API
             if (isCurrentlyLiked) {
                 userLikes.add(postId);
                 post.likes += 1;
@@ -332,7 +294,6 @@ async function toggleLike(postId, likesBtn) {
             
             likesCount.textContent = formatNumber(post.likes);
             console.log(`Like revertido debido al error. Total: ${post.likes}`);
-        }
     }
 }
 

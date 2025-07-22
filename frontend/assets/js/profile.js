@@ -30,7 +30,6 @@ function formatNumber(num) {
     return num.toString();
 }
 
-
 function formatDate(dateString) {
     if (!dateString) return 'Fecha no disponible';
     
@@ -170,7 +169,6 @@ function showErrorMessage(message) {
     }
 }
 
-
 function setupPostEventListeners() {
     document.querySelectorAll('.likes-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -179,8 +177,14 @@ function setupPostEventListeners() {
             toggleLike(postId);
         });
     });
+    document.querySelectorAll('.comments-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            handleComments(postId);
+        });
+    });
 }
-
 
 function toggleLike(postId) {
     const likeBtn = document.querySelector(`[data-post-id="${postId}"].likes-btn`);
@@ -196,6 +200,24 @@ function toggleLike(postId) {
         likeBtn.classList.add('liked');
         const currentCount = parseInt(likesCount.textContent) || 0;
         likesCount.textContent = formatNumber(currentCount + 1);
+    }
+}
+
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id.toString() === postId.toString());
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
+    }
+    
+    try {
+        console.log(`../comments.html?post=${encodeURIComponent(postId)}`);
+        window.location.href = `../../pages/comments.html?post=${encodeURIComponent(postId)}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
     }
 }
 

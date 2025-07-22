@@ -19,25 +19,22 @@
                 <a href="../pages/profile.html" class="nav-button">PROFILE</a>
             </nav>
         </header>
-
         <div class="profile-wrapper">
+            <img src="../assets/images/header.png" alt="User cover" class="cover-img" id="cover-img" />
             <div class="decorative-box"></div>
-            <div class="user-container">
-                <img src="../assets/images/header.png" alt="User cover" class="cover-img" id="cover-img" />
-                <div class="user-info">
+            <div class="user-info-logout">
+                <div class="avatar-container">
                     <img src="../assets/images/avatar.png" alt="User avatar" class="avatar" id="avatar" />
-                    <div class="user-text">
-                        <p class="email" id="user-email">email</p>
-                        <p class="username" id="user-username">Username</p>
-                    </div>
+                </div>
+                <div class="user-text">
+                    <p class="email" id="user-email">email</p>
+                    <p class="username" id="user-username">Username</p>
+                    <button id="logoutBtn" class="logout-button">Logout</button>
                 </div>
             </div>
         </div>
-
-        <div class="posts-container" id="posts-container">
-        </div>
+        <div class="posts-container" id="posts-container"></div>
     </div>
-
     <script src="../assets/js/profile.js"></script>
 </body>
 </html>

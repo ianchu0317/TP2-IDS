@@ -6,6 +6,7 @@ from typing import Annotated
 from schemas import User, UserLogin, UserInfo, Token
 from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
+from schemas import ForgotPasswordRequest, ResetPasswordRequest
 import db_controller as db
 import auth_controller as auth
 import ai_controller as ai
@@ -70,6 +71,40 @@ async def get_user_info(token: Annotated[str, Depends(oauth2_scheme)]):
 async def get_user_phobias(token: Annotated[str, Depends(oauth2_scheme)]):
     user_id = auth.get_id_from_token(token)
     return await db.get_user_phobias(user_id)
+
+
+# **** Recuperación de contraseña ****
+@app.post("/forgot-password", status_code=200)
+async def forgot_password(request: ForgotPasswordRequest):
+    try:
+        user = await db.validate_user_data(request)
+        if user:
+            return {"message": "Datos válidos. Proceder al cambio de contraseña.", "valid": True}
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Los datos no coinciden con ningún usuario registrado")
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail="Error validando datos")
+
+
+# Actualizar contraseña del usuario
+@app.post("/reset-password", status_code=200)
+async def reset_password(request: ResetPasswordRequest):
+    try:
+        success = await db.update_user_password(request)
+        if success:
+            return {"message": "Contraseña actualizada exitosamente"}
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Los datos no coinciden con ningún usuario registrado")
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail="Error actualizando contraseña")
 
 
 

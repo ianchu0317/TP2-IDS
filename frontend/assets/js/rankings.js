@@ -121,6 +121,7 @@ function handleComments(postId) {
     }
     
     try {
+        console.log(`../../pages/comments.html?post=${encodeURIComponent(postId)}`);
         window.location.href = `../../pages/comments.html?post=${encodeURIComponent(postId)}`;
     } catch (error) {
         console.error('Error al redireccionar a comments.html:', error);

@@ -186,6 +186,211 @@ body {
   color: #ffffff;
 }
 
+.posts-container {
+  max-width: 1130px;
+  margin: 20px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post-card {
+  background: #333338;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-card:hover {
+  border-color: #FF4500;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 69, 0, 0.1);
+}
+
+.post-header {
+  margin-bottom: 8px;
+}
+
+.post-title {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 17px;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.post-description {
+  margin-bottom: 12px;
+}
+
+.post-text {
+  font-family: 'Roboto Regular', sans-serif;
+  font-size: 17px;
+  color: #FFFFFF;
+  opacity: 0.87;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  order: 2;
+}
+
+.post-meta-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.post-author {
+  font-family: 'Roboto Medium', sans-serif;
+  font-size: 12px;
+  color: #FF4500;
+  font-weight: 500;
+}
+
+.post-date {
+  font-family: 'Roboto Regular', sans-serif;
+  font-size: 12px;
+  color: #FFFFFF;
+  opacity: 0.6;
+}
+
+.post-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  opacity: 0.6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.action-item:hover {
+  opacity: 1;
+  color: #FF4500;
+}
+
+.action-item.liked {
+  color: #FF4500 !important;
+  opacity: 1 !important;
+}
+
+.action-item.liked .action-icon {
+  fill: #FF4500;
+  stroke: #FF4500;
+}
+
+.action-item.liked:hover {
+  color: #FF4500 !important;
+  opacity: 0.8 !important;
+}
+
+.action-item .action-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transition: all 0.3s ease;
+}
+
+.action-count {
+  font-family: 'Roboto Regular', sans-serif;
+  font-size: 14px;
+  color: inherit;
+  font-weight: 400;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 60px 20px;
+  margin-bottom: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .header {
+    padding: 0 40px;
+  }
+  
+  .nav-buttons {
+    gap: 32px;
+  }
+  
+  .profile-wrapper {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+  
+  .posts-container {
+    max-width: 95%;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    padding: 0 30px;
+  }
+  
+  .nav-buttons {
+    gap: 24px;
+  }
+  
+  .nav-button {
+    font-size: 13px;
+  }
+  
+  .profile-wrapper {
+    max-width: 100%;
+    padding: 120px 20px 0;
+  }
+  
+  .posts-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -197,7 +402,7 @@ body {
   .nav-buttons {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
+    gap: 20px;
   }
 
   .profile-wrapper {
@@ -234,11 +439,116 @@ body {
   }
 
   .username {
-    font-size: 16px;
+    font-size: 20px;
+  }
+
+  .email {
+    font-size: 13px;
   }
 
   .logout-button {
     align-self: center;
+  }
+
+  .post-card {
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+
+  .post-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .post-text {
+    font-size: 15px;
+  }
+
+  .post-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .post-actions {
+    width: 100%;
+    justify-content: space-around;
+    gap: 10px;
+  }
+
+  .action-item {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .action-item .action-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .action-count {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    padding: 12px 15px;
+  }
+
+  .nav-buttons {
+    gap: 15px;
+  }
+
+  .nav-button {
+    font-size: 12px;
+  }
+
+  .profile-wrapper {
+    padding-top: 80px;
+  }
+
+  .posts-container {
+    gap: 15px;
+    padding: 0 5px;
+  }
+
+  .post-card {
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .post-title {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .post-text {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .post-author {
+    font-size: 11px;
+  }
+
+  .post-date {
+    font-size: 11px;
+  }
+
+  .action-item {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .action-item .action-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .action-count {
+    font-size: 12px;
   }
 }
 
@@ -248,6 +558,73 @@ body {
     right: 20px;
     transform: none;
     width: calc(100% - 40px);
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .username {
+    font-size: 18px;
+  }
+
+  .email {
+    font-size: 12px;
+  }
+
+  .logout-button {
+    font-size: 10px;
+    padding: 6px 12px;
+    border-width: 1px;
+  }
+
+  .post-card {
+    padding: 12px 14px;
+  }
+
+  .post-title {
+    font-size: 14px;
+  }
+
+  .post-text {
+    font-size: 13px;
+  }
+
+  .post-footer {
+    gap: 10px;
+  }
+
+  .post-actions {
+    gap: 8px;
+  }
+
+  .action-item {
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .action-item .action-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .action-count {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: 10px 12px;
+  }
+
+  .nav-buttons {
+    gap: 10px;
+  }
+
+  .nav-button {
+    font-size: 11px;
   }
 
   .avatar {
@@ -266,6 +643,32 @@ body {
   .logout-button {
     font-size: 9px;
     padding: 4px 8px;
-    border-width: 1px;
+  }
+
+  .post-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .post-title {
+    font-size: 13px;
+  }
+
+  .post-text {
+    font-size: 12px;
+  }
+
+  .action-item {
+    padding: 3px 5px;
+    font-size: 10px;
+  }
+
+  .action-item .action-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .action-count {
+    font-size: 10px;
   }
 }

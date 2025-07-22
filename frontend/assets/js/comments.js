@@ -1,28 +1,4 @@
 const API_BASE_URL = 'https://api.fobium.com';
-const USE_HARDCODED_DATA = false;
-
-const hardcodedPostData = {
-    "id": 3,
-    "phobia_name": "fobias",
-    "description": "testing",
-    "creador": "usuario 2",
-    "likes": 0,
-    "comments": 0,
-    "date": "2025-07-07"
-};
-
-const hardcodedCommentsData = [
-    {
-        comment: "Acabo de entrar al post y ya me siento atacado 😭",
-        creator: "CringePolicía",
-        date: "2025-07-14"
-    },
-    {
-        comment: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
-        creator: "ToontoPolarBear",
-        date: "2025-07-14"
-    }
-];
 
 let currentPostData = null;
 let currentCommentsData = [];
@@ -43,9 +19,8 @@ function getPhobiaIdFromUrl() {
         return parseInt(pathSegments[postIndex + 1], 10);
     }
     
-    return hardcodedPostData.id;
+    return null;
 }
-
 
 async function fetchPostData(phobiaId) {
     try {
@@ -62,7 +37,7 @@ async function fetchPostData(phobiaId) {
         return await response.json();
     } catch (error) {
         console.error('Error fetching post data:', error);
-        return null;
+        throw error;
     }
 }
 
@@ -81,7 +56,7 @@ async function fetchComments(phobiaId) {
         return await response.json();
     } catch (error) {
         console.error('Error fetching comments:', error);
-        return [];
+        throw error;
     }
 }
 
@@ -109,37 +84,6 @@ async function postComment(phobiaId, commentText) {
         console.error('Error posting comment:', error);
         throw error;
     }
-}
-
-async function getPostData(phobiaId) {
-    if (USE_HARDCODED_DATA) {
-        return hardcodedPostData;
-    }
-    
-    const apiData = await fetchPostData(phobiaId);
-    
-    if (apiData) {
-        return apiData;
-    }
-    
-    console.warn('Using hardcoded post data as fallback');
-    return hardcodedPostData;
-}
-
-
-async function getComments(phobiaId) {
-    if (USE_HARDCODED_DATA) {
-        return hardcodedCommentsData.filter(comment => comment.phobia_id === phobiaId);
-    }
-
-    const apiComments = await fetchComments(phobiaId);
-
-    if (apiComments) {
-        return apiComments;
-    }
-
-    console.warn('Fallo el fetch, devolviendo []');
-    return [];
 }
 
 function renderPost() {
@@ -200,11 +144,7 @@ function renderComments() {
         return;
     }
 
-    const filterValue = filterSelect ? filterSelect.value : "all";
-
     commentsList.innerHTML = '';
-    console.log(currentCommentsData);
-
     currentCommentsData.forEach(comment => {
         const commentElement = createCommentElement(comment);
         commentsList.appendChild(commentElement);
@@ -231,7 +171,7 @@ async function handleCommentSubmit(commentText) {
         newComment = await postComment(currentPhobiaId, commentText);
             
         if (newComment) {
-            currentCommentsData = await getComments(currentPhobiaId);
+            currentCommentsData = await fetchComments(currentPhobiaId);
             renderComments();
             
             const commentInput = document.getElementById('comment-input');
@@ -252,19 +192,28 @@ async function handleCommentSubmit(commentText) {
     }
 }
 
+async function refreshComments() {
+    try {
+        currentCommentsData = await fetchComments(currentPhobiaId);
+        renderComments();
+    } catch (error) {
+        console.error('Error refreshing comments:', error);
+    }
+}
+
 async function initializePage() {
     try {
         currentPhobiaId = getPhobiaIdFromUrl();
         console.log('Phobia ID:', currentPhobiaId);
 
-        currentPostData = await getPostData(currentPhobiaId);
+        currentPostData = await fetchPostData(currentPhobiaId);
         if (!currentPostData) {
             throw new Error('No se pudo cargar el post. Verifica que el ID sea correcto.');
         }
         
         console.log('Post data loaded:', currentPostData);
 
-        currentCommentsData = await getComments(currentPhobiaId);
+        currentCommentsData = await fetchComments(currentPhobiaId);
         console.log('Comments loaded:', currentCommentsData);
 
         renderPost();
@@ -307,22 +256,3 @@ async function initializePage() {
 }
 
 document.addEventListener('DOMContentLoaded', initializePage);
-
-async function refreshComments() {
-    try {
-        currentCommentsData = await getComments(currentPhobiaId);
-        renderComments();
-    } catch (error) {
-        console.error('Error refreshing comments:', error);
-    }
-}
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        initializePage,
-        refreshComments,
-        handleCommentSubmit,
-        getPostData,
-        getComments
-    };
-}

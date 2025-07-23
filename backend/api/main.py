@@ -156,6 +156,8 @@ async def delete_phobia(phobia_id: int,
             status_code=403,
             detail="No sos el usuario creador lol"
         )
+    await db.delete_phobia(phobia_id)
+    """
     try:     
         await db.delete_phobia(phobia_id)
     except: 
@@ -163,6 +165,7 @@ async def delete_phobia(phobia_id: int,
             status_code=400,
             detail="Error eliminando fobia"
         )
+    """
 
 # *** CRUD comentarios ***
 # Crear comentario en una fobia

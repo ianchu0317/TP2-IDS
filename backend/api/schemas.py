@@ -4,7 +4,7 @@ import datetime
 class User(BaseModel):
     username: str
     email: str
-    phone: str | None
+    phone: int | None
     password: str
 
 
@@ -17,7 +17,7 @@ class UserInDB(BaseModel):
     id: int
     username: str
     email: str
-    phone: str | None
+    phone: int | None
     hashed_password: str
     date: datetime.date
 
@@ -25,7 +25,7 @@ class UserInDB(BaseModel):
 class UserInfo(BaseModel):
     username: str
     email: str
-    phone: str
+    phone: int
     date: datetime.date 
 
 
@@ -59,19 +59,6 @@ class PhobiaOUT(BaseModel):
     date: datetime.date | None
 
     
-# Password Recovery
-class ForgotPasswordRequest(BaseModel):
-    username: str
-    email: str
-    phone: str
-
-class ResetPasswordRequest(BaseModel):
-    username: str
-    email: str
-    phone: str
-    new_password: str
-
-
 # Comentarios
 class Comment(BaseModel):
     comment: str

@@ -3,7 +3,6 @@ import psycopg
 from schemas import User, UserLogin, UserInDB, UserInfo
 from schemas import Phobia, PhobiaInDB, PhobiaOUT
 from schemas import Comment, CommentInDB, CommentOUT
-from schemas import ForgotPasswordRequest, ResetPasswordRequest
 from auth_controller import hash_password
 from os import getenv
 
@@ -323,50 +322,3 @@ async def get_rankings():
                 ))
     await aconn.close()
     return phobias_ranked
-
-
-# **** Funciones de recuperación de contraseña ****
-async def validate_user_data(request: ForgotPasswordRequest) -> UserInDB | None:
-    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
-    async with aconn:
-        async with aconn.cursor() as acur:
-            await acur.execute(
-                "SELECT * FROM users "
-                "WHERE username=%s AND email=%s AND phone=%s",
-                (request.username, request.email, request.phone))
-            user_db_data = await acur.fetchone()
-    await aconn.close()
-    
-    if user_db_data:
-        return UserInDB(
-            id=user_db_data[0],
-            username=user_db_data[1],
-            email=user_db_data[2],
-            phone=user_db_data[3],
-            hashed_password=user_db_data[4],
-            date=user_db_data[5]
-        )
-    return None
-
-
-async def update_user_password(request: ResetPasswordRequest) -> bool:
-    user = await validate_user_data(ForgotPasswordRequest(
-        username=request.username,
-        email=request.email,
-        phone=request.phone
-    ))
-    
-    if not user:
-        return False
-    
-    new_hashed_password = hash_password(request.new_password)
-    
-    aconn = await psycopg.AsyncConnection.connect(db_conn_info)
-    async with aconn:
-        async with aconn.cursor() as acur:
-            await acur.execute(
-                "UPDATE users SET hashed_password=%s WHERE id=%s",
-                (new_hashed_password, user.id))
-    await aconn.close()
-    
-    return True

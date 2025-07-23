@@ -166,7 +166,7 @@ body {
     opacity: 1;
   }
   
-  .toggle-password.active::after {
+  .toggle-password.show::after {
     opacity: 0;
   }
   

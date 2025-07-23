@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        togglePasswordVisibility(passwordInput, togglePassword);
+    });
     
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevenir envío normal del form
@@ -40,3 +46,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function togglePasswordVisibility(input, toggleIcon) {
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggleIcon.classList.add('show');
+    } else {
+        input.type = 'password';
+        toggleIcon.classList.remove('show');
+    }
+}

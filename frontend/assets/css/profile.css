@@ -188,11 +188,13 @@ body {
 
 .posts-container {
   max-width: 1130px;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-top: 0px;
+  padding-top: 215px;
 }
 
 .post-card {
@@ -327,48 +329,39 @@ body {
 
 .no-posts {
   text-align: center;
-  padding: 100px 20px;
-  margin: 60px auto;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
+  padding: 30px 20px;
+  background: #1A1D1F;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  margin-top: 0px;
 }
 
 .no-posts-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .no-posts-avatar {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
+  margin-bottom: 20px;
   object-fit: cover;
-  opacity: 0.8;
-  margin-bottom: 16px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid #333;
 }
 
 .no-posts h3 {
-  font-family: 'Poppins Medium', sans-serif;
-  font-size: 24px;
   color: #FFFFFF;
-  margin-bottom: 16px;
-  font-weight: 500;
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .no-posts p {
-  font-family: 'Roboto Regular', sans-serif;
-  font-size: 16px;
   color: #B0B0B0;
-  line-height: 1.6;
-  margin-bottom: 8px;
-  max-width: 400px;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 10px;
 }
 
 
@@ -533,9 +526,9 @@ body {
   }
 
   .no-posts {
-    padding: 80px 15px;
-    margin: 40px auto;
-    min-height: 350px;
+    padding: 20px 15px;
+    margin: 0 auto;
+    min-height: 200px;
   }
   
   .no-posts-avatar {
@@ -675,9 +668,9 @@ body {
   }
 
   .no-posts {
-    padding: 40px 10px;
-    margin: 20px auto;
-    min-height: 200px;
+    padding: 15px 10px;
+    margin: 0 auto;
+    min-height: 150px;
   }
   
   .no-posts-avatar {
@@ -759,8 +752,9 @@ body {
   }
 
   .no-posts {
-    padding: 30px 8px;
-    min-height: 180px;
+    padding: 12px 8px;
+    margin: 0 auto;
+    min-height: 120px;
   }
   
   .no-posts-avatar {

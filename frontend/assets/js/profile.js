@@ -209,7 +209,7 @@ function handleComments(postId) {
     const post = posts.find(p => p.id.toString() === postId.toString());
     if (!post) {
         console.error(`Post con ID ${postId} no encontrado`);
-        alert('Post no encontrado');
+        alert('Post no encontrado. Tal vez lo soñaste, tal vez fue real. Nunca lo sabremos');
         return;
     }
     
@@ -316,7 +316,7 @@ function checkAuthentication() {
     
     if (!token) {
         console.log('No token found, redirecting to login');
-        alert('Debes iniciar sesión para ver tu perfil');
+        alert('¿Perfil? Sin login sos solo un ente navegando sin propósito.');
         window.location.href = 'login.html';
         return false;
     }
@@ -327,7 +327,7 @@ function checkAuthentication() {
 
 function handleAuthError(response) {
     if (response.status === 401) {
-        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+        alert('Tu sesión tuvo un ataque de pánico y se fue. Iniciá sesión otra vez, con calma.');
         localStorage.removeItem('access_token');
         window.location.href = 'login.html';
         return true;
@@ -446,7 +446,7 @@ function initProfile() {
 
 function logout() {
     localStorage.removeItem('access_token');
-    alert('Sesión cerrada exitosamente');
+    alert('Sesión cerrada con éxito. Tu yo digital está en modo fetal.');
     window.location.href = 'login.html';
 }
 

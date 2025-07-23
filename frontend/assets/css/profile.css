@@ -188,11 +188,13 @@ body {
 
 .posts-container {
   max-width: 1130px;
-  margin: 200px auto 20px auto;
+  margin: 0 auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-top: 0px;
+  padding-top: 215px;
 }
 
 .post-card {
@@ -325,9 +327,41 @@ body {
 
 .no-posts {
   text-align: center;
-  padding: 60px 20px;
+  padding: 30px 20px;
+  background: #1A1D1F;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  margin-top: 0px;
+}
+
+.no-posts-content {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.no-posts-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+  border: 3px solid #333;
+}
+
+.no-posts h3 {
+  color: #FFFFFF;
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.no-posts p {
+  color: #B0B0B0;
+  font-size: 16px;
+  line-height: 1.5;
   margin-bottom: 10px;
 }
+
 
 @keyframes fadeIn {
   from {
@@ -344,7 +378,7 @@ body {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1200px) {
   .header {
     padding: 0 40px;
@@ -488,6 +522,26 @@ body {
   .action-count {
     font-size: 13px;
   }
+
+  .no-posts {
+    padding: 20px 15px;
+    margin: 0 auto;
+    min-height: 200px;
+  }
+  
+  .no-posts-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .no-posts h3 {
+    font-size: 22px;
+  }
+  
+  .no-posts p {
+    font-size: 15px;
+    max-width: 350px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -610,6 +664,31 @@ body {
   .action-count {
     font-size: 11px;
   }
+
+  .no-posts {
+    padding: 15px 10px;
+    margin: 0 auto;
+    min-height: 150px;
+  }
+  
+  .no-posts-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .no-posts h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  
+  .no-posts p {
+    font-size: 12px;
+    max-width: 250px;
+  }
+  
+  .no-posts-content {
+    gap: 12px;
+  }
 }
 
 @media (max-width: 320px) {
@@ -668,5 +747,25 @@ body {
 
   .action-count {
     font-size: 10px;
+  }
+
+  .no-posts {
+    padding: 12px 8px;
+    margin: 0 auto;
+    min-height: 120px;
+  }
+  
+  .no-posts-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .no-posts h3 {
+    font-size: 15px;
+  }
+  
+  .no-posts p {
+    font-size: 11px;
+    max-width: 220px;
   }
 }

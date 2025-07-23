@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('access_token', result.access_token.token);
                 
                 alert('Login exitoso!');
-                // Redirigir al dashboard o página principal
-                window.location.href = '../index.html'; // o la página que quieras
+                // Redirigir a la página principal
+                window.location.href = '../index.html';
                 
             } else {
                 const error = await response.json();

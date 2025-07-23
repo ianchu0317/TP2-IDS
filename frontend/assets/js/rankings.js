@@ -1,4 +1,4 @@
-const titles = [
+const RANDOM_TITLES = [
     "Top de tops. Sin lugar para los débiles",
     "Los más likeados. El Olimpo de las fobias",
     "Camino al podio de la paranoia",
@@ -6,24 +6,19 @@ const titles = [
     "Las joyas de la comunidad. Brillan más que tu ansiedad"
 ];
 
-const API_BASE_URL = 'http://localhost:8000';
-const USE_MOCK_DATA = false;
+let posts = [];
 
-function getRandomPhrase() {
-    const randomIndex = Math.floor(Math.random() * titles.length);
-    return titles[randomIndex];
-}
+const API_BASE_URL = 'https://api.fobium.com';
 
 function setRandomTitle() {
-    const titleElement = document.getElementById('Title');
-    if (titleElement) {
-        const randomPhrase = getRandomPhrase();
-        titleElement.textContent = randomPhrase;
-        console.log("Título actualizado con:", randomPhrase);
-    }
+    const titleElement = document.getElementById('title');
+    if (!titleElement) return;
+    
+    const randomIndex = Math.floor(Math.random() * RANDOM_TITLES.length);
+    titleElement.textContent = RANDOM_TITLES[randomIndex];
 }
 
-function createPostCard(post, ranking) {
+function createPostCard(post, index) {
     const card = document.createElement('div');
     card.className = 'post-card';
     card.dataset.postId = post.id;
@@ -38,15 +33,15 @@ function createPostCard(post, ranking) {
         </div>
         
         <div class="post-stats">
-            <div class="stat-item likes-btn" data-id="${post.id}">
+            <div class="stat-item likes-btn" data-post-id="${post.id}">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M7 14l5-5 5 5"/>
                 </svg>
                 <span class="like-count">${post.likes}</span>
             </div>
             
-            <div class="stat-item comments-btn" data-id="${post.id}">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <div class="stat-item comments-btn" data-post-id="${post.id}">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                 </svg>
                 <span>${post.comments || 0}</span>
@@ -72,35 +67,33 @@ function renderPosts(posts) {
         const card = createPostCard(post, index + 1);
         container.appendChild(card);
     });
-    addEventListeners();
 }
 
-function addEventListeners() {
-    document.querySelectorAll('.likes-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const postId = this.dataset.id;
-            handleLike(postId, this);
-        });
-    });
-    document.querySelectorAll('.comments-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const postId = this.dataset.id;
-            handleComment(postId);
-        });
+function setupEventListeners() {
+    const container = document.getElementById('rankingContainer');
+    if (!container) return;
+    
+    container.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const likesBtn = e.target.closest('.likes-btn');
+        const commentsBtn = e.target.closest('.comments-btn');
+        
+        if (likesBtn) {
+            const postId = likesBtn.dataset.postId;
+            console.log(`Click en likes del post ${postId}`);
+            handleLike(postId, likesBtn);
+        }
+        
+        if (commentsBtn) {
+            const postId = commentsBtn.dataset.postId;
+            console.log(`Click en comments del post ${postId}`);
+            handleComments(postId);
+        }
     });
     
-    document.querySelectorAll('.share-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const postId = this.dataset.id;
-            handleShare(postId);
-        });
-    });
+    console.log('Event listeners configurados correctamente para rankings');
 }
 
 function handleLike(postId, button) {
@@ -117,76 +110,27 @@ function handleLike(postId, button) {
     }
 }
 
-function handleComment(postId) {
-    console.log(`Redirigiendo a comentarios del post ${postId}`);
-    window.location.href = `comments.html?id=${postId}`;
-}
-
-
-function handleShare(postId) {
-    console.log(`Compartir post ${postId}`);
-    if (navigator.share) {
-        navigator.share({
-            title: 'Post interesante',
-            text: 'Mira este post sobre fobias',
-            url: window.location.href
-        });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('Enlace copiado al portapapeles');
+function handleComments(postId) {
+    console.log(`Intentando abrir comentarios para post ${postId}`);
+    
+    const post = posts.find(p => p.id.toString() === postId.toString());
+    if (!post) {
+        console.error(`Post con ID ${postId} no encontrado`);
+        alert('Post no encontrado');
+        return;
     }
-}
-
-
-function getSamplePosts() {
-    return [
-        {
-            "id": 5,
-            "phobia_name": "fobias",
-            "description": "testing",
-            "creator": "skibidi",
-            "likes": 7,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 6,
-            "phobia_name": "fobias",
-            "description": "testing",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 4,
-            "phobia_name": "eres un cute skibdii",
-            "description": "me gustan los skibidis con cabesita de pochoclo",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        },
-        {
-            "id": 8,
-            "phobia_name": "fobias",
-            "description": "walkers",
-            "creator": "skibidi",
-            "likes": 0,
-            "comments": 0,
-            "date": "2025-07-07"
-        }
-    ];
+    
+    try {
+        console.log(`../../pages/comments.html?post=${encodeURIComponent(postId)}`);
+        window.location.href = `../../pages/comments.html?post=${encodeURIComponent(postId)}`;
+    } catch (error) {
+        console.error('Error al redireccionar a comments.html:', error);
+        alert(`Comentarios para "${post.phobia_name}"\n\nEsta funcionalidad requiere el archivo comments.html`);
+    }
 }
 
 async function loadPosts() {
     try {
-        if (USE_MOCK_DATA) {
-            console.log('Usando datos mock para testing');
-            const samplePosts = getSamplePosts();
-            renderPosts(samplePosts);
-            return;
-        }
-
         console.log('Cargando posts desde API...');
         const response = await fetch(`${API_BASE_URL}/rankings`);
         
@@ -194,27 +138,22 @@ async function loadPosts() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const posts = await response.json();
-        console.log('Posts recibidos de la API:', posts);
+        const postsData = await response.json();
+        console.log('Posts recibidos de la API:', postsData);
+        
+        posts = postsData;
         renderPosts(posts);
         
     } catch (error) {
         console.error('Error al cargar posts:', error);
-        console.log('Fallback a datos mock debido al error');
-        const samplePosts = getSamplePosts();
-        renderPosts(samplePosts);
+        const container = document.getElementById('rankingContainer');
+        container.innerHTML = '<div class="error-message">Error al cargar los posts. Inténtalo de nuevo más tarde.</div>';
     }
 }
 
-function loadSamplePosts() {
-    const samplePosts = getSamplePosts();
-    renderPosts(samplePosts);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, inicializando rankings...');
     setRandomTitle();
+    setupEventListeners();
     loadPosts();
 });
-
-window.renderPosts = renderPosts;
-window.loadPosts = loadPosts;

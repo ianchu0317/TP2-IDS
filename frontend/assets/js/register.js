@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        togglePasswordVisibility(passwordInput, togglePassword);
+    });
     
     registerForm.addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevenir envío normal del form
@@ -8,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const userData = {
             username: document.getElementById('username').value,
             email: document.getElementById('email').value,
-            phone: parseInt(document.getElementById('phone').value),
+            phone: document.getElementById('phone').value,
             password: document.getElementById('password').value
         };
 
@@ -37,3 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function togglePasswordVisibility(input, toggleIcon) {
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggleIcon.classList.add('show');
+    } else {
+        input.type = 'password';
+        toggleIcon.classList.remove('show');
+    }
+}

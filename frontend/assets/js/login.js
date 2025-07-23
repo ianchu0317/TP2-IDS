@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        togglePasswordVisibility(passwordInput, togglePassword);
+    });
     
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevenir envío normal del form
@@ -24,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 
                 // Guardar el token en localStorage
-                localStorage.setItem('access_token', result.access_token);
+                localStorage.setItem('access_token', result.access_token.token);
                 
                 alert('Login exitoso!');
                 // Redirigir al dashboard o página principal
@@ -40,3 +46,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function togglePasswordVisibility(input, toggleIcon) {
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggleIcon.classList.add('show');
+    } else {
+        input.type = 'password';
+        toggleIcon.classList.remove('show');
+    }
+}

@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initProfile();
     }
     
-    const logoutBtn = document.querySelector('.logout-btn');
+    const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
     }

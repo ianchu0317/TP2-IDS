@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://api.fobium.com';
 const USE_HARDCODED_DATA = false;
 
 const hardcodedPostData = {
@@ -13,35 +13,13 @@ const hardcodedPostData = {
 
 const hardcodedCommentsData = [
     {
-        id: 1,
         comment: "Acabo de entrar al post y ya me siento atacado 😭",
         creator: "CringePolicía",
-        creator_id: 1,
-        phobia_id: 3,
         date: "2025-07-14"
     },
     {
-        id: 2,
         comment: "Bro eso no es fobia, eso es superficialidad nivel final boss.",
         creator: "ToontoPolarBear",
-        creator_id: 2,
-        phobia_id: 3,
-        date: "2025-07-14"
-    },
-    {
-        id: 3,
-        comment: "Entonces no veas mi foto de perfil, por tu bien.",
-        creator: "DarwinTeMira",
-        creator_id: 3,
-        phobia_id: 3,
-        date: "2025-07-14"
-    },
-    {
-        id: 4,
-        comment: "¿Y qué hacés cuando te ves al espejo recién levantadx? ¿Entrás en pánico?",
-        creator: "NarizDePayaso",
-        creator_id: 4,
-        phobia_id: 3,
         date: "2025-07-14"
     }
 ];
@@ -52,7 +30,7 @@ let currentPhobiaId = null;
 
 function getPhobiaIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const phobiaId = urlParams.get('id') || urlParams.get('phobia_id');
+    const phobiaId = urlParams.get('post');
     
     if (phobiaId) {
         return parseInt(phobiaId, 10);
@@ -110,6 +88,7 @@ async function fetchComments(phobiaId) {
 
 async function postComment(phobiaId, commentText) {
     try {
+        const token = localStorage.getItem('access_token');
         const response = await fetch(`${API_BASE_URL}/phobias/${phobiaId}/comments`, {
             method: 'POST',
             headers: {
@@ -171,11 +150,10 @@ function renderPost() {
     }
 
     const rawDate = currentPostData.date;
-    const author = currentPostData.creador;
+    const author = currentPostData.creator;
     const content = currentPostData.description;
     const phobiaName = currentPostData.phobia_name;
-    const commentsCount = currentPostData.comments || 0;
-    
+
     document.title = `${author} en Fobium: "${content}"`;
 
     postCard.innerHTML = `
@@ -225,17 +203,9 @@ function renderComments() {
     const filterValue = filterSelect ? filterSelect.value : "all";
 
     commentsList.innerHTML = '';
-    let sortedComments = sortComments(currentCommentsData, 'newest');
-    
-    if (filterValue !== "all") {
-        sortedComments = sortedComments.slice(0, parseInt(filterValue, 10));
-    }
+    console.log(currentCommentsData);
 
-    if (commentsCount) {
-        commentsCount.textContent = `${sortedComments.length} comentarios`;
-    }
-
-    sortedComments.forEach(comment => {
+    currentCommentsData.forEach(comment => {
         const commentElement = createCommentElement(comment);
         commentsList.appendChild(commentElement);
     });
@@ -246,6 +216,7 @@ function handleFilterChange() {
 }
 
 async function handleCommentSubmit(commentText) {
+    console.log('Handling comment submit:', commentText);
     if (!commentText.trim()) {
         alert('El comentario no puede estar vacío');
         return;
@@ -256,38 +227,19 @@ async function handleCommentSubmit(commentText) {
         submitButton.disabled = true;
         submitButton.textContent = 'Enviando...';
     }
-
     try {
-        if (USE_HARDCODED_DATA) {
-            const newComment = {
-                id: currentCommentsData.length + 1,
-                comment: commentText,
-                creator: "Usuario Anónimo",
-                creator_id: 999,
-                phobia_id: currentPhobiaId,
-                date: new Date().toISOString().split('T')[0]
-            };
+        newComment = await postComment(currentPhobiaId, commentText);
             
-            currentCommentsData.push(newComment);
+        if (newComment) {
+            currentCommentsData = await getComments(currentPhobiaId);
             renderComments();
+            
             const commentInput = document.getElementById('comment-input');
             if (commentInput) {
                 commentInput.value = '';
             }
         } else {
-            const newComment = await postComment(currentPhobiaId, commentText);
-            
-            if (newComment) {
-                currentCommentsData = await getComments(currentPhobiaId);
-                renderComments();
-                
-                const commentInput = document.getElementById('comment-input');
-                if (commentInput) {
-                    commentInput.value = '';
-                }
-            } else {
-                alert('Error al enviar el comentario. Inténtalo de nuevo.');
-            }
+            alert('Error al enviar el comentario. Inténtalo de nuevo.');
         }
     } catch (error) {
         console.error('Error submitting comment:', error);
@@ -328,14 +280,15 @@ async function initializePage() {
         const submitButton = document.getElementById('submit-btn');
 
         if (commentForm && commentInput && submitButton) {
-            commentForm.addEventListener('submit', (e) => {
+            commentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                handleCommentSubmit(commentInput.value);
+                await handleCommentSubmit(commentInput.value);
             });
 
-            submitButton.addEventListener('click', (e) => {
+            submitButton.addEventListener('click', async (e) => {
                 e.preventDefault();
-                handleCommentSubmit(commentInput.value);
+                console.log('Comment form submitted:', commentInput.value);
+                await handleCommentSubmit(commentInput.value);
             });
         }
         console.log('Page initialization complete');

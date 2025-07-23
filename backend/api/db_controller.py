@@ -223,15 +223,15 @@ async def delete_phobia(phobia_id: int):
     aconn = await psycopg.AsyncConnection.connect(db_conn_info)
     async with aconn:
         async with aconn.cursor() as acur:
-            # eliminar post de fobia
-            await acur.execute(
-                "DELETE FROM phobias " 
-                "WHERE id=%s",
-                (str(phobia_id),))
             # eliminar comentarios del post
             await acur.execute(
                 "DELETE FROM comments "
                 "WHERE phobia_id=%s",
+                (str(phobia_id),))
+            # eliminar post de fobia
+            await acur.execute(
+                "DELETE FROM phobias " 
+                "WHERE id=%s",
                 (str(phobia_id),))
     await aconn.close()
 

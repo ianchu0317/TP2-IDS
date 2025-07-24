@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS users (
   email             VARCHAR(100) UNIQUE NOT NULL,
   phone             VARCHAR(20),
   hashed_password   VARCHAR(255) NOT NULL,
-  register_date     DATE NOT NULL
+  register_date     DATE NOT NULL DEFAULT CURRENT_DATE, 
 );
 

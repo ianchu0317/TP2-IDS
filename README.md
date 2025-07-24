@@ -94,3 +94,26 @@ Usamos Docker Compose para levantar todos los servicios del proyecto de forma se
 
 Si encontrás algún problema o tenés sugerencias, podés abrir un issue o contactarnos directamente.
 
+
+## Capturas de pantalla y funcionamiento
+La pagina de inicio `index.html` se listan todas las publicaciones de todos los usuarios. En esta página se puede acceder los posts individualmente y ver sus comentarios, y también likear publicaciones de otros o de vos mismo.
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/1ca22ff9-1e17-4a64-95c4-27464a4d2341" />
+
+En las publicaciones individuales se pueden editar la publicaciones (si sos creador), eliminar la publicación, y ver los comentarios de la gente acerca de la publicación. Cabe destacar que el primer comentario de cada mensaje utiliza una IA (API de Gemini) para comentar de qué tan raro es el creador en el mundo.
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/762ea73c-4c02-4f8a-bf43-6f26424001ef" />
+
+
+Para poder crear una publicacion, comentar o ver el perfil en la plataforma se debe crear primero un usuario y logearse, sino aparece el mensaje de alerta. Los mensajes de alerta te dicen qué fue el error y que tenes que hacer. También te redirige a la pagina de login si fue ese el error 
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/f5a7a384-0f84-4755-aac1-e85de1ea1b22" />
+
+
+Login
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/a553cf57-ba26-4005-8d16-f354309beb88" />
+
+Registro
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/27f03db4-779e-4107-bceb-f7df14036a60" />
+
+Una vez logeado, el usuario puede: crear publicaciones, comentar, y ver su perfil (en `profile.html`)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/7992f26a-ecc1-4545-a657-b501388ccd6f" />
+
+

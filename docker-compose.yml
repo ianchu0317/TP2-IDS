@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     extends:
-      file: ./backend/db/docker-compose.yml
+      file: ./backend/docker-compose.yml
       service: db
 
   api:
@@ -20,4 +20,6 @@ services:
     depends_on:
       - api
       - db
-  
+
+volumes:
+  db_data:

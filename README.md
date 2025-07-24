@@ -9,19 +9,19 @@ Este proyecto es una aplicación web desarrollada como parte del TP2 de la mater
 
 ## Estructura del proyecto
 
-- **backend/**: Lógica de negocio, API REST (FastAPI), controladores, scripts de base de datos y tests.
+- **backend/**: API REST (FastAPI), scripts de base de datos y tests.
 - **frontend/**: Sitio web estático, páginas HTML, CSS, JS y recursos multimedia.
 - **docs/**: Documentación técnica detallada de API, backend, base de datos y contribución.
-- **docker-compose.yml**: Orquestador para levantar toda la app (backend, frontend y base de datos) fácilmente.
+- **docker-compose.yml**: Para levantar toda la app (backend, frontend y base de datos).
 - **README.md**: Este archivo, con la guía general y enlaces útiles.
 
 
 ## Tecnologías principales
 
 - **Backend:** Python (FastAPI), PostgreSQL, Docker
-- **Frontend:** HTML, CSS, JavaScript puro
+- **Frontend:** HTML, CSS, JavaScript
 - **Control de versiones:** Git & GitHub
-- **Testing:** Colecciones Postman
+- **Testing:** Colecciones Postman (testing API)
 - **Automatización:** Docker Compose
 
 
@@ -30,10 +30,12 @@ Este proyecto es una aplicación web desarrollada como parte del TP2 de la mater
 1. **Cloná el repo o descargá el ZIP completo.**
 2. **Levantá todo el sistema con Docker Compose:**
    ```bash
+   git clone https://github.com/ianchu0317/TP2-IDS.git
+   cd TP2-IDS
    docker-compose up --build
    ```
-3. **Accedé a la app:**
-   - Frontend: [http://localhost:3000](http://localhost:3000)
+3. **Accedé a la app localmente**
+   - Frontend: [http://localhost:80](http://localhost:80)
    - Backend/API: [http://localhost:8000](http://localhost:8000)
    - Base de datos: puerto 5432 (ver credenciales en docs/database.md)
 
@@ -57,13 +59,13 @@ Este proyecto es una aplicación web desarrollada como parte del TP2 de la mater
 
 ## Créditos
 
-- **Integrantes:** 
+- **Integrantes:** Lia Jhong Laos, Facundo Becker, Felipe Jacome, Ian Chen
 - **Materia:** Introducción al Desarrollo de Software (Camejo) - FIUBA
 
 
 ## Notas finales
 
-- Para detalles de endpoints, estructura de datos, ejemplos de uso y scripts, consultá la documentación específica en la carpeta `/docs`.
+- Para detalles de endpoints, estructura de datos, ejemplos de uso y scripts, consultá la documentación específica en la carpeta `/docs` o en `http://localhost:8000/docs` (swagger).
 - Si encontrás algún error o tenés sugerencias, podés abrir un issue o contactar a los integrantes del grupo.
 
 
@@ -74,7 +76,6 @@ Usamos Docker Compose para levantar todos los servicios del proyecto de forma se
 ## Accedé a la app
 
 - [https://www.fobium.com/](https://www.fobium.com/)
-- O localmente en [http://localhost:3000](http://localhost:3000) (ver instrucciones abajo)
 
 ## Notas importantes
 

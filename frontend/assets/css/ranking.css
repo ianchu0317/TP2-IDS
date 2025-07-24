@@ -1,0 +1,551 @@
+@font-face {
+  font-family: 'Roboto Medium';
+  src: url('../fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Regular';
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #161618;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #161618;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
+  height: 90px;
+  position: relative;
+  z-index: 10;
+  margin-top: 20px;
+}
+
+.logo {
+  width: auto;
+  height: 150px;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+  display: block;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 48px;
+}
+
+.nav-button {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 14px;
+  color: #FF4500;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  text-transform: uppercase;
+}
+
+.nav-button:hover {
+  opacity: 0.8;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32px;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+.page-title {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 24px;
+  color: #FFFFFF;
+  opacity: 0.87;
+  line-height: 29px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.ranking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  gap: 20px;
+}
+
+.post-card {
+  background-color: #333338;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  min-height: 140px;
+}
+
+.post-card:hover {
+  border-color: #FF4500;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 69, 0, 0.1);
+}
+
+.post-content {
+  position: relative;
+  z-index: 1;
+}
+
+.post-title {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  text-transform: capitalize;
+}
+
+.post-text {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #FFFFFF;
+  opacity: 0.87;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.post-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.post-meta-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.post-author {
+  font-family: 'Roboto Medium', Arial, sans-serif;
+  font-size: 12px;
+  color: #FF4500;
+  font-weight: 500;
+}
+
+.post-date {
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 12px;
+  color: #FFFFFF;
+  opacity: 0.6;
+}
+
+.post-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  order: 2;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-family: 'Roboto Regular', Arial, sans-serif;
+  font-size: 14px;
+  color: #FFFFFF;
+  opacity: 0.6;
+}
+
+.stat-item:hover {
+  opacity: 1;
+  color:#FF4500;
+}
+
+.stat-item .icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+
+.likes-btn {
+  transition: all 0.3s ease;
+}
+
+.likes-btn.liked {
+  color: #FF4500 !important;
+  opacity: 1 !important;
+}
+
+.likes-btn.liked .icon {
+  fill: #FF4500;
+  stroke: #FF4500;
+}
+
+.likes-btn.liked:hover {
+  color: #FF4500 !important;
+  opacity: 0.8 !important;
+}
+
+.likes-btn .icon {
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.ranking-title-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 900px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.ranking-star {
+  width: 30px;
+  height: 30px;
+  animation: spin-star 3s infinite linear;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@keyframes spin-star {
+  0% { transform: rotate(0deg); opacity: 1; }
+  45% { opacity: 0; }
+  50% { transform: rotate(-180deg); opacity: 0; }
+  55% { opacity: 0; }
+  100% { transform: rotate(-360deg); opacity: 1; }
+}
+
+@media (max-width: 1200px) {
+  .header {
+    padding: 0 40px;
+  }
+  
+  .nav-buttons {
+    gap: 20px;
+  }
+  
+  .post-card {
+    max-width: 700px;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 700px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    padding: 0 30px;
+  }
+  
+  .nav-buttons {
+    gap: 15px;
+  }
+  
+  .nav-button {
+    font-size: 13px;
+  }
+  
+  .post-card {
+    max-width: 600px;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 600px;
+    justify-content: center;
+  }
+
+  .stat-item .icon {
+    width: 15px;
+    height: 15px;
+}
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: auto;
+    position: relative;
+    flex-direction: column;
+    padding: 20px 30px;
+    gap: 20px;
+  }
+  
+  .logo {
+    height: 120px;
+  }
+  
+  .nav-buttons {
+    gap: 25px;
+  }
+  
+  .main-content {
+    padding-top: 40px;
+  }
+  
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 30px;
+  }
+  
+  .post-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    max-width: 95%;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 95%;
+    justify-content: center;
+  }
+  
+  .post-title {
+    font-size: 16px;
+  }
+  
+  .post-text {
+    font-size: 15px;
+  }
+  
+  .post-meta {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .post-stats {
+    gap: 16px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .stat-item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .stat-item .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    padding: 15px 20px;
+  }
+  
+  .logo {
+    font-size: 20px;
+  }
+  
+  .nav-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .nav-button {
+    font-size: 12px;
+  }
+  
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .post-card {
+    padding: 14px;
+    margin-bottom: 14px;
+    max-width: 100%;
+  }
+  
+  .ranking-title-wrapper {
+    max-width: 100%;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .post-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .post-text {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .post-meta {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  
+  .post-stats {
+    gap: 8px;
+  }
+  
+  .stat-item {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+  
+  .stat-item .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 15px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .nav-buttons {
+    gap: 12px;
+  }
+  
+  .nav-button {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+  
+  .page-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .post-card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .post-title {
+    font-size: 14px;
+  }
+  
+  .post-text {
+    font-size: 13px;
+  }
+  
+  .post-author {
+    font-size: 11px;
+  }
+  
+  .post-date {
+    font-size: 10px;
+  }
+  
+  .stat-item {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  .stat-item .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .header {
+    padding: 10px 12px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  .nav-buttons {
+    gap: 10px;
+  }
+  
+  .nav-button {
+    font-size: 10px;
+  }
+  
+  .page-title {
+    font-size: 16px;
+  }
+  
+  .post-card {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .post-text {
+    font-size: 12px;
+  }
+
+  .stat-item {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .stat-item .icon {
+    width: 12px;
+    height: 12px;
+  }
+}

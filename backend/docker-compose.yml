@@ -1,0 +1,38 @@
+services:
+  db:
+    container_name: fobias-db
+    build:
+      context: ./db
+    env_file:
+      - ./db/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    container_name: fobias-api
+    build:
+      context: ./api
+    depends_on:
+      - db
+    volumes:
+      - ./api:/app
+    ports:
+      - "8000:8000"
+    environment:
+      # Informacion de la conexion a la base de datos
+      DB_HOST: db    
+      DB_NAME: tp2
+      DB_USER: fobias
+      DB_PASSWORD: fobias
+      # Configuracion de la API
+      # openssl rand -hex 32
+      SECRET_KEY: 354198b9efb425526d5822bd4e4d5ab36fa92dcf2e40521d18402e4edcd60ae1
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 120
+      # Configuracion GEMINI
+      GEMINI_API_KEY: AIzaSyCvghgxu0QUJB3G9OpsqPK7O8sTWRTGuHU
+
+volumes:
+  db_data:

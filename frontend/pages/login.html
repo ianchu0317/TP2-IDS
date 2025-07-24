@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="icon" href="../assets/images/login.png" type="image/png" />
+</head>
+<body>
+    <div class="login-container">
+        <form class="login-form" id="loginForm">
+            <h2>Iniciar Sesión</h2>
+
+            <div class="form-group">
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <i class="toggle-password" id="togglePassword"></i>
+            </div>    
+
+            <button type="submit" class="btn">Iniciar Sesión</button>
+
+            <div class="signup-link">
+                <p>¿No tienes cuenta? <a href="register.html" class="signup-text">¡Crea una ahora aquí!</a></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Vincular el archivo JavaScript -->
+    <script src="../assets/js/login.js"></script>
+</body>
+</html>

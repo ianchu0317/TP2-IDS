@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comments</title>
+    <link rel="stylesheet" href="../assets/css/comments.css" />
+    <link rel="icon" href="../assets/images/comentarios.png" type="image/png" />
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="../index.html" class="logo-link">
+                <img src="../assets/images/logo.png" alt="Logo Fobias" class="logo">
+            </a>
+            <nav class="nav-buttons">
+                <a href="../pages/create_post.html" class="nav-button">CREATE POST</a>
+                <a href="../pages/ranking.html" class="nav-button">RANKINGS</a>
+                <a href="../pages/profile.html" class="nav-button">PROFILE</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="post-card" id="post-card"></div>
+
+            <section class="comment-form-section">
+                <form class="comment-form" id="comment-form">
+                    <div class="form-group">
+                        <textarea
+                            class="comment-textarea"
+                            id="comment-input"
+                            placeholder="Share your thoughts..."
+                            maxlength="500"
+                            required
+                        ></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
+                        <button type="submit" class="submit-btn" id="submit-btn">Post Comment</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="comments-section">
+                <div class="comments-header">
+                    <div class="comments-count" id="comments-count"></div>
+                    <div class="filter-container">
+                        <select class="filter-select" id="filter-select">
+                            <option value="5">Showing top 5</option>
+                            <option value="10">Showing top 10</option>
+                            <option value="20">Showing top 20</option>
+                            <option value="all" selected>Show all</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="comments-list" id="comments-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../assets/js/comments.js"></script>
+</body>
+</html>

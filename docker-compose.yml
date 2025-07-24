@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    extends:
+      file: ./backend/db/docker-compose.yml
+      service: db
+
+  api:
+    extends:
+      file: ./backend/docker-compose.yml
+      service: api
+    depends_on:
+      - db
+
+  web:
+    extends:
+      file: ./frontend/docker-compose.yml
+      service: web
+    depends_on:
+      - api
+      - db
+  

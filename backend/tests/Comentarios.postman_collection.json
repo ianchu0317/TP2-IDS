@@ -17,13 +17,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxOTE3MzU4LCJleHAiOjE3NTE5MTg1NTh9.IXuUBG7uqc1fqe8Esl9MgyeTN0KYCb1UVtbRALrJHmc",
+						"value": "Bearer {{token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"comment\": \"testing comment\"\n}",
+					"raw": "{\n    \"comment\": \"testing comment hola soy alex\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -31,16 +31,18 @@
 					}
 				},
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias/3/comments",
-					"protocol": "https",
+					"raw": "http://127.0.0.1:8000/phobias/1/comments",
+					"protocol": "http",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"phobias",
-						"3",
+						"1",
 						"comments"
 					]
 				}
@@ -57,21 +59,24 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODk1MDkxLCJleHAiOjE3NTE4OTU2OTF9.SMReLKCMYmLrKQtanO3wbPrgw97KGhmeX0ZcUAe-Adw",
-						"type": "text"
+						"value": "Bearer {{token}}",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias/3/comments",
-					"protocol": "https",
+					"raw": "http://127.0.0.1:8000/phobias/1/comments",
+					"protocol": "http",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"phobias",
-						"3",
+						"1",
 						"comments"
 					]
 				}

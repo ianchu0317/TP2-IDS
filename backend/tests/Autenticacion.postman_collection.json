@@ -17,7 +17,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"pepito123\",\n    \"email\": \"pepito@gmail.com\",\n    \"phone\": 123456,\n    \"password\": \"123\"\n}",
+					"raw": "{\n    \"username\": \"ianchu0317\",\n    \"email\": \"ianchu0317@gmail.com\",\n    \"phone\": 123456,\n    \"password\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -25,13 +25,14 @@
 					}
 				},
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/register",
-					"protocol": "https",
+					"raw": "127.0.0.1:8000/register",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"register"
 					]
@@ -49,7 +50,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"pepito@gmail.com\",\n    \"password\": \"123\"\n}",
+					"raw": "{\n    \"email\": \"skibidi@gmail.com\",\n    \"password\": \"123\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -57,13 +58,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/login",
-					"protocol": "https",
+					"raw": "http://127.0.0.1:8000/login",
+					"protocol": "http",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"login"
 					]
@@ -78,20 +81,45 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJwZXBpdG8xMjMiLCJpYXQiOjE3NTE5MTkxMDQsImV4cCI6MTc1MTkyMDMwNH0.EXNhklenSy2myT5IFn0ghHKhR6zGq0SxyWgkT5EW01M",
+						"value": "Bearer {{token}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/profile",
-					"protocol": "https",
+					"raw": "127.0.0.1:8000/profile",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver fobias del usuario",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{Local URL}}/profile/phobias",
+					"host": [
+						"{{Local URL}}"
+					],
+					"path": [
+						"profile",
+						"phobias"
 					]
 				}
 			},

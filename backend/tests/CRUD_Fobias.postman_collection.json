@@ -17,13 +17,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxOTE1ODA0LCJleHAiOjE3NTE5MTcwMDR9.yDhlmTGt_14mEskFK7uwKDkUKfSo1bdbYrzptwjhBcc",
+						"value": "Bearer {{token}}",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"phobia_name\": \"fobias\",\n    \"description\": \"walkers\" \n}",
+					"raw": "{\n    \"phobia_name\": \"turtufobia\",\n    \"description\": \"tengo miedo de las mujeres lindas\" \n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -31,13 +31,14 @@
 					}
 				},
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias",
-					"protocol": "https",
+					"raw": "127.0.0.1:8000/phobias",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"phobias"
 					]
@@ -52,22 +53,16 @@
 					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODUzNTg5LCJleHAiOjE3NTE4NTQxODl9.V-df1wltmWKqQlvbxKLPrIzAmVg1aCxQaHxdbAcLQA8CYd",
-						"type": "text",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias",
-					"protocol": "https",
+					"raw": "127.0.0.1:8000/phobias",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
+					"port": "8000",
 					"path": [
 						"phobias"
 					]
@@ -82,25 +77,18 @@
 					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU2MDA5LCJleHAiOjE3NTE4NTY2MDl9.V5r20ve_luXpvJhuAJ1jkAuYqZellcfdUzkWkarTEmI",
-						"type": "text",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias/10",
-					"protocol": "https",
+					"raw": "127.0.01:8000/phobias/2",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"127",
+						"0",
+						"01"
 					],
+					"port": "8000",
 					"path": [
 						"phobias",
-						"10"
+						"2"
 					]
 				}
 			},
@@ -147,7 +135,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU2OTkzLCJleHAiOjE3NTE4NTc1OTN9._QrjfPM381e-p9Vk5zXHlHIhP5srjKeT8YeggRf6SFk",
+						"value": "Bearer {{token}}",
 						"type": "text"
 					}
 				],
@@ -161,16 +149,13 @@
 					}
 				},
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias/4",
-					"protocol": "https",
+					"raw": "{{Local URL}}/phobias/3",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"{{Local URL}}"
 					],
 					"path": [
 						"phobias",
-						"4"
+						"3"
 					]
 				}
 			},
@@ -186,21 +171,18 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJpYW5jaHUwMzE3IiwiaWF0IjoxNzUxODU4NDI4LCJleHAiOjE3NTE4NTkwMjh9.0leHkrGdIS3WpGxuNycXnNoc6RX3npS8ny5Twpk4fWA",
+						"value": "Bearer {{token}}",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "https://phobia-api.ianchenn.com/phobias/5",
-					"protocol": "https",
+					"raw": "{{Local URL}}/phobias/2",
 					"host": [
-						"phobia-api",
-						"ianchenn",
-						"com"
+						"{{Local URL}}"
 					],
 					"path": [
 						"phobias",
-						"5"
+						"2"
 					]
 				}
 			},

@@ -237,7 +237,6 @@ body {
   color: #FFFFFF;
   opacity: 0.87;
   line-height: 1.5;
-  /* margin-bottom: 3px; */
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -420,6 +419,7 @@ body {
   .posts-container {
     max-width: 100%;
     padding: 0 10px;
+    padding-top: 190px;
   }
 }
 
@@ -480,6 +480,10 @@ body {
 
   .logout-button {
     align-self: center;
+  }
+
+  .posts-container {
+    padding-top: 260px;
   }
 
   .post-card {
@@ -564,6 +568,7 @@ body {
   .posts-container {
     gap: 15px;
     padding: 0 5px;
+    padding-top: 240px;
   }
 
   .post-card {
@@ -629,6 +634,10 @@ body {
     font-size: 10px;
     padding: 6px 12px;
     border-width: 1px;
+  }
+
+  .posts-container {
+    padding-top: 220px;
   }
 
   .post-card {
@@ -720,6 +729,10 @@ body {
   .logout-button {
     font-size: 9px;
     padding: 4px 8px;
+  }
+
+  .posts-container {
+    padding-top: 200px;
   }
 
   .post-card {

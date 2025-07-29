@@ -58,6 +58,12 @@ Luego de ejecutar se puede acceder localmente en
 - Backend/API: [http://localhost:8000](http://localhost:8000)
 - Base de datos: puerto 5432 (ver credenciales en docs/database.md)
 
+## Configuraciones de ejecución
+Para las configuraciones customizadas se puede editar el archivo `.env` que permite cambiar variables como puertos, API key, llaves secretas, base de datos, entre otros.
+
+El frontend detecta automáticamente si se quiere correr local o si está en producción. En caso de que está en producción hay que cambiar los URL de producción en el archivo de configuración del frontend ubicado en `frontend/assets/js/config.js`.
+
+Por defecto el archivo `.env` está apuntado todo hacia una ejecución local y con API keys inválidas (conseguir gratis con GEMINI). 
 
 ## Documentación técnica
 

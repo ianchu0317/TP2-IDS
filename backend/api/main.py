@@ -80,6 +80,14 @@ async def create_phobia(phobia_data: Phobia,
                       token: Annotated[str, Depends(oauth2_scheme)]):
     # verificar token
     user_id = auth.get_id_from_token(token)
+    # crear fobia en db
+    phobia_db_data = await db.create_phobia(phobia_data, user_id)
+    # creaer primer comentario de IA
+    ai_res = await ai.generate(phobia_data.description)
+    ai_comment = Comment(comment=ai_res)
+    ai_comment_db = await db.create_comment(ai_comment, 1, phobia_db_data.id)
+    return phobia_db_data
+    """
     try:
         # crear fobia en db
         phobia_db_data = await db.create_phobia(phobia_data, user_id)
@@ -92,6 +100,7 @@ async def create_phobia(phobia_data: Phobia,
         raise HTTPException(
             status_code=400,
             detail="Error creando fobia")
+    """
 
 
 # Obtener todas las fobias en una lista

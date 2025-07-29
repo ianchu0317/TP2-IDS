@@ -42,7 +42,7 @@ services:
     ports:
       - "${WEB_PORT}:80"
     volumes:
-      - ./:/var/www/html
+      - ./frontend/:/var/www/html
     depends_on:
       - api
 

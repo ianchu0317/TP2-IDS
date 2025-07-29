@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend/api:/app
+      - ./api:/app
     ports:
       - "8000:8000"
     environment:

@@ -2,7 +2,7 @@
 # TP2-IDS
 
 <div align="center">
-   <img src="./frontend/assets/images/logo.webp" alt="Fobium Logo" height="200" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+   <img src="./frontend/assets/images/logo.png" alt="Fobium Logo" height="200" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
    <br>
    <h3>🧠 Foro de Fobias 🧠</h3>
 </div>

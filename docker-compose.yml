@@ -45,6 +45,8 @@ services:
       - ./frontend/:/var/www/html
     depends_on:
       - api
+    environment:
+      API_URL: ${API_URL}
 
 volumes:
   db_data:

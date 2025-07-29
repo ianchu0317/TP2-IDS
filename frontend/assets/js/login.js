@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Enviar request a tu API
-            const response = await fetch('https://api.fobium.com/login', {
+            const response = await fetch(`${CONFIG.apiBaseUrl}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

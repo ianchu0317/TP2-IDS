@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         try {
-            const response = await fetch('https://api.fobium.com/phobias', {
+            const response = await fetch(`${CONFIG.apiBaseUrl}/phobias`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

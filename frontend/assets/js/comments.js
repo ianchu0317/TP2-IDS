@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://api.fobium.com';
+// Use global config for API base URL
+const API_BASE_URL = CONFIG.apiBaseUrl;
 
 let currentPostData = null;
 let currentCommentsData = [];

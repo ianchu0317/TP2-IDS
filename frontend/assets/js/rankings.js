@@ -8,7 +8,8 @@ const RANDOM_TITLES = [
 
 let posts = [];
 
-const API_BASE_URL = 'https://api.fobium.com';
+// Use global config for API base URL
+const API_BASE_URL = CONFIG.apiBaseUrl;
 
 function setRandomTitle() {
     const titleElement = document.getElementById('title');

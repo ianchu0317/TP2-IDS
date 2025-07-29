@@ -342,7 +342,7 @@ async function fetchUserProfile() {
         
         console.log('Fetching user profile...');
         
-        const response = await fetch('https://api.fobium.com/profile', {
+        const response = await fetch(`${CONFIG.apiBaseUrl}/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -372,7 +372,7 @@ async function fetchUserPhobias() {
         
         console.log('Fetching user phobias...');
         
-        const response = await fetch('https://api.fobium.com/profile/phobias', {
+        const response = await fetch(`${CONFIG.apiBaseUrl}/profile/phobias`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'

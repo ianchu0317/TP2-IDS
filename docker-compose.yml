@@ -1,25 +1,52 @@
-version: '3.8'
-
 services:
   db:
-    extends:
-      file: ./backend/docker-compose.yml
-      service: db
+    container_name: fobias-db
+    build:
+      context: ./backend/db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   api:
-    extends:
-      file: ./backend/docker-compose.yml
-      service: api
+    container_name: fobias-api
+    build:
+      context: ./backend/api
     depends_on:
       - db
+    volumes:
+      - ./backend/api:/app
+    ports:
+      - "8000:8000"
+    environment:
+      # Informacion de la conexion a la base de datos
+      DB_HOST: db
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      # Configuracion de la API
+      # openssl rand -hex 32
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      # Configuracion GEMINI
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
 
   web:
-    extends:
-      file: ./frontend/docker-compose.yml
-      service: web
+    container_name: fobias-web
+    image: ubuntu/apache2:2.4-22.04_beta
+    ports:
+      - "${WEB_PORT}:80"
+    volumes:
+      - ./frontend/:/var/www/html
     depends_on:
       - api
-      - db
+    environment:
+      API_URL: ${API_URL}
 
 volumes:
   db_data:

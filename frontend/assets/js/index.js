@@ -22,7 +22,8 @@ let currentPage = 0;
 let isLoading = false;
 let posts = [];
 
-const API_BASE_URL = 'https://api.fobium.com';
+// Use global config for API base URL
+const API_BASE_URL = CONFIG.apiBaseUrl;
 const USE_MOCK_DATA = false;
 
 function getRandomPhrase() {

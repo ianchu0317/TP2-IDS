@@ -1,8 +1,20 @@
 
 # TP2-IDS
-Trabajo Práctico 2 - Introducción al Desarrollo de Software (Camejo) - FIUBA
 
-[https://www.fobium.com/](https://www.fobium.com/)
+<div align="center">
+   <img src="./frontend/assets/images/logo.png" alt="Fobium Logo" height="200" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+   <br>
+   <h3>🧠 Foro de Fobias 🧠</h3>
+</div>
+
+---
+<div align="center">
+<br>Trabajo Práctico 2 - Introducción al Desarrollo de Software (Camejo) - FIUBA<br>
+
+🌐 **URL Deploy:** [https://www.fobium.com/](https://www.fobium.com/)
+</div>
+
+---
 
 ## Descripción general
 
